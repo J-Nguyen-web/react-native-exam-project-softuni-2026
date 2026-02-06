@@ -2,6 +2,7 @@
 
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
+import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons"
 import HomeNavigator from "./HomeNavigator.jsx";
 import SigthsNavigator from "./SightsNavigator.jsx";
 import AboutNavigator from "./AboutNavigator.jsx";
@@ -15,11 +16,23 @@ export default function RootNavigator() {
 
             {/* между таг-а ще влизат всички иконки към screens */}
             <Tabs.Navigator screenOptions={{ tabBarPosition: 'bottom'}}>
-                <Tabs.Screen name="Home" component={HomeNavigator} />
-                {/* <MaterialCommunityIcons name="view-gallery-outline" size={25} color="black" />
-                <MaterialCommunityIcons name="view-dashboard-outline" size={25} color="black" /> */}
+                <Tabs.Screen name="Home" component={HomeNavigator} options={{
+                    tabBarIcon: () => (
+                        <Ionicons name="home-outline"
+                         size={29}
+                         color="black" /> 
+                    )
+                }}/>
+                {/* <MaterialCommunityIcons name="view-gallery-outline" size={25} color="black" />*/}
+                
 
-                <Tabs.Screen name="Sigths" component={SigthsNavigator} />
+                <Tabs.Screen name="Sigths" component={SigthsNavigator} options={{
+                    tabBarIcon: () => (
+                        <MaterialCommunityIcons name="view-dashboard-outline"
+                         size={29}
+                         color="black" /> 
+                    )
+                }}/>
                 <Tabs.Screen name="About" component={AboutNavigator} />
                 {/* подаваме друг навигатор вместо screen , за да се използват всичките screen от него */}
             </Tabs.Navigator>
