@@ -1,5 +1,5 @@
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-import RootNavigator from '../navigators/RootNavigator.jsx';
+import RootNavigator from './navigators/RootNavigator';
 
 export default function App() {
     return (

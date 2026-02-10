@@ -1,0 +1,43 @@
+export const dummySights =
+    [
+        {
+            id: "1",
+            title: "Cầu Vàng (Golden Bridge)",
+            description: "The Golden Bridge (Cầu Vàng) in Vietnam is a famous 150-meter-long pedestrian bridge in the Bà Nà Hills, Da Nang, featuring two giant, weathered hands that appear to lift it above the forest. Opened in 2018, the structure offers panoramic views and is designed to look like a golden thread held by the \"hands of gods\". ",
+            country: "Vietnam",
+            location: "Bà Nà Hills, Da Nang",
+            createdAt: "2026-02-06T12:30:00Z",
+            titleImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMJCU_xPTktrgIUlS3p8HZISoxTB-EAagZXw&s",
+            images: [
+                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMJCU_xPTktrgIUlS3p8HZISoxTB-EAagZXw&s",
+                "https://upload.wikimedia.org/wikipedia/commons/0/0c/Golden_Bridge_at_Ba_Na_Hills_20250718.jpg",
+                "https://360nomad.org/wp-content/uploads/2018/08/Golden-Bridge-Da-nang-Vietnam-1080x675.jpg"
+            ]
+        },
+        {
+            id: "2",
+            title: "Покритият мост в Ловеч",
+            description: "Покрит мост над река Осъм в Ловеч. Свързва новата част на града с Архитектурно-историческия резерват „Вароша“. Единственият по рода си на Балканския полуостров. В Европа съществуват множество подобни мостове – в Люцерн, Флоренция, Басано дел Грапа, Ерфурт, Бад-Зекинген, Страсбург, Бат и др. Покритият мост е официалният символ на Ловеч.",
+            country: "Bulgaria",
+            location: "Lovech",
+            createdAt: "2026-02-06T12:21:00Z",
+            titleImage: "https://tourism.lovech.bg/uploads/posts/2023/cbb1888b3d634a9bd44607f733e303de.jpg",
+            images: [
+                "https://tourism.lovech.bg/uploads/posts/2023/cbb1888b3d634a9bd44607f733e303de.jpg",
+                "https://www.artonlinebg.com/uf/members/09bd0714c89ada14262fff437ea322ff.jpg",
+                "https://www.bestplacesinbulgaria.com/wp-content/uploads/2016/06/covered-bridge-lovech-04.jpg"
+            ]
+        },
+        {
+            id: "3",
+            title: "The rooftop infinity pool",
+            description: "The Sky Habitat towers are designed on the vertical village concept and the pool Sky Habitat, is between two 38-storey apartment towers 100m above the ground.",
+            country: "Singapore ",
+            location: "Marina Bay Sands ",
+            createdAt: "2026-02-06T12:22:00Z",
+            titleImage: "https://www.commercialinteriordesign.com/public/article_embed_images/sky-habitat-homes.jpg",
+            images: [
+                "https://www.commercialinteriordesign.com/public/article_embed_images/sky-habitat-homes.jpg"
+            ]
+        }
+    ]

@@ -7,7 +7,7 @@ export default function HomeNavigator() {
         
         // всички screens в който ще са със stack navigator (със стрелка за back, за да не се stack множество екрани)
         <Stack.Navigator>
-            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="HomeMain" component={HomeScreen} />
         </Stack.Navigator>
     );
 }
