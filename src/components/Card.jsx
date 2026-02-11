@@ -1,12 +1,12 @@
 import { useNavigation } from "@react-navigation/native";
-import { Pressable, Text } from "react-native";
-import { View } from "react-native/types_generated/index";
+import { Image, Pressable, Text, View } from "react-native";
 import { cardStyles } from "./cardStyles.js";
 
 export default function Card({
   title,
   titleImage,
   rating,
+  country,
   location,
 }) {
 
@@ -22,12 +22,12 @@ export default function Card({
           <Image source={{ uri: titleImage }} style={cardStyles.image} />
 
           <View style={cardStyles.content}>
-            <View style={cardStyle.titleRow}>
+            <View style={cardStyles.titleRow}>
               <Text style={cardStyles.title}>{title}</Text>
               <Text style={cardStyles.rating}># {rating}</Text>
             </View>
-
-            <Text style={cardStyles.location}> {location}</Text>
+{/* todo add flags for country */}
+            <Text style={cardStyles.location}>{location} ({country})</Text>
           </View>
 
         </Pressable>

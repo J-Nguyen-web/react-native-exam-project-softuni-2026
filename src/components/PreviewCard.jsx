@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Pressable } from "react-native";
+import { Pressable, View } from "react-native";
 
 export default function PreviewCard() {
     const navigation = useNavigation();

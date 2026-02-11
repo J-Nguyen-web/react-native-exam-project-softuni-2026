@@ -27,7 +27,7 @@ export default function RootNavigator() {
                     )
                 }}/>                
 
-                <Tabs.Screen name="Sigths" component={SightsScreen} options={{
+                <Tabs.Screen name="Sights" component={SightsScreen} options={{
                     tabBarIcon: () => (
                         <MaterialCommunityIcons name="view-dashboard-outline"
                          size={29}
