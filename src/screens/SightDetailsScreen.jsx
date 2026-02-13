@@ -1,5 +1,5 @@
-import { Text } from "@react-navigation/elements";
-import { Button, Image } from "react-native";
+import { Button, Image, Text } from "react-native";
+import { cardStyles } from "../components/cardStyles.js";
 
 export default function SightDetailsScreen({
     titleImage,
