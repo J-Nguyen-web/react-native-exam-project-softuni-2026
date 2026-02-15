@@ -3,6 +3,7 @@ import { Image, Pressable, Text, View } from "react-native";
 import { cardStyles } from "./cardStyles.js";
 
 export default function Card({
+  id,
   title,
   titleImage,
   rating,
@@ -17,7 +18,7 @@ export default function Card({
           cardStyles.style,
           pressed && {opacity: 0.85},
         ]}
-        onPress={() => navigation.navigate('SightDetails')}
+        onPress={() => navigation.navigate('SightDetails', {id: id})}
         >
           <Image source={{ uri: titleImage }} style={cardStyles.image} />
 

@@ -26,7 +26,6 @@ export default function SightScreen() {
     return (
         <View style={style.container}>
           <View style={style.titleContainer}>
-            <Text style={style.title}> Discover Sights </Text>
           </View>
           
 

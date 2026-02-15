@@ -1,30 +1,27 @@
-import { Button, Image, Text } from "react-native";
+import { Button, Image, Text, View } from "react-native";
 import { cardStyles } from "../components/cardStyles.js";
+import { dummySights } from "../../db.js";
 
-export default function SightDetailsScreen({
-    titleImage,
-    title,
-    rating,
-    location,
-    country,
-    description,
+export default function SightDetailsScreen({route}) {
 
-}) {
+    const { id } = route.params;
+    const sight = dummySights.find(item => item.id === id)
+
     return (
-    <View>    
-        <Image source={{ uri: titleImage }} style={cardStyles.image} />
+    <View style={cardStyles.style}>    
+        <Image source={{ uri: sight.titleImage }} style={cardStyles.image} />
         <View style={cardStyles.content}>
             <View style={cardStyles.titleRow}>
-                <Text style={cardStyles.title}>{title}</Text>
-                <Text style={cardStyles.rating}># {rating}</Text>
+                <Text style={cardStyles.title}>{sight.title}</Text>
+                <Text style={cardStyles.rating}># {sight.rating}</Text>
             </View>
     {/* todo add flags for country */}
-            <Text style={cardStyles.location}>{location} ({country})</Text>
-            <Text>{description}</Text>
+            <Text style={cardStyles.location}>{sight.location} ({sight.country})</Text>
+            <Text style={cardStyles.description}>{sight.description}</Text>
             <View>
-                <Button>Edit</Button>
-                <Button>Delete</Button>
-                <Button>Rate</Button>
+                <Button title="Edit"></Button>
+                <Button title="Delete"></Button>
+                <Button title="Rate"></Button>
             </View>
         </View>
     </View>

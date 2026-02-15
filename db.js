@@ -7,16 +7,16 @@ export const dummySights =
             country: "Vietnam",
             location: "Bà Nà Hills, Da Nang",
             createdAt: "2026-02-06T12:30:00Z",
-            titleImage: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMJCU_xPTktrgIUlS3p8HZISoxTB-EAagZXw&s",
+            titleImage: "https://vietnamdiscovery.com/wp-content/uploads/2020/12/Golden-Bridge-Featured.jpg",
             images: [
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSMJCU_xPTktrgIUlS3p8HZISoxTB-EAagZXw&s",
+                "https://vietnamdiscovery.com/wp-content/uploads/2020/12/Golden-Bridge-Featured.jpg",
                 "https://upload.wikimedia.org/wikipedia/commons/0/0c/Golden_Bridge_at_Ba_Na_Hills_20250718.jpg",
                 "https://360nomad.org/wp-content/uploads/2018/08/Golden-Bridge-Da-nang-Vietnam-1080x675.jpg"
             ]
         },
         {
             id: "2",
-            title: "Покритият мост в Ловеч",
+            title: "Покритият мост",
             description: "Покрит мост над река Осъм в Ловеч. Свързва новата част на града с Архитектурно-историческия резерват „Вароша“. Единственият по рода си на Балканския полуостров. В Европа съществуват множество подобни мостове – в Люцерн, Флоренция, Басано дел Грапа, Ерфурт, Бад-Зекинген, Страсбург, Бат и др. Покритият мост е официалният символ на Ловеч.",
             country: "Bulgaria",
             location: "Lovech",

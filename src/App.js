@@ -1,5 +1,6 @@
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import RootNavigator from './navigators/RootNavigator';
+import { NavigationContainer } from '@react-navigation/native';
 
 export default function App() {
     return (

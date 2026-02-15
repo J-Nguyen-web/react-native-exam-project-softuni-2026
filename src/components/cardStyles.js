@@ -6,7 +6,7 @@ export const cardStyles = StyleSheet.create({
     borderRadius: 22,
     borderWidth: 2,
     borderColor: "#01b9a9",
-    marginBottom: 23,
+    marginTop: 23,
     marginHorizontal: 12,
     overflow: "hidden",
     shadowColor: "#000",
@@ -44,11 +44,10 @@ export const cardStyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 8,
   },
 
   title: {
-    fontS: 22,
+    fontSize: 18,
     fontWeight: "800",
     color: "#0077b6",
     flex: 1,
@@ -62,11 +61,16 @@ export const cardStyles = StyleSheet.create({
   },
 
   location: {
-    fontSize: 14,
+    fontSize: 16,
     color: "#555555",
     fontStyle: "italic",
-    marginTop: 3,
+    marginTop: 14,
   },
+
+  description: {
+    marginTop: 16,
+    fontSize: 18,
+  }
 
   
 });
