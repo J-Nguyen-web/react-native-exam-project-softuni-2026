@@ -1,11 +1,28 @@
 import { Button, Image, Text, View } from "react-native";
 import { cardStyles } from "../components/cardStyles.js";
 import { dummySights } from "../../db.js";
+import { useEffect, useState } from "react";
+import api from "../api/api.js";
+import { getById } from "../api/sights.js";
 
 export default function SightDetailsScreen({route}) {
+    
+    const [sight, setSight] = useState();
 
     const { id } = route.params;
-    const sight = dummySights.find(item => item.id === id)
+
+    setSight(dummySights.find(item => item.id === id));
+    
+    useEffect =( () => {
+        getById(id)
+        .then (res => {
+            setSight(res.data)
+        })
+        .catch(err => {
+            console.error('Error fetching sight')
+        })
+    
+    },[id])
 
     return (
     <View style={cardStyles.style}>    
