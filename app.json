@@ -24,6 +24,32 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "expo": {
+      "ios": {
+        "infoPlist": {
+          "NSCameraUsageDescription": "This app need your camera to shoot your sight.",
+          "NSPhotoLibraryUsageDescription": "To upload photos this app need access to your collection."
+        }
+      },
+      "android": {
+        "permission": ["CAMERA", "READ_EXTERNAL_STORAGE"]
+      }
+    },
+    "plugins": [
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Camera is required to take pictures."
+        }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Camera is required to take pictures.",
+          "photosPermission": "App need to access your photos to select images."
+        }
+      ]
+    ]
   }
 }
