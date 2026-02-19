@@ -14,8 +14,8 @@ export default function SightScreen() {
     async function fetchSights() {
       setRefresh(true)
       try {
-        // const sightsResult = await getAll();
-        setSights(dummySights);
+        const sightsResult = await getAll();
+        setSights(sightsResult.data);
       } catch (error) {
         alert('cannot load data')
       }

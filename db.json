@@ -7,6 +7,7 @@
             "country": "Vietnam",
             "location": "Bà Nà Hills, Da Nang",
             "createdAt": "2026-02-06T12:30:00Z",
+            "titleImage": "https://vietnamdiscovery.com/wp-content/uploads/2020/12/Golden-Bridge-Featured.jpg",
             "images": [
                 "https://tourism.lovech.bg/uploads/posts/2023/cbb1888b3d634a9bd44607f733e303de.jpg",
                 "https://www.artonlinebg.com/uf/members/09bd0714c89ada14262fff437ea322ff.jpg",
@@ -20,6 +21,7 @@
             "country": "Bulgaria",
             "location": "Lovech",
             "createdAt": "2026-02-06T12:21:00Z",
+            "titleImage": "https://tourism.lovech.bg/uploads/posts/2023/cbb1888b3d634a9bd44607f733e303de.jpg",
             "images": [
                 "https://tourism.lovech.bg/uploads/posts/2023/cbb1888b3d634a9bd44607f733e303de.jpg",
                 "https://www.artonlinebg.com/uf/members/09bd0714c89ada14262fff437ea322ff.jpg",
@@ -33,6 +35,7 @@
             "country": "Singapore ",
             "location": "Marina Bay Sands ",
             "createdAt": "2026-02-06T12:22:00Z",
+            "titleImage": "https://www.commercialinteriordesign.com/public/article_embed_images/sky-habitat-homes.jpg",
             "images": [
                 "https://www.commercialinteriordesign.com/public/article_embed_images/sky-habitat-homes.jpg"
             ]

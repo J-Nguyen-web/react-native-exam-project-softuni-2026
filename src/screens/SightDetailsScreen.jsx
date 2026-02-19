@@ -1,8 +1,7 @@
-import { Button, Image, Text, View } from "react-native";
+import { ActivityIndicator, Button, Image, Text, View } from "react-native";
 import { cardStyles } from "../components/cardStyles.js";
 import { dummySights } from "../../db.js";
 import { useEffect, useState } from "react";
-import api from "../api/api.js";
 import { getById } from "../api/sights.js";
 
 export default function SightDetailsScreen({route}) {
@@ -11,18 +10,23 @@ export default function SightDetailsScreen({route}) {
 
     const { id } = route.params;
 
-    setSight(dummySights.find(item => item.id === id));
+    // setSight(dummySights.find(item => item.id === id));
     
-    useEffect =( () => {
+    useEffect ( () => {
         getById(id)
         .then (res => {
-            setSight(res.data)
+            setSight(res.data);
+            console.log(res.data)
         })
         .catch(err => {
             console.error('Error fetching sight')
         })
     
-    },[id])
+    },[id]);
+
+    if(!sight) {
+        return <ActivityIndicator />
+    }
 
     return (
     <View style={cardStyles.style}>    
