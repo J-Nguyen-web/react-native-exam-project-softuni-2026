@@ -3,6 +3,8 @@ import { cardStyles } from "../components/cardStyles.js";
 import { dummySights } from "../../db.js";
 import { useEffect, useState } from "react";
 import { getById } from "../api/sights.js";
+import CoutnryFlag from "react-native-country-flag"
+import CountryFlag from "react-native-country-flag";
 
 export default function SightDetailsScreen({route}) {
     
@@ -37,6 +39,7 @@ export default function SightDetailsScreen({route}) {
                 <Text style={cardStyles.rating}># {sight.rating}</Text>
             </View>
     {/* todo add flags for country */}
+        <CountryFlag isoCode={sight.Country} size={20} />
             <Text style={cardStyles.location}>{sight.location} ({sight.country})</Text>
             <Text style={cardStyles.description}>{sight.description}</Text>
             <View>
