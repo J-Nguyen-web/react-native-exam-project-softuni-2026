@@ -1,7 +1,9 @@
 import { launchCameraAsync, useCameraPermissions } from "expo-image-picker";
+import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "expo-status-bar";
 import { useState } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, Button } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator, Button, ScrollView } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
     
@@ -24,6 +26,15 @@ export default function HomeScreen() {
         )
     }
     return (
+        <LinearGradient>
+            <SafeAreaView>
+                <ScrollView>
+                    <Text>Share Your World</Text>
+                    <Text>Every place has a story. Inspire others.</Text>
+                    
+                </ScrollView>
+            </SafeAreaView>
+        </LinearGradient>
         <View style={styles.container}>
             <Text>Photo your sights</Text>
             <Button 
