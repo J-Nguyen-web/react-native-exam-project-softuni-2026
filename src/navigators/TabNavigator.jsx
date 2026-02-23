@@ -14,6 +14,7 @@ return (
         <Tabs.Screen name="HomeNavigator"  component={HomeNavigator} options={{
             // /* подаваме друг навигатор вместо screen , за да се използват всичките screen от него */
             headerShown: false,
+            title: "Home",
             tabBarIcon: (color, size) => (
                 <Ionicons name="home-outline" size={29} color="black"
                 />
