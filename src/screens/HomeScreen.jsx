@@ -1,7 +1,18 @@
 
 import { LinearGradient } from "expo-linear-gradient";
 import { useState } from "react";
-import { View, Text, StyleSheet, ActivityIndicator, Button, ScrollView, TouchableOpacity, Image, KeyboardAvoidingView } from "react-native";
+import { View,
+    Text,
+    StyleSheet,
+    ActivityIndicator,
+    Button,
+    ScrollView,
+    TouchableOpacity,
+    Image,
+    KeyboardAvoidingView,
+    ImageBackground
+    
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Camera from "../components/Camera.jsx";
 import Input from "../components/Input.jsx";
@@ -24,32 +35,32 @@ export default function HomeScreen() {
 
                     <View style={styles.photoCard}>
                         {photo ? (
-                            <KeyboardAvoidingView>
-                                <View>
-                                    <Image source={{ uri: photo }} style={styles.imagePreview} />
-                                </View>
-                            
-                                <View>
-                                    <Input 
-                                        label="Title"
-                                        placeholder="What we see..."
-                                        value={title}
-                                        onChangeText={setTitle}
-                                    />
-                                    <Input 
-                                        label="Description"
-                                        placeholder="What is special about that place..."
-                                        value={description}
-                                        onChangeText={setDescription}
-                                    />
-                                    <Input
-                                        label="Country"
-                                        placeholder="In which country it is"
-                                        value={country}
-                                        onChangeText={setCountry}
-                                    />
-                                </View>
-                            </KeyboardAvoidingView>
+                                <KeyboardAvoidingView>
+                                    <View>
+                                        <Image source={{ uri: photo }} style={styles.imagePreview} />
+                                    </View>
+                                
+                                    <View style={styles.formContainer}>
+                                            <Input 
+                                                label="Title"
+                                                placeholder="What we see..."
+                                                value={title}
+                                                onChangeText={setTitle}
+                                            />
+                                            <Input 
+                                                label="Description"
+                                                placeholder="What is special about that place..."
+                                                value={description}
+                                                onChangeText={setDescription}
+                                            />
+                                            <Input
+                                                label="Country"
+                                                placeholder="In which country it is"
+                                                value={country}
+                                                onChangeText={setCountry}
+                                            />
+                                    </View>
+                                </KeyboardAvoidingView>
                         ) : (
                             <Camera onPhotoTaken={setPhoto} />
                             
@@ -59,25 +70,6 @@ export default function HomeScreen() {
                 </ScrollView>
             </SafeAreaView>
         </LinearGradient>
-        // <View style={styles.container}>
-        //     <Text>Photo your sights</Text>
-        //     <Button 
-        //         title="LaunchCamera"
-        //         onPress={async () => {
-        //             const result = launchCameraAsync({ quality: 0.6})
-        //         if(!result.canceled){
-        //             setPhoto(result.assets[0].uri)
-        //         }
-        //         }}
-        //     />
-        //     {photo && (
-        //         <Image 
-        //         source={{ uri: photo}}
-        //         style={{ width: 300, height: 300, marginTop: 20}}
-        //         />
-        //     )}
-        //     <StatusBar style="auto" />
-        // </View>
     );
 }
 
@@ -109,7 +101,34 @@ const styles = StyleSheet.create({
     },
     placeholderText: { color: "#028273", fontSize: 16, fontWeight: "600" },
 
-    imagePreview: { width: "100%", height: 220, borderRadius: 20, marginBottom: 16},
+    imagePreview: { 
+        width: "100%", 
+        height: 220, 
+        borderRadius: 20, 
+        marginBottom: 8,
+    
+        shadowColor: "#000",
+        shadowOpacity: 0.08,
+        shadowOffset: {width: 0, height: 6},
+        shadowRadius: 11,
+        borderColor: "#000"
+    },
+
+    formContainer: {
+        marginTop: 16,
+        width: "100%",
+    },
+
+    formCard: {
+        backgroundColor: "#ffffff",
+        borderRadius: 26,
+        padding: 20,
+        shadowColor: "#000",
+        shadowOpacity: 0.08,
+        shadowOffset: {width: 0, height: 6},
+        shadowRadius: 11,
+        elevation: 6,
+    },
 
     input: {
         backgroundColor: "#ffffff",

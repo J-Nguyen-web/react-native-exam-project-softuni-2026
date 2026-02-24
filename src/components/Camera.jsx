@@ -1,5 +1,5 @@
 import { launchCameraAsync, useCameraPermissions } from "expo-image-picker";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Camera({
@@ -23,23 +23,32 @@ export default function Camera({
             </SafeAreaView>
         )
     }
-    
-    return (
-        <View style={styles.placeholder}>
-                                <Text style={styles.placeholderText}>Your photo will appear here</Text>
-        <TouchableOpacity
-            style={styles.cameraButton}
-            onPress={ async () => {
+
+    const takePhotoHandler = async () => {
                 const result = await launchCameraAsync({ quality: 0.6});
                 if(!result.canceled) {
                     if(onPhotoTaken){
                         onPhotoTaken((result.assets[0].uri))
                     }
-                }                    
             }}
-        >
-            <Text style={styles.cameraText}>Take photo</Text>
-        </TouchableOpacity>
+    return (
+        <View>
+            <ImageBackground
+                source={require("../../assets/film-strip.jpg")}
+                style={styles.placeholder}
+                imageStyle={{borderRacdius: 20}}
+            >
+                <View style={styles.placeholder}>
+                    <Text style={styles.placeholderText}>Your photo will appear here</Text>
+                </View>
+            </ImageBackground>
+        
+            <TouchableOpacity
+                style={styles.cameraButton}
+                onPress={takePhotoHandler}
+            >
+                <Text style={styles.cameraText}>Take photo</Text>
+            </TouchableOpacity>
         </View>
     );
 }
@@ -64,13 +73,13 @@ const styles = StyleSheet.create({
 
     placeholder: {
         height: 200,
-        backgroundColor: "#ffffff",
+        backgroundColor: "transperant",
         borderRadius: 20,
         justifyContent: "center",
         alignItems: "center",
         marginBottom: 16,
     },
-    placeholderText: { color: "#028273", fontSize: 16, fontWeight: "600" },
+    placeholderText: { backgroundColor: "transperant", color: "#028273", fontSize: 16, fontWeight: "600" },
 
     cameraButton: {
         backgroundColor: "#7d3d94",
