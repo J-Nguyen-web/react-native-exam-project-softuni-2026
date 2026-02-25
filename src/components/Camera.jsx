@@ -3,7 +3,8 @@ import { ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity,
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Camera({
-    onPhotoTaken
+    onPhotoTaken,
+    retake
 }) {
     const [status, requestPermission] = useCameraPermissions();
 
@@ -32,22 +33,12 @@ export default function Camera({
                     }
             }}
     return (
-        <View>
-            <ImageBackground
-                source={require("../../assets/film-strip.jpg")}
-                style={styles.placeholder}
-                imageStyle={{borderRacdius: 20}}
-            >
-                <View style={styles.placeholder}>
-                    <Text style={styles.placeholderText}>Your photo will appear here</Text>
-                </View>
-            </ImageBackground>
-        
+        <View>        
             <TouchableOpacity
                 style={styles.cameraButton}
                 onPress={takePhotoHandler}
             >
-                <Text style={styles.cameraText}>Take photo</Text>
+                <Text style={styles.cameraText}>{retake ? "Retake photo" : "Take photo"}</Text>
             </TouchableOpacity>
         </View>
     );

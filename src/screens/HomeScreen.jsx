@@ -24,8 +24,6 @@ export default function HomeScreen() {
     const [description, setDescription] = useState();
     const [country, setCountry] = useState();
 
-    console.log(photo)
-
     return (
         <LinearGradient colors={["#ffffff", "#ddd6fe"]} style={styles.gradient}>
             <SafeAreaView style={{flex: 1}}>
@@ -34,6 +32,7 @@ export default function HomeScreen() {
                     <Text style={styles.subtitle}>Every place has a story. Inspire others.</Text>
 
                     <View style={styles.photoCard}>
+                        
                         {photo ? (
                                 <KeyboardAvoidingView>
                                     <View>
@@ -59,10 +58,22 @@ export default function HomeScreen() {
                                                 value={country}
                                                 onChangeText={setCountry}
                                             />
+                                            <Camera onPhotoTaken={setPhoto} retake={true}/>
                                     </View>
                                 </KeyboardAvoidingView>
                         ) : (
-                            <Camera onPhotoTaken={setPhoto} />
+                            <View>
+                        <ImageBackground
+                            source={require("../../assets/film-strip.jpg")}
+                            style={styles.placeholder}
+                            imageStyle={{borderRacdius: 20}}
+                        >
+                            <View style={styles.placeholder}>
+                                <Text style={styles.placeholderText}>Your photo will appear here</Text>
+                            </View>
+                        </ImageBackground>
+                            <Camera onPhotoTaken={setPhoto}/>
+                        </View>
                             
                         )}
                     </View>
