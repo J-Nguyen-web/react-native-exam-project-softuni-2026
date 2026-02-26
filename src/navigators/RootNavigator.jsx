@@ -1,7 +1,7 @@
 // Мястото за основния навигатор ( в случая е bottom tabs)
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigator from "./TabNavigator.jsx";
-import SightDetailsScreen from "../screens/SightDetailsScreen.jsx";
+import DetailsSightScreen from "../screens/DetailsSightScreen.jsx";
 
 export default function RootNavigator() {
 
@@ -15,12 +15,12 @@ export default function RootNavigator() {
             />
             
             <Stack.Screen 
-            name='SightDetails'
+            name='Details'
             options={{
                 title:'Details',
                 headerBackTitle: 'Back',
             }}
-            component={SightDetailsScreen}
+            component={DetailsSightScreen}
             />
         </Stack.Navigator>
     );

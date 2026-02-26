@@ -18,7 +18,7 @@ export default function Card({
           cardStyles.style,
           pressed && {opacity: 0.85},
         ]}
-        onPress={() => navigation.navigate('SightDetails', {id: id})}
+        onPress={() => navigation.navigate('Details', {id: id})}
         >
           <Image source={{ uri: titleImage }} style={cardStyles.image} />
 

@@ -3,10 +3,9 @@ import { cardStyles } from "../components/cardStyles.js";
 import { dummySights } from "../../db.js";
 import { useEffect, useState } from "react";
 import { getById } from "../api/sights.js";
-import CoutnryFlag from "react-native-country-flag"
 import CountryFlag from "react-native-country-flag";
 
-export default function SightDetailsScreen({route}) {
+export default function DetailsSightScreen({route}) {
     
     const [sight, setSight] = useState();
 
