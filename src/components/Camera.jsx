@@ -62,22 +62,13 @@ const styles = StyleSheet.create({
         elevation: 6,
     },
 
-    placeholder: {
-        height: 200,
-        backgroundColor: "transperant",
-        borderRadius: 20,
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 16,
-    },
-    placeholderText: { backgroundColor: "transperant", color: "#028273", fontSize: 16, fontWeight: "600" },
-
     cameraButton: {
         backgroundColor: "#7d3d94",
         paddingVertical: 14,
         borderRadius:22,
         alignItems: "center",
-        marginBottom:16,
+        marginTop: 16,
+        marginBottom: 16,
     },
     cameraText: {
         color: "#fff",

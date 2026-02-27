@@ -2,8 +2,8 @@ import { ActivityIndicator, Button, Image, Text, View } from "react-native";
 import { cardStyles } from "../components/cardStyles.js";
 import { dummySights } from "../../db.js";
 import { useEffect, useState } from "react";
-import { getById } from "../api/sights.js";
 import CountryFlag from "react-native-country-flag";
+import { sightService } from "../services/index.js";
 
 export default function DetailsSightScreen({route}) {
     
@@ -14,7 +14,7 @@ export default function DetailsSightScreen({route}) {
     // setSight(dummySights.find(item => item.id === id));
     
     useEffect ( () => {
-        getById(id)
+        sightService.getById(id)
         .then (res => {
             setSight(res.data);
             console.log(res.data)

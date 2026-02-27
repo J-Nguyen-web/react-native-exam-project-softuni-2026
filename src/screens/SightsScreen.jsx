@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { getAll } from "../api/sights.js"
 import { dummySights } from "../../db.js";
 import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import Card from "../components/Card.jsx";
 import { StatusBar } from "expo-status-bar";
+import { sightService } from "../services/index.js";
 
 export default function SightScreen() {
   const [refresh, setRefresh] = useState(true)
@@ -14,7 +14,7 @@ export default function SightScreen() {
     async function fetchSights() {
       setRefresh(true)
       try {
-        const sightsResult = await getAll();
+        const sightsResult = await sightService.getAll();
         setSights(sightsResult.data);
       } catch (error) {
         alert('cannot load data')

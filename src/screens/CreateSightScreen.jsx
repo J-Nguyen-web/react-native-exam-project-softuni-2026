@@ -1,4 +1,4 @@
-import { Image, ImageBackground, KeyboardAvoidingView, StyleSheet, Text, View } from "react-native";
+import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 import Input from "../components/Input.jsx";
 import Camera from "../components/Camera.jsx";
 import { useState } from "react";
@@ -13,50 +13,51 @@ export default function CreateSightScreen() {
     return (
         <View style={styles.photoCard}>
                                 
-                                {photo ? (
-                                        <KeyboardAvoidingView>
-                                            <View>
-                                                <Image source={{ uri: photo }} style={styles.imagePreview} />
-                                            </View>
-                                        
-                                            <View style={styles.formContainer}>
-                                                    <Input 
-                                                        label="Title"
-                                                        placeholder="What we see..."
-                                                        value={title}
-                                                        onChangeText={setTitle}
-                                                    />
-                                                    <Input 
-                                                        label="Description"
-                                                        placeholder="What is special about that place..."
-                                                        value={description}
-                                                        onChangeText={setDescription}
-                                                    />
-                                                    <Input
-                                                        label="Country"
-                                                        placeholder="In which country it is"
-                                                        value={country}
-                                                        onChangeText={setCountry}
-                                                    />
-                                                    <Camera onPhotoTaken={setPhoto} retake={true}/>
-                                            </View>
-                                        </KeyboardAvoidingView>        
-                                ) : (
-                                    <View>
-                                        <ImageBackground
-                                            source={require("../../assets/film-strip.jpg")}
-                                            style={styles.placeholder}
-                                            imageStyle={{borderRacdius: 20}}
-                                        >
-                                            <View>
-                                                <Text style={styles.placeholderText}>Your photo will appear here</Text>
-                                            </View>
-                                        </ImageBackground>
-        
-                                        <Camera onPhotoTaken={setPhoto}/>
-                                    </View>                            
-                                )}
-                            </View>
+            {photo ? (
+                    <View>
+                        <View>
+                            <Image source={{ uri: photo }} style={styles.imagePreview} />
+                        </View>
+
+                        <Camera onPhotoTaken={setPhoto} retake={true}/>
+
+                        <View style={styles.formContainer}>
+                                <Input 
+                                    label="Title"
+                                    placeholder="What we see..."
+                                    value={title}
+                                    onChangeText={setTitle}
+                                />
+                                <Input 
+                                    label="Description"
+                                    placeholder="What is special about that place..."
+                                    value={description}
+                                    onChangeText={setDescription}
+                                />
+                                <Input
+                                    label="Country"
+                                    placeholder="In which country it is"
+                                    value={country}
+                                    onChangeText={setCountry}
+                                />
+                        </View>
+                    </View>        
+            ) : (
+                <View>
+                    <ImageBackground
+                        source={require("../../assets/film-strip.jpg")}
+                        style={styles.placeholder}
+                        imageStyle={{borderRacdius: 20}}
+                    >
+                        <View>
+                            <Text style={styles.placeholderText}>Your photo will appear here</Text>
+                        </View>
+                    </ImageBackground>
+
+                    <Camera onPhotoTaken={setPhoto}/>
+                </View>                            
+            )}
+        </View>
             
     );
 }

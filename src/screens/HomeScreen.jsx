@@ -1,11 +1,13 @@
 import { LinearGradient } from "expo-linear-gradient";
-import { useState } from "react";
+import { KeyboardAwareScrollView, KeyBoardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { 
         View,
         Text,
         StyleSheet,
         ScrollView,
-        ImageBackground
+        ImageBackground,
+        KeyboardAvoidingView,
+        Platform
     } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Camera from "../components/Camera.jsx";
@@ -15,13 +17,18 @@ export default function HomeScreen() {
 
     return (
         <LinearGradient colors={["#ffffff", "#ddd6fe"]} style={styles.gradient}>
-            <View style={{flex: 1}}>
+            <KeyboardAwareScrollView
+                contentContainerStyle={styles.container}
+                enableOnAndroid = {true}
+                keyboardShouldPersistTaps = "handled"
+                >
+                
                 <ScrollView contentContainerStyle={styles.container}>
                     <Text style={styles.title}>Share Your World</Text>
                     <Text style={styles.subtitle}>Every place has a story. Inspire others.</Text>
                     <CreateSightScreen style={styles.photoCard}/>
                 </ScrollView>
-            </View>
+            </KeyboardAwareScrollView>
         </LinearGradient>
     );
 }
