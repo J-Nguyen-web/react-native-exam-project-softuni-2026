@@ -1,34 +1,41 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { KeyboardAwareScrollView, KeyBoardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { 
-        View,
-        Text,
-        StyleSheet,
-        ScrollView,
-        ImageBackground,
-        KeyboardAvoidingView,
-        Platform
-    } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import Camera from "../components/Camera.jsx";
+import { Text, StyleSheet, View, ImageBackground } from "react-native";
 import CreateSightScreen from "./CreateSightScreen.jsx";
+import { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import Camera from "../components/Camera.jsx";
 
 export default function HomeScreen() {
+    
+    const [photo, setPhoto] = useState();
+
+    const navigation = useNavigation();
+
+    useEffect(() => {
+        if(photo){
+            navigation.navigate('CreateSight', {initialPhoto: photo});
+            setPhoto(null)
+        }
+    },[photo])
 
     return (
         <LinearGradient colors={["#ffffff", "#ddd6fe"]} style={styles.gradient}>
-            <KeyboardAwareScrollView
-                contentContainerStyle={styles.container}
-                enableOnAndroid = {true}
-                keyboardShouldPersistTaps = "handled"
-                >
-                
-                <ScrollView contentContainerStyle={styles.container}>
-                    <Text style={styles.title}>Share Your World</Text>
-                    <Text style={styles.subtitle}>Every place has a story. Inspire others.</Text>
-                    <CreateSightScreen style={styles.photoCard}/>
-                </ScrollView>
-            </KeyboardAwareScrollView>
+            <Text style={styles.title}>Share Your World</Text>
+            <Text style={styles.subtitle}>Every place has a story. Inspire others.</Text>
+                <View>
+                    <ImageBackground
+                        source={require("../../assets/film-strip.jpg")}
+                        style={styles.placeholder}
+                        imageStyle={{borderRacdius: 20}}
+                    >
+                        <View>
+                            <Text style={styles.placeholderText}>Your photo will appear here</Text>
+                        </View>
+                    </ImageBackground>
+
+                    <Camera onPhotoTaken={setPhoto}/>
+                </View>   
         </LinearGradient>
     );
 }
@@ -36,7 +43,7 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
     gradient: {flex: 1},
 
-    container: { padding: 20, paddingTop: "25%" },
+    container: { paddingTop: 20, flexGrow: 1 },
 
     title: { 
         fontSize: 28, 

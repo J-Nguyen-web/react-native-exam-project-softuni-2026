@@ -1,12 +1,12 @@
 import api from "./api.js";
 
 export async function getAll(){
-    return await api.get('/sights');
+    const response = await api.get('/sights');
+    return response.data
 }
 
 export async function create(sight) {
     const newSight = await api.post('/sights', sight);
-
     return newSight.data;
 }
 

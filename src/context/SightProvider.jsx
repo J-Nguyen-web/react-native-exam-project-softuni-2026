@@ -20,9 +20,10 @@ export function SightProvider ({children}) {
     const createSight = async (sightData) => {
         try {
             const newSight = await sightService.create(sightData);
-            setSights((sightsList) => [...sightsList, newSight]);
+            setSights(sightsList => [...sightsList, newSight]);
+            return newSight;
         } catch (error) {
-            console.error('Error creating sight: ', err);
+            console.error('Error creating sight: ', error);
         }
     };
 
@@ -39,7 +40,21 @@ export function SightProvider ({children}) {
             await sightService.deleteSight(id);
             setSights((sightsList) => sightsList.filter(sight => sight.id !== id));
         } catch (error) {
-            console.error('Error deleting sight: ', err);
+            console.error('Error deleting sight: ', error);
         }
     }
+
+    const contextValue = {
+        sights,
+        createSight,
+        getSightById,
+        deleteSight,
+    }
+
+    return (
+        <SightContext.Provider value={contextValue}>
+            {children}
+        </SightContext.Provider>
+    )
 }
+

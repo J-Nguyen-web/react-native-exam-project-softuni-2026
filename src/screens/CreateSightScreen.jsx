@@ -2,61 +2,82 @@ import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
 import Input from "../components/Input.jsx";
 import Camera from "../components/Camera.jsx";
 import { useState } from "react";
+import Button from "../components/Button.jsx";
+import { useSight } from "../context/useSight.js";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
-export default function CreateSightScreen() {
+export default function CreateSightScreen( {route, navigation}) {
     
+    const {initialPhoto} = route.params;
     const [title, setTitle] = useState();
     const [description, setDescription] = useState();
-    const [country, setCountry] = useState();    
-    const [photo, setPhoto] = useState();
+    const [country, setCountry] = useState();
+    const [city, setCity] = useState();
+    const [photo, setPhoto] = useState(initialPhoto || null);
+
+    const { createSight } = useSight();
+
+    const saveSightHandler = async () => {
+        const newSight = await createSight ({ photo, title , description, country, city });
+        
+        navigation.replace('Details', {id: newSight.id})
+    }
 
     return (
+        
         <View style={styles.photoCard}>
                                 
-            {photo ? (
-                    <View>
-                        <View>
-                            <Image source={{ uri: photo }} style={styles.imagePreview} />
-                        </View>
-
-                        <Camera onPhotoTaken={setPhoto} retake={true}/>
-
-                        <View style={styles.formContainer}>
-                                <Input 
-                                    label="Title"
-                                    placeholder="What we see..."
-                                    value={title}
-                                    onChangeText={setTitle}
-                                />
-                                <Input 
-                                    label="Description"
-                                    placeholder="What is special about that place..."
-                                    value={description}
-                                    onChangeText={setDescription}
-                                />
-                                <Input
-                                    label="Country"
-                                    placeholder="In which country it is"
-                                    value={country}
-                                    onChangeText={setCountry}
-                                />
-                        </View>
-                    </View>        
-            ) : (
+            <KeyboardAwareScrollView
+                enableOnAndroid = {true}
+                keyboardShouldPersistTaps="handled"
+                enableAutomaticScroll={true}
+                extraHeight={140}
+                extraScrollHeight={80}
+                contentContainerStyle={styles.container}
+                keyboardOpeningTime={0}
+                >
                 <View>
-                    <ImageBackground
-                        source={require("../../assets/film-strip.jpg")}
-                        style={styles.placeholder}
-                        imageStyle={{borderRacdius: 20}}
-                    >
-                        <View>
-                            <Text style={styles.placeholderText}>Your photo will appear here</Text>
-                        </View>
-                    </ImageBackground>
+                    <View>
+                        <Image source={{ uri: photo }} style={styles.imagePreview} />
+                    </View>
 
-                    <Camera onPhotoTaken={setPhoto}/>
-                </View>                            
-            )}
+                    <Camera onPhotoTaken={setPhoto} retake={true}/>
+
+                    <View style={styles.formContainer}>
+                            <Input 
+                                label="Title"
+                                placeholder="What we see..."
+                                value={title}
+                                onChangeText={setTitle}
+                            />
+                            <Input 
+                                label="Description"
+                                placeholder="What is special about that place..."
+                                value={description}
+                                onChangeText={setDescription}
+                            />
+                            <Input
+                                label="Country"
+                                placeholder=""
+                                value={country}
+                                onChangeText={setCountry}
+                            />
+                            <Input
+                                label="City"
+                                placeholder=""
+                                value={city}
+                                onChangeText={setCity}
+                            />
+                            <Button
+                                title='Upload Sight'
+                                //todo icon
+                                onPress={saveSightHandler}
+                                style={styles.submitButton}
+                                />
+                    </View>
+                </View>  
+            </KeyboardAwareScrollView>
+            
         </View>
             
     );
@@ -64,6 +85,9 @@ export default function CreateSightScreen() {
 
 const styles = StyleSheet.create({
 
+    submitButton: {
+        color: '#fff'
+    },
     
     photoCard: {
         background: "#fff",
@@ -144,7 +168,6 @@ const styles = StyleSheet.create({
     publishtext: { color: "#fff", fontWeight: "900", fontSize: 18},
 
     permissionContainer: {
-        flex: 1,
         justifyContent: "center",
         alignItems: "center",
         padding: 30,
