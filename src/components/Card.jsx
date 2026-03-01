@@ -6,12 +6,15 @@ export default function Card({
   id,
   title,
   titleImage,
+  photo,
   rating,
   country,
   location,
 }) {
 
   const navigation = useNavigation();
+
+  console.log(photo)
 
     return (
         <Pressable style={({pressed}) => [
@@ -20,7 +23,7 @@ export default function Card({
         ]}
         onPress={() => navigation.navigate('Details', {id: id})}
         >
-          <Image source={{ uri: titleImage }} style={cardStyles.image} />
+          <Image source={{ uri: photo || titleImage }} style={cardStyles.image} resizeMode="cover" />
 
           <View style={cardStyles.content}>
             <View style={cardStyles.titleRow}>

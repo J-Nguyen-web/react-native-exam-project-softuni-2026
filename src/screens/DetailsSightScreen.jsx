@@ -29,7 +29,7 @@ export default function DetailsSightScreen({route}) {
 
     return (
     <View style={cardStyles.style}>    
-        <Image source={{ uri: sight.titleImage }} style={cardStyles.image} />
+        <Image source={{ uri: sight.photo || sight.titleImage }} style={cardStyles.image} />
         <View style={cardStyles.content}>
             <View style={cardStyles.titleRow}>
                 <Text style={cardStyles.title}>{sight?.title}</Text>

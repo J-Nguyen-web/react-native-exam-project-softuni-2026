@@ -5,6 +5,7 @@ import { useState } from "react";
 import Button from "../components/Button.jsx";
 import { useSight } from "../context/useSight.js";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import * as ImagePicker from 'expo-image-picker'
 
 export default function CreateSightScreen( {route, navigation}) {
     
@@ -13,12 +14,27 @@ export default function CreateSightScreen( {route, navigation}) {
     const [description, setDescription] = useState();
     const [country, setCountry] = useState();
     const [city, setCity] = useState();
-    const [photo, setPhoto] = useState(initialPhoto || null);
+    const [tempUri, setTempUri] = useState(initialPhoto || null);
 
     const { createSight } = useSight();
+    
+    const makeUriUsable = async(tempUri) => {
+        if(!tempUri) return null;
+
+        const pickedImage = {
+            canceled: false,
+            assets: [{ uri: tempUri}],
+        }
+        return pickedImage.assets[0].uri;
+    }
 
     const saveSightHandler = async () => {
-        const newSight = await createSight ({ photo, title , description, country, city });
+
+        if(!tempUri) return;
+
+        const usableUri = await makeUriUsable(tempUri)
+        
+        const newSight = await createSight ({ photo: usableUri, title , description, country, city });
         
         navigation.replace('Details', {id: newSight.id})
     }
@@ -38,10 +54,10 @@ export default function CreateSightScreen( {route, navigation}) {
                 >
                 <View>
                     <View>
-                        <Image source={{ uri: photo }} style={styles.imagePreview} />
+                        <Image source={{ uri: tempUri }} style={styles.imagePreview} />
                     </View>
 
-                    <Camera onPhotoTaken={setPhoto} retake={true}/>
+                    <Camera onPhotoTaken={setTempUri} retake={true}/>
 
                     <View style={styles.formContainer}>
                             <Input 

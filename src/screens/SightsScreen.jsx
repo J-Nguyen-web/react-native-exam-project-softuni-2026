@@ -4,26 +4,25 @@ import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import Card from "../components/Card.jsx";
 import { StatusBar } from "expo-status-bar";
 import { sightService } from "../services/index.js";
+import { useScreenLoaderRefresh } from "../hooks/useScreenLoaderRefresh.js";
+import { RefreshableScreen } from "../components/RefreshableScreen.jsx";
 
 export default function SightScreen() {
-  const [refresh, setRefresh] = useState(true)
   const [sights, setSights] = useState([])
-  const [toggleRefreshing, setToggleRefreshing] = useState(false)
 
-  useEffect( () => {
-    async function fetchSights() {
-      setRefresh(true)
-      try {
-        const sightsResult = await sightService.getAll();
-        setSights(sightsResult.data);
-      } catch (error) {
-        alert('cannot load data')
-      }
+  // за да се използва и от useEffect и RefreshScreen-a
+  async function fetchSights() {
+    try {
+      const sightsResult = await sightService.getAll();
+      setSights(sightsResult);
+    } catch (error) {
+      alert('cannot load data')
     }
+  }
 
-    fetchSights();
-  },[toggleRefreshing])
+  const { loading, reload } = useScreenLoaderRefresh(fetchSights)
     return (
+        <RefreshableScreen loading={loading} reload={reload}>
         <View style={style.container}>
           <View style={style.titleContainer}>
           </View>
@@ -40,10 +39,10 @@ export default function SightScreen() {
             renderItem={({item, index}) => <Card index={index} {...item} />}
             keyExtractor={(item) => item.id.toString()}
             />
-            
 
           <StatusBar style="dark" />
         </View>
+        </RefreshableScreen>
     );
 }
 
