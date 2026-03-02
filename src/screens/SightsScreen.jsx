@@ -1,28 +1,38 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { dummySights } from "../../db.js";
 import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import Card from "../components/Card.jsx";
 import { StatusBar } from "expo-status-bar";
 import { sightService } from "../services/index.js";
-import { useScreenLoaderRefresh } from "../hooks/useScreenLoaderRefresh.js";
-import { RefreshableScreen } from "../components/RefreshableScreen.jsx";
 
 export default function SightScreen() {
-  const [sights, setSights] = useState([])
+  const [sights, setSights] = useState([]);
 
-  // за да се използва и от useEffect и RefreshScreen-a
-  async function fetchSights() {
-    try {
-      const sightsResult = await sightService.getAll();
-      setSights(sightsResult);
-    } catch (error) {
-      alert('cannot load data')
-    }
+  const [refreshing, setRefreshing] = useState(false);
+  const [toggleRefresh, setToggleRefresh] = useState(false);
+
+  useEffect(() => {
+    async function fetchSights() {
+      setRefreshing(true);
+      
+      try {
+        const sightsResult = await sightService.getAll();
+        console.log(sightsResult)
+        setSights(sightsResult);
+      } catch (error) {
+        alert('cannot load data')
+      } finally {
+        setRefreshing(false)
+      }
+    } 
+
+    fetchSights();
+  }, [toggleRefresh]);
+
+  const refreshHandler = () => {
+    setToggleRefresh(state => ! state)
   }
-
-  const { loading, reload } = useScreenLoaderRefresh(fetchSights)
     return (
-        <RefreshableScreen loading={loading} reload={reload}>
         <View style={style.container}>
           <View style={style.titleContainer}>
           </View>
@@ -38,11 +48,12 @@ export default function SightScreen() {
             data={sights}
             renderItem={({item, index}) => <Card index={index} {...item} />}
             keyExtractor={(item) => item.id.toString()}
+            refreshing={refreshing}
+            onRefresh={refreshHandler}
             />
 
           <StatusBar style="dark" />
         </View>
-        </RefreshableScreen>
     );
 }
 
