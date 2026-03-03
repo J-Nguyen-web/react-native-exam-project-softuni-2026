@@ -7,7 +7,6 @@ const Button = ({
     size = 'medium',
     disabled = false,
     loading = false,
-    icon,
     style,
 }) => {
     const buttonStyle = [
@@ -23,6 +22,7 @@ const Button = ({
         styles[`${variant}Text`],
         styles[`${size}Text`],
         disabled && styles.disabledText,
+        style
     ];
 
     return (
@@ -32,18 +32,8 @@ const Button = ({
             disabled={disabled || loading}
             activeOpacity={0.8}
         >
-            
-            {loading ? (
-                <ActivityIndicator
-                color={variant === 'primary' ? '#fff' : '#000'}
-                size='small'
-                />
-            ) : (
-                <>
-                    {icon}
-                    <Text style={textStyles}>{title}</Text>
-                </>
-            )}
+        {loading && <ActivityIndicator color={variant === 'primary' ? '#fff' : '#000'} size='small' /> }
+        {!loading && title && <Text style={textStyles}>{title}</Text>}
         </TouchableOpacity>
     )
 }

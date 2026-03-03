@@ -7,35 +7,33 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
+
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+          "NSCameraUsageDescription": "This app need your camera to shoot your sight.",
+          "NSPhotoLibraryUsageDescription": "To upload photos this app need access to your collection."
+        }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.nguyen.sight2share",
+      "permission": ["CAMERA", "READ_EXTERNAL_STORAGE"]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "expo": {
-      "ios": {
-        "infoPlist": {
-          "NSCameraUsageDescription": "This app need your camera to shoot your sight.",
-          "NSPhotoLibraryUsageDescription": "To upload photos this app need access to your collection."
-        }
-      },
-      "android": {
-        "permission": ["CAMERA", "READ_EXTERNAL_STORAGE"]
-      }
-    },
+    
     "plugins": [
       [
         "expo-image-picker",

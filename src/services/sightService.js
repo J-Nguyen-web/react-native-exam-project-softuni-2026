@@ -17,6 +17,13 @@ export async function getById(id){
     return sightById.data;
 }
 
+export async function update(id, updatedSight) {
+    if (!id) throw new Error('No entry with such id!');
+    const response = await api.put(`/sights/${id}`, updatedSight);
+    return response.data;
+}
+
 export async function deleteSight(id) {
+    if (!id) throw new Error('No entry with such id!');
     return await api.delete(`/sights/${id}`)
 }

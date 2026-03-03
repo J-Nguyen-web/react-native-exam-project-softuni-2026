@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "393321321672",
+    "project_id": "sight2share",
+    "storage_bucket": "sight2share.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393321321672:android:4946449ba6b96a799101fd",
+        "android_client_info": {
+          "package_name": "com.nguyen.sight2share"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAN6nwf7r5JL6IqxU0z79Wj0AA0WDC5YOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
