@@ -1,3 +1,6 @@
+APK link:
+https://github.com/J-Nguyen-web/react-native-exam-project-softuni-2026/releases/download/link/app-release.apk
+
 // keyboard avoiding and for email with @
 // expo-file-system installed (shouldnt be used)
 // image picker installed
