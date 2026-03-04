@@ -7,16 +7,17 @@ import { useSight } from "../context/useSight.js";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as ImagePicker from 'expo-image-picker'
 
-export default function CreateSightScreen( {route, navigation}) {
+export default function FormSightScreen( {route, navigation}) {
     
-    const {initialPhoto} = route.params;
-    const [title, setTitle] = useState();
-    const [description, setDescription] = useState();
-    const [country, setCountry] = useState();
-    const [city, setCity] = useState();
-    const [tempUri, setTempUri] = useState(initialPhoto || null);
+    const {sight, isEdit,initialPhoto} = route.params;
+    const [title, setTitle] = useState(sight?.title || '');
+    const [description, setDescription] = useState(sight?.description || '');
+    const [country, setCountry] = useState(sight?.country || '');
+    const [city, setCity] = useState(sight?.city || '');
+    const [tempUri, setTempUri] = useState(initialPhoto || sight?.photo || null);
+    const [saving, setSaving] = useState(false);
 
-    const { createSight } = useSight();
+    const { createSight, updateSight } = useSight();
     
     const makeUriUsable = async(tempUri) => {
         if(!tempUri) return null;
@@ -29,16 +30,27 @@ export default function CreateSightScreen( {route, navigation}) {
     }
 
     const saveSightHandler = async () => {
+        if(saving || !tempUri) return;
+            setSaving(true)
 
-        if(!tempUri) return;
+        try {              
+            
+            const usableUri = await makeUriUsable(tempUri)
+            
+            const sightData = { photo: usableUri, title , description, country, city };
+            
+            let result;
+            if(isEdit && sight?.id) {
+                result = await updateSight(sight.id, sightData)
+            } else {
+                result = await createSight(sightData)
+            }
+            navigation.replace('Details', {id: result.id})
 
-        const usableUri = await makeUriUsable(tempUri)
-        
-        const newSight = await createSight ({ photo: usableUri, title , description, country, city });
-        
-        navigation.replace('Details', {id: newSight.id})
-    }
-
+        } finally {
+            setSaving(false)
+        }
+    } 
     return (
         
         <View style={styles.photoCard}>
@@ -85,9 +97,11 @@ export default function CreateSightScreen( {route, navigation}) {
                                 onChangeText={setCity}
                             />
                             <Button
-                                title='Upload Sight'
+                                title={!isEdit ? 'Upload Sight' : 'Update sight'}
                                 //todo icon
                                 onPress={saveSightHandler}
+                                loading={saving}
+                                disabled={saving}
                                 style={styles.submitButton}
                                 />
                     </View>
