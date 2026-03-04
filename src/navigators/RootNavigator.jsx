@@ -2,7 +2,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigator from "./TabNavigator.jsx";
 import DetailsSightScreen from "../screens/DetailsSightScreen.jsx";
-import CreateSightScreen from "../screens/CreateSightScreen.jsx";
+import FormSightScreen from "../screens/FormSightScreen.jsx";
 import { useAuth } from "../context/useAuth.js";
 import AuthNavigator from "./AuthNavigator.jsx";
 
@@ -36,13 +36,13 @@ export default function RootNavigator() {
             />
 
             <Stack.Screen 
-                name='CreateSight'
+                name='FormSight'
                 options={{
                     presentation: "modal",
                     title:'Create your Inspiration',
                     headerBackTitle: 'Back',
                 }}
-                component={CreateSightScreen}
+                component={FormSightScreen}
             />
                 </>
                 

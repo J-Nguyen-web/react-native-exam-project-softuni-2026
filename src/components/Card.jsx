@@ -14,8 +14,6 @@ export default function Card({
 
   const navigation = useNavigation();
 
-  console.log(photo)
-
     return (
         <Pressable style={({pressed}) => [
           cardStyles.style,

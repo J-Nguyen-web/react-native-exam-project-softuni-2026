@@ -31,7 +31,18 @@ export function SightProvider ({children}) {
         try {
             return await sightService.getById(id);
         } catch (error) {
-            
+            console.error('Error get sight: ', error);
+        }
+    }
+    
+    const updateSight = async(id, data) => {
+        try {
+            const updated = await sightService.update(id, data);
+            setSights(previous => previous.map(sight => sight.id === id ? updated : sight)) // замяна на новия със стария
+            return updated;
+        } catch (error) {
+            console.error('Error update sight: ', error);
+            throw error
         }
     }
 
@@ -48,6 +59,7 @@ export function SightProvider ({children}) {
         sights,
         createSight,
         getSightById,
+        updateSight,
         deleteSight,
     }
 

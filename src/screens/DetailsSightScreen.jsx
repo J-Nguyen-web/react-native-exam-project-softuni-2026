@@ -1,17 +1,17 @@
 import { ActivityIndicator, Button, Image, Text, View } from "react-native";
 import { cardStyles } from "../components/cardStyles.js";
-import { dummySights } from "../../db.js";
 import { useEffect, useState } from "react";
 import CountryFlag from "react-native-country-flag";
 import { sightService } from "../services/index.js";
+import { useNavigation } from "@react-navigation/native";
 
 export default function DetailsSightScreen({route}) {
     
     const [sight, setSight] = useState();
 
     const { id: id } = route.params;
+    const navigation = useNavigation();
 
-    // setSight(dummySights.find(item => item.id === id));
     
     useEffect ( () => {
         sightService.getById(id)
@@ -40,7 +40,13 @@ export default function DetailsSightScreen({route}) {
             <Text style={cardStyles.location}>{sight?.location} ({sight?.country})</Text>
             <Text style={cardStyles.description}>{sight?.description}</Text>
             <View>
-                <Button title="Edit"></Button>
+                <Button 
+                    title="Edit"
+                    onPress={() => navigation.navigate('FormSight',{
+                        sight: sight,
+                        isEdit: true
+                    })}
+                    />
                 <Button title="Delete"></Button>
                 <Button title="Rate"></Button>
             </View>

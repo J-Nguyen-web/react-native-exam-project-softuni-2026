@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
-import { dummySights } from "../../db.js";
 import { FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
 import Card from "../components/Card.jsx";
 import { StatusBar } from "expo-status-bar";
 import { sightService } from "../services/index.js";
+import { useSight } from "../context/useSight.js";
 
 export default function SightScreen() {
-  const [sights, setSights] = useState([]);
+  const {sights} = useSight();
+  // const [sights, setSights] = useState([]);
 
   const [refreshing, setRefreshing] = useState(false);
-  const [toggleRefresh, setToggleRefresh] = useState(false);
+  // const [toggleRefresh, setToggleRefresh] = useState(false);
 
   useEffect(() => {
     async function fetchSights() {
@@ -17,7 +18,6 @@ export default function SightScreen() {
       
       try {
         const sightsResult = await sightService.getAll();
-        console.log(sightsResult)
         setSights(sightsResult);
       } catch (error) {
         alert('cannot load data')
@@ -36,14 +36,6 @@ export default function SightScreen() {
         <View style={style.container}>
           <View style={style.titleContainer}>
           </View>
-          
-
-            {/* <ScrollView scrollContent={style.scrollContent}>
-              {sights.map((sight) => (
-                <Card key={sight.id} {...sight} />
-              ))}
-            </ScrollView> */}
-
             <FlatList 
             data={sights}
             renderItem={({item, index}) => <Card index={index} {...item} />}

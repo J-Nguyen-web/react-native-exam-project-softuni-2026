@@ -1,7 +1,7 @@
 import { LinearGradient } from "expo-linear-gradient";
 import { KeyboardAwareScrollView, KeyBoardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Text, StyleSheet, View, ImageBackground } from "react-native";
-import CreateSightScreen from "./CreateSightScreen.jsx";
+import FormSightScreen from "./FormSightScreen.jsx";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Camera from "../components/Camera.jsx";
@@ -14,14 +14,15 @@ export default function HomeScreen() {
 
     useEffect(() => {
         if(photo){
-            navigation.navigate('CreateSight', {initialPhoto: photo});
+            navigation.navigate('FormSight', {initialPhoto: photo});
             setPhoto(null)
         }
     },[photo])
 
     return (
         <LinearGradient colors={["#ffffff", "#ddd6fe"]} style={styles.gradient}>
-            <Text style={styles.title}>Share Your World</Text>
+            <Text style={styles.title}>Share Your Sight</Text>
+            <Text style={styles.subtitle}>Share Your World</Text>
             <Text style={styles.subtitle}>Every place has a story. Inspire others.</Text>
                 <View>
                     <ImageBackground

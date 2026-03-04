@@ -25,6 +25,7 @@ export function AuthProvider({ children}) {
         try {
             setIsLoading(true);
             const newUser = await authService.register(email, password, username);
+            await login(email, password)
             setUser(newUser);
             setError(null);
         } catch (error) {
