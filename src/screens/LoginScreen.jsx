@@ -26,8 +26,8 @@ export default function LoginScreen() {
     // todo
     }
     const handleLogin = () => {
-    if(!email || !password ) return;
-    login({ email, password });
+        if(!email || !password ) return;
+        login({ email, password });
     }
 
     return (
