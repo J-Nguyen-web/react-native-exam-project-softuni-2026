@@ -5,6 +5,7 @@ import FormSightScreen from "./FormSightScreen.jsx";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Camera from "../components/Camera.jsx";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
     
@@ -21,22 +22,24 @@ export default function HomeScreen() {
 
     return (
         <LinearGradient colors={["#ffffff", "#ddd6fe"]} style={styles.gradient}>
-            <Text style={styles.title}>Share Your Sight</Text>
-            <Text style={styles.subtitle}>Share Your World</Text>
-            <Text style={styles.subtitle}>Every place has a story. Inspire others.</Text>
-                <View>
-                    <ImageBackground
-                        source={require("../../assets/film-strip.jpg")}
-                        style={styles.placeholder}
-                        imageStyle={{borderRacdius: 20}}
-                    >
-                        <View>
-                            <Text style={styles.placeholderText}>Your photo will appear here</Text>
-                        </View>
-                    </ImageBackground>
+            <SafeAreaView style={styles.container}>
+                <Text style={styles.title}>Share Your Sight</Text>
+                <Text style={styles.subtitle}>Share Your World</Text>
+                <Text style={styles.subtitle}>Every place has a story. Inspire others.</Text>
+                    <View style={{padding: 20}}>
+                        <ImageBackground
+                            source={require("../../assets/film-strip.jpg")}
+                            style={styles.placeholder}
+                            imageStyle={{borderRacdius: 20}}
+                        >
+                            <View>
+                                <Text style={styles.placeholderText}>Your photo will appear here</Text>
+                            </View>
+                        </ImageBackground>
 
-                    <Camera onPhotoTaken={setPhoto}/>
-                </View>   
+                        <Camera onPhotoTaken={setPhoto}/>
+                    </View>   
+            </SafeAreaView>
         </LinearGradient>
     );
 }

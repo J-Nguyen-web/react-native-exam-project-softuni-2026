@@ -38,8 +38,8 @@ export default function RegisterScreen() {
                     enableOnAndroid = {true}
                     keyboardShouldPersistTaps="handled"
                     enableAutomaticScroll={true}
-                    extraHeight={50}
-                    extraScrollHeight={50}
+                    extraHeight={80}
+                    extraScrollHeight={80}
                     contentContainerStyle={styles.container}
                     keyboardOpeningTime={0}
                 >

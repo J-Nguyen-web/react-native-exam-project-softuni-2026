@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import  Button  from '../components/Button'
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -15,6 +15,13 @@ export default function LoginScreen() {
 
     const navigation = useNavigation();
 
+    useEffect(() => {
+    fetch("https://react-native-api-3.onrender.com/users")
+      .then(res => res.json())
+      .then(data => console.log("API works:", data))
+      .catch(err => console.log("API error:", err));
+  }, []);
+  
     const validate = () => {
     // todo
     }
@@ -30,11 +37,12 @@ export default function LoginScreen() {
                     enableOnAndroid = {true}
                     keyboardShouldPersistTaps="handled"
                     enableAutomaticScroll={true}
-                    extraHeight={50}
-                    extraScrollHeight={50}
+                    extraHeight={80}
+                    extraScrollHeight={80}
                     contentContainerStyle={styles.container}
                     keyboardOpeningTime={0}
                     >
+                        
                     <Text style={styles.title}>Log in</Text>
                     <Text style={styles.subtitle}>Join us and share yhour story.</Text>
 

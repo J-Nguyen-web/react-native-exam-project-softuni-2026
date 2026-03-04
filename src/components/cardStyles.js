@@ -28,7 +28,6 @@ export const cardStyles = StyleSheet.create({
   image: {
     width: "100%",
     height: 220,
-    backgroundColor: 'red',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
   },

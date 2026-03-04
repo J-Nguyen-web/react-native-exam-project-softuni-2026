@@ -1,7 +1,16 @@
 import { createContext, useState } from "react";
 import * as authService from "../services/authService.js"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const AuthContext = createContext({});
+export const AuthContext = createContext({
+    user: null,
+    isLoading: false,
+    error: null,
+    login: async () => {},
+    register: async () => {},
+    logout: () => {},
+    clearError: () => {},
+});
 
 export function AuthProvider({ children}) {
 
@@ -12,7 +21,9 @@ export function AuthProvider({ children}) {
     const login = async ({email, password}) => {
         try {
             setIsLoading(true);
-            const loggedUser = await authService.login(email, password);
+            const data = await authService.login(email, password);
+            await AsyncStorage.setItem("token", data.accessToken);
+
             setUser(loggedUser);
             setError(null);
         } catch (error) {
@@ -24,9 +35,11 @@ export function AuthProvider({ children}) {
     const register = async ({email, password, username}) => {
         try {
             setIsLoading(true);
-            const newUser = await authService.register(email, password, username);
-            await login(email, password)
-            setUser(newUser);
+            const data = await authService.register(email, password, username);
+            await AsyncStorage.setItem("token", data.accessToken);
+
+            // await login(email, password)
+            setUser(data.user);
             setError(null);
         } catch (error) {
             setError(error.message || 'Error during Registration')

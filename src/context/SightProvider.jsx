@@ -46,6 +46,15 @@ export function SightProvider ({children}) {
         }
     }
 
+    const reloadSights = async () => {
+        try {
+            const data = await sightService.getAll();
+            setSights(data);
+        } catch(error) {
+            console.error("Error reloading sights:", error)
+        }
+    }
+
     const deleteSight = async(id)=>{
         try {
             await sightService.deleteSight(id);
@@ -60,6 +69,7 @@ export function SightProvider ({children}) {
         createSight,
         getSightById,
         updateSight,
+        reloadSights,
         deleteSight,
     }
 

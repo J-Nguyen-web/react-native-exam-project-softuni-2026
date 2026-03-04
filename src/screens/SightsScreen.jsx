@@ -6,31 +6,15 @@ import { sightService } from "../services/index.js";
 import { useSight } from "../context/useSight.js";
 
 export default function SightScreen() {
-  const {sights} = useSight();
+  const {sights, reloadSights} = useSight();
   // const [sights, setSights] = useState([]);
 
   const [refreshing, setRefreshing] = useState(false);
-  // const [toggleRefresh, setToggleRefresh] = useState(false);
 
-  useEffect(() => {
-    async function fetchSights() {
-      setRefreshing(true);
-      
-      try {
-        const sightsResult = await sightService.getAll();
-        setSights(sightsResult);
-      } catch (error) {
-        alert('cannot load data')
-      } finally {
-        setRefreshing(false)
-      }
-    } 
-
-    fetchSights();
-  }, [toggleRefresh]);
-
-  const refreshHandler = () => {
-    setToggleRefresh(state => ! state)
+  const refreshHandler = async () => {
+    setRefreshing(true)
+    await reloadSights()
+    setRefreshing(false)
   }
     return (
         <View style={style.container}>
