@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development expo start",
-    "android:go": "cross-env NODE_ENV=development expo start --android",
+    "start": "expo start",
+    "android:go": "expo start --android",
     "android": "expo run:android",
-    "ios": "cross-env NODE_ENV=development expo run:ios",
-    "ios:go": "cross-env NODE_ENV=development expo start --ios",
-    "web": "cross-env NODE_ENV=development expo start --web"
+    "ios": "expo run:ios",
+    "ios:go": "expo start --ios",
+    "web": "expo start --web"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",

@@ -1,4 +1,4 @@
-import { ActivityIndicator, Button, Image, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Button, Image, Text, View } from "react-native";
 import { cardStyles } from "../components/cardStyles.js";
 import { useEffect, useState } from "react";
 import CountryFlag from "react-native-country-flag";
@@ -11,20 +11,39 @@ export default function DetailsSightScreen({route}) {
 
     const { id: id } = route.params;
     const navigation = useNavigation();
-
     
     useEffect ( () => {
         sightService.getById(id)
-        
         .then (res => { setSight(res); })
         .catch(err => {
             console.error('Error fetching sight', err)
         })
-    
     },[id]);
 
     if(!sight) {
         return <ActivityIndicator />
+    }
+
+    async function handleDeleteSight() {
+        try {
+            Alert.alert(
+                "Delete SIght",
+                `Confirm delete sight: ${sight.title} ?`,
+                [
+                    { text: "Dismiss", style: "cancel"},
+                    {
+                        text: "Delete",
+                        style: "destructive",
+                        onPress: async () =>{
+                            await sightService.deleteSight(id);
+                            navigation.goBack();
+                        }
+                    }
+                ]
+            )
+        } catch (error) {
+            console.error(`Failed to delete sight: ${sight.title}`)
+        }
     }
 
     return (
@@ -47,7 +66,7 @@ export default function DetailsSightScreen({route}) {
                         isEdit: true
                     })}
                     />
-                <Button title="Delete"></Button>
+                <Button title="Delete" onPress={(handleDeleteSight)}></Button>
                 <Button title="Rate"></Button>
             </View>
         </View>

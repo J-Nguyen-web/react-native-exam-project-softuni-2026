@@ -4,6 +4,7 @@ import Card from "../components/Card.jsx";
 import { StatusBar } from "expo-status-bar";
 import { sightService } from "../services/index.js";
 import { useSight } from "../context/useSight.js";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function SightScreen() {
   const {sights, reloadSights} = useSight();
@@ -17,9 +18,9 @@ export default function SightScreen() {
     setRefreshing(false)
   }
     return (
+      <LinearGradient colors={["#ffffff", "#ddd6fe"]} style={{flex: 1}}>      
         <View style={style.container}>
-          <View style={style.titleContainer}>
-          </View>
+          {/* <View style={style.titleContainer}> <Text>swipe down to refresh the list of sights</Text> </View> */}
             <FlatList 
             data={sights}
             renderItem={({item, index}) => <Card index={index} {...item} />}
@@ -30,13 +31,13 @@ export default function SightScreen() {
 
           <StatusBar style="dark" />
         </View>
+      </LinearGradient>
     );
 }
 
 export const style = StyleSheet.create({
+  gradient: {flex: 1},
   container: {
-    flex: 1,
-    backgroundColor: '#ffffff',
     paddingTop: 25,
   },
   title: {

@@ -25,9 +25,8 @@ export function AuthProvider({ children}) {
                 const token = await AsyncStorage.getItem("token");
                     if(token) {
                         const data = await authService.getProfile(token);
-                        setUser(data);
+                        setUser(data.user);
                     }
-                
             } catch (error) {
                 await AsyncStorage.removeItem("token");
                 setUser(null)
@@ -59,10 +58,12 @@ export function AuthProvider({ children}) {
     const register = async ({email, password, username}) => {
         try {
             setIsLoading(true);
-            const data = await authService.register(email, password, username);
-            await AsyncStorage.setItem("token", data.accessToken);
+            await authService.register(email, password, username);
+            // we dont const data bcoz the server needs to work on token and hash the password
+            
+            const data = await authService.login(email, password) // thats why log separetly
 
-            // await login(email, password)
+            await AsyncStorage.setItem("token", data.accessToken);
             setUser(data.user);
             setError(null);
         } catch (error) {

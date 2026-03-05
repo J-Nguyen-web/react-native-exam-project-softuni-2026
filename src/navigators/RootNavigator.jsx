@@ -11,12 +11,11 @@ export default function RootNavigator() {
 
     const Stack = createNativeStackNavigator();
     const { isAuthenticated, isLoading, checkingAuth } = useAuth();
-    console.log(isAuthenticated)
 
     if(checkingAuth){
         return (
             <View>
-                <ActivityIndicator size={larger} color={"#793d94"}/>
+                <ActivityIndicator color={"#793d94"}/>
             </View>
         )
     }

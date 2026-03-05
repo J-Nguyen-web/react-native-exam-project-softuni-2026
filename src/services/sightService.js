@@ -2,6 +2,7 @@ import api from "./api.js";
 
 export async function getAll(){
     const response = await api.get('/sights');
+
     return response.data
 }
 

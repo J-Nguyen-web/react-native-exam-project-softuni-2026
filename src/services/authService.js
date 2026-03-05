@@ -1,6 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
-const BASE_URL =process.env.EXPO_PUBLIC_API_URL;
+const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export async function login(email, password) {
 
@@ -10,6 +8,13 @@ export async function login(email, password) {
         body: JSON.stringify({ email, password }),
     });
 
+    if(!res.ok) {
+        const err  = await res.text()
+        console.log('LOGIN ERROR ', err)
+
+        throw new Error("Wrong email or password")
+    }
+
     return res.json();
 }
 
@@ -18,8 +23,27 @@ export async function register(email, password, username) {
     const res = await fetch(`${BASE_URL}/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password, username }),
     });
+
+    if(!res.ok) {
+        throw new Error("Wrong email or password")
+    }
+
+    return res.json();
+}
+
+export async function getProfile(token) { 
+
+    const res = await fetch(`${BASE_URL}/profile`,{
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    });
+
+    if (!res.ok) {
+        throw new Error("Not valid token")
+    }
 
     return res.json();
 }
