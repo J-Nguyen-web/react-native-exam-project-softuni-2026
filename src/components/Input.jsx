@@ -18,7 +18,7 @@ const Input = ({
                     keyboardType={keyboardType}
 
                 />
-                {error && <Text>{error}</Text>}
+                {error && <Text style={{color: "#ff0000"}}>{error}</Text>}
         </View>
     )
 }

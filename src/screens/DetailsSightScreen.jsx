@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import CountryFlag from "react-native-country-flag";
 import { sightService } from "../services/index.js";
 import { useNavigation } from "@react-navigation/native";
+import { useSight } from "../context/useSight.js";
 
 export default function DetailsSightScreen({route}) {
     
@@ -11,6 +12,8 @@ export default function DetailsSightScreen({route}) {
 
     const { id: id } = route.params;
     const navigation = useNavigation();
+    
+    const { deleteSight } = useSight()
     
     useEffect ( () => {
         sightService.getById(id)
@@ -35,7 +38,7 @@ export default function DetailsSightScreen({route}) {
                         text: "Delete",
                         style: "destructive",
                         onPress: async () =>{
-                            await sightService.deleteSight(id);
+                            await deleteSight(id);
                             navigation.goBack();
                         }
                     }

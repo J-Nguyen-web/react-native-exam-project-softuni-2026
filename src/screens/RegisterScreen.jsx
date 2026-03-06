@@ -8,6 +8,7 @@ import { confirmPasswordReset } from "firebase/auth";
 import { LinearGradient } from "expo-linear-gradient";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useNavigation } from "@react-navigation/native";
+import FormWrap from "../components/FormWrap.jsx";
 
 export default function RegisterScreen() {
     const [username, setUsername] = useState('');
@@ -18,19 +19,34 @@ export default function RegisterScreen() {
 
     const navigation = useNavigation();
 
-    const validate = () => {
-    // todo
-    }
+    const { control, errors, handleSubmit} = useFormSight({
+            username: username || '',
+            email: email || '',
+            password: '',
+            confirmPassword: '',
+        });
 
-    const handleRegister = () => {
-    if(!username||!email || !password || !confirmPassword ) return;
-    if(password !== confirmPassword) {
-        alert("Passwords do not match!"); //todo modal?
-        return
-    }
-    register({ email, password, username });
-    }
+    const onSubmit = async (data) => {
+        if(saving ) return;
+            // if(!username||!email || !password || !confirmPassword ) return;    
+            // if(password !== confirmPassword) { alert("Passwords do not match!"); return }
+            // react-hook-form comparison inside the schema
+        setSaving(true)
 
+        try {
+            await register({
+                email: data.email,
+                password: data.password,
+                username: data.username
+             });
+        } catch(error) {
+            console.error("Error during registration", error)
+        } finally {
+            setSaving(false)
+        }
+        
+    }    
+    
     return (
         <LinearGradient colors={["#ffffff", "#ddd6fe"]} style={styles.gradient}>
             <SafeAreaView style={{ flex: 1}}>
@@ -49,10 +65,18 @@ export default function RegisterScreen() {
                     <View style={styles.formCard}>
                         <View style={styles.inputGroup}>
                             <Ionicons name="person-outline" size={20} color={"#7d3d94"}/>
-                            <TextInput 
+                            {/* <TextInput 
                                 placeholder="Username"
                                 value={username}
                                 onChangeText={setUsername}
+                                style={styles.input}
+                                placeholderTextColor={"#7d3d94"}
+                            /> */}
+                            <FormWrap
+                                control={control}
+                                name="username" 
+                                error={errors.username}
+                                placeholder="Username"
                                 style={styles.input}
                                 placeholderTextColor={"#7d3d94"}
                             />
@@ -60,10 +84,11 @@ export default function RegisterScreen() {
 
                         <View style={styles.inputGroup}>
                             <Ionicons name="mail-outline" size={20} color={"#7d3d94"}/>
-                            <TextInput 
+                            <FormWrap 
+                                control={control}
+                                name="email" 
+                                error={errors.username}
                                 placeholder="Email"
-                                value={email}
-                                onChangeText={setEmail}
                                 style={styles.input}
                                 autoCapitalize="none"
                                 autoCorrect={false}
@@ -74,10 +99,11 @@ export default function RegisterScreen() {
 
                         <View style={styles.inputGroup}>
                             <Ionicons name="lock-closed-outline" size={20} color={"#7d3d94"}/>
-                            <TextInput 
+                            <FormWrap 
+                                control={control}
+                                name="password" 
+                                error={errors.password}
                                 placeholder="Password"
-                                value={password}
-                                onChangeText={setPassword}
                                 style={styles.input}
                                 secureTextEntry
                                 placeholderTextColor={"#7d3d94"}
@@ -87,9 +113,10 @@ export default function RegisterScreen() {
                         <View style={styles.inputGroup}>
                             <Ionicons name="lock-closed-outline" size={20} color={"#7d3d94"}/>
                             <TextInput 
+                                control={control}
+                                name="confirmPassword" 
+                                error={errors.connfirmPassword}
                                 placeholder="Confirm Password"
-                                value={confirmPassword}
-                                onChangeText={setConfirmPassword}
                                 style={styles.input}
                                 secureTextEntry
                                 placeholderTextColor={"#7d3d94"}
@@ -102,7 +129,7 @@ export default function RegisterScreen() {
 
                         <Button
                             title="Register"
-                            onPress={handleRegister}
+                            onPress={handleSubmit(onSubmit)}
                             disabled={isLoading}
                             loading={isLoading}
                             style={styles.button}

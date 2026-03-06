@@ -6,19 +6,27 @@ import Button from "../components/Button.jsx";
 import { useSight } from "../context/useSight.js";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as ImagePicker from 'expo-image-picker'
+import { useFormSight } from "../validators/useFormSight.js";
+import FormWrap from "../components/FormWrap.jsx";
 
 export default function FormSightScreen( {route, navigation}) {
     
+    // const [title, setTitle] = useState(sight?.title || '');
+    // const [description, setDescription] = useState(sight?.description || '');
+    // const [country, setCountry] = useState(sight?.country || '');
+    // const [city, setCity] = useState(sight?.city || '');
     const {sight, isEdit,initialPhoto} = route.params;
-    const [title, setTitle] = useState(sight?.title || '');
-    const [description, setDescription] = useState(sight?.description || '');
-    const [country, setCountry] = useState(sight?.country || '');
-    const [city, setCity] = useState(sight?.city || '');
     const [tempUri, setTempUri] = useState(initialPhoto || sight?.photo || null);
     const [saving, setSaving] = useState(false);
 
     const { createSight, updateSight } = useSight();
-    
+    const { control, errors, handleSubmit} = useFormSight({
+        title: sight?.title || '',
+        description: sight?.description || '',
+        country: sight?.country || '',
+        city: sight?.city || '',
+    });
+
     const makeUriUsable = async(tempUri) => {
         if(!tempUri) return null;
 
@@ -29,15 +37,19 @@ export default function FormSightScreen( {route, navigation}) {
         return pickedImage.assets[0].uri;
     }
 
-    const saveSightHandler = async () => {
-        if(saving || !tempUri) return;
-            setSaving(true)
+    const onSubmit = async (data) => {
+        if(saving ) return;
+        if(!tempUri) {
+            Alert("Please add photo");
+        return;
+        }
+        setSaving(true)
 
         try {              
             
             const usableUri = await makeUriUsable(tempUri)
             
-            const sightData = { photo: usableUri, title , description, country, city };
+            const sightData = { ...data, photo: usableUri  };
             
             let result;
             if(isEdit && sight?.id) {
@@ -72,34 +84,38 @@ export default function FormSightScreen( {route, navigation}) {
                     <Camera onPhotoTaken={setTempUri} retake={true}/>
 
                     <View style={styles.formContainer}>
-                            <Input 
+                            <FormWrap
+                                control={control}
+                                name="title" 
+                                error={errors.title} 
                                 label="Title"
                                 placeholder="What we see..."
-                                value={title}
-                                onChangeText={setTitle}
                             />
-                            <Input 
+                            <FormWrap
+                                control={control}
+                                name="description" 
+                                error={errors.description}  
                                 label="Description"
                                 placeholder="What is special about that place..."
-                                value={description}
-                                onChangeText={setDescription}
                             />
-                            <Input
+                            <FormWrap
+                                control={control}
+                                name="country" 
+                                error={errors.country} 
                                 label="Country"
                                 placeholder=""
-                                value={country}
-                                onChangeText={setCountry}
                             />
-                            <Input
+                            <FormWrap
+                                control={control}
+                                name="city" 
+                                error={errors.city} 
                                 label="City"
                                 placeholder=""
-                                value={city}
-                                onChangeText={setCity}
                             />
                             <Button
                                 title={!isEdit ? 'Upload Sight' : 'Update sight'}
                                 //todo icon
-                                onPress={saveSightHandler}
+                                onPress={handleSubmit(onSubmit)}
                                 loading={saving}
                                 disabled={saving}
                                 style={styles.submitButton}

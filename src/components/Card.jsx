@@ -22,6 +22,7 @@ export default function Card({
         onPress={() => navigation.navigate('Details', {id: id})}
         >
           <Image source={{ uri: photo || titleImage }} style={cardStyles.image} resizeMode="cover" />
+          {/* todo loading for photo */}
 
           <View style={cardStyles.content}>
             <View style={cardStyles.titleRow}>

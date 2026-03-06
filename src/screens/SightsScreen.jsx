@@ -23,8 +23,8 @@ export default function SightScreen() {
           {/* <View style={style.titleContainer}> <Text>swipe down to refresh the list of sights</Text> </View> */}
             <FlatList 
             data={sights}
-            renderItem={({item, index}) => <Card index={index} {...item} />}
             keyExtractor={(item) => item.id.toString()}
+            renderItem={({item, index}) => <Card index={index} {...item} />}
             refreshing={refreshing}
             onRefresh={refreshHandler}
             />
