@@ -8,7 +8,9 @@ export default function FormWrap({
     label,
     placeholder,
     keyboardType,
-    error
+    error,
+    style,
+    placeholderTextColor,
 }) {
 
     return (
@@ -24,6 +26,8 @@ export default function FormWrap({
                         placeholder={placeholder}
                         keyboardType = {keyboardType}
                         error={error?.message}
+                        style={style}
+                        placeholderTextColor={placeholderTextColor}
                     />
                 </View>
             )}

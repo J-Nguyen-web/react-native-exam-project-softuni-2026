@@ -6,19 +6,22 @@ const Input = ({
     onChangeText,
     placeholder,
     keyboardType = 'default',
-    error
+    error,
+    style,
+    placeholderTextColor,
 }) => {
     return (
-        <View style={styles.inputBlock}>
+        <View>
             {label && <Text style={styles.inputLabel}>{label}</Text>}
-                <TextInput style={styles.modernInput}
+                <TextInput style={style}
                     value={value}
                     onChangeText={onChangeText}
                     placeholder={placeholder}
                     keyboardType={keyboardType}
-
+                    placeholderTextColor={placeholderTextColor}
                 />
-                {error && <Text style={{color: "#ff0000"}}>{error}</Text>}
+                <View>
+                {error && <Text style={{color: "#ff0000"}}>{error}</Text>}</View>
         </View>
     )
 }
@@ -44,17 +47,6 @@ const styles = StyleSheet.create({
         marginBottom: 6,
         textTransform: "uppercase",
         letterSpacing: 1,
-    },
-    modernInput: {
-        backgroundColor: "#f4e7f8",
-        borderRadius: 18,
-        paddingVertical: 12,
-        paddingHorizontal: 16,
-        marginBottom: 8,
-        fontSize: 16,
-        color: "#7d3d94",
-        borderWidth: 1,
-        borderColor: "#af57a6",
     },
 })
 
