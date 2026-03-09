@@ -28,8 +28,6 @@ export default function SightScreen() {
             refreshing={refreshing}
             onRefresh={refreshHandler}
             />
-
-          <StatusBar style="dark" />
         </View>
       </LinearGradient>
     );

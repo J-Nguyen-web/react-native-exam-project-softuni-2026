@@ -48,7 +48,7 @@ export default function RootNavigator() {
                 name='FormSight'
                 options={{
                     presentation: "modal",
-                    title:'Create your Inspiration',
+                    title:'Create your inspiration',
                     headerBackTitle: 'Back',
                 }}
                 component={FormSightScreen}

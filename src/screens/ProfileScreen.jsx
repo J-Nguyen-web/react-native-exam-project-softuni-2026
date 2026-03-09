@@ -13,7 +13,6 @@ export default function ProfileScreen() {
                 <TouchableOpacity>Booked Sights</TouchableOpacity>
                 <TouchableOpacity>Own Sights</TouchableOpacity>
             </View>
-            <StatusBar style="auto" />
         </View>
     );
 }

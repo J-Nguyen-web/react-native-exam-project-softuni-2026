@@ -1,4 +1,4 @@
-import { Image, ImageBackground, StyleSheet, Text, View } from "react-native";
+import { Image, ImageBackground, StyleSheet, Switch, Text, View } from "react-native";
 import Input from "../components/Input.jsx";
 import Camera from "../components/Camera.jsx";
 import { useState } from "react";
@@ -8,6 +8,11 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import * as ImagePicker from 'expo-image-picker'
 import { useFormSight } from "../validators/useFormSight.js";
 import FormWrap from "../components/FormWrap.jsx";
+import ScreenWrapper from "../components/ScreenWrapper.jsx";
+import { globalColor, globalStyles } from "../globalStyles.js";
+import { Feather, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { Picker } from "@react-native-picker/picker";
+import StarsRating from "../components/StarsRating.jsx";
 
 export default function FormSightScreen( {route, navigation}) {
     
@@ -23,8 +28,11 @@ export default function FormSightScreen( {route, navigation}) {
     const { control, errors, handleSubmit} = useFormSight({
         title: sight?.title || '',
         description: sight?.description || '',
+        category: sight?.category || '',
+        rating: sight?.rating || '',
         country: sight?.country || '',
         city: sight?.city || '',
+        liked: sight?.liked || '',
     });
 
     const makeUriUsable = async(tempUri) => {
@@ -65,66 +73,103 @@ export default function FormSightScreen( {route, navigation}) {
     } 
     return (
         
-        <View style={styles.photoCard}>
-                                
-            <KeyboardAwareScrollView
-                enableOnAndroid = {true}
-                keyboardShouldPersistTaps="handled"
-                enableAutomaticScroll={true}
-                extraHeight={140}
-                extraScrollHeight={80}
-                contentContainerStyle={styles.container}
-                keyboardOpeningTime={0}
-                >
+        <ScreenWrapper>
+            {/* <View style={styles.photoCard}> */}
+            <View style={globalStyles.formCard}>
+
                 <View>
-                    <View>
-                        <Image source={{ uri: tempUri }} style={styles.imagePreview} />
-                    </View>
+                    <Image source={{ uri: tempUri }} style={styles.imagePreview} />
+                </View>
 
-                    <Camera onPhotoTaken={setTempUri} retake={true}/>
+                <Camera onPhotoTaken={setTempUri} retake={true}/>
 
-                    <View style={styles.formContainer}>
-                            <FormWrap
-                                control={control}
-                                name="title" 
-                                error={errors.title} 
-                                label="Title"
-                                placeholder="What we see..."
+                        <FormWrap
+                            control={control}
+                            name="title" 
+                            error={errors.title} 
+                            placeholder="Title of your sight"
+                            style={globalStyles.input}
+                            icon={<MaterialIcons name="title" size={20} color={globalColor.primary} />}
+                        />
+                        <FormWrap
+                            control={control}
+                            name="description" 
+                            error={errors.description}  
+                            placeholder="Describe your sight"
+                            style={globalStyles.input}
+                            icon={<FontAwesome name="file-text-o" size={20} color={globalColor.primary} />}
+                        />
+                        <FormWrap
+                            control={control}
+                            name="description"
+                            defaultValue="nature"
+                            render={({ field: { onChange, value } }) => (
+                                <View>
+                                    <Text>Category</Text>
+                                    <Picker
+                                        selectedValue={value}
+                                        onValueChange={onChange}
+                                    >
+                                        <Picker.Item label="Nature" value="nature" />
+                                        <Picker.Item label="Mountain" value="mountain" />
+                                        <Picker.Item label="Sea Side" value="sea" />
+                                        <Picker.Item label="City Landmarks" value="city" />
+                                        <Picker.Item label="Religious Site" value="religios" />
+                                        <Picker.Item label="Historical Site" value="history" />
+                                    </Picker>
+                                </View>
+                            )}
+                        />
+                        <FormWrap 
+                            control={control}
+                            name="rating"
+                            render={({ field: { onChange, value } }) => (
+                                <View>
+                                    <Text>Rating</Text>
+                                    <StarsRating value={value} onChange={onChange}   />
+                                </View>
+                            )}
+                        />
+                        <FormWrap 
+                            control={control}
+                            name="rating"
+                            render={({ field: { onChange, value } }) => (
+                                <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: 8}}>
+                                    <Text>Liked</Text>
+                                    
+                                    <Switch 
+                                        value={value} 
+                                        onChange={onChange}   
+                                    />
+                                </View>
+                            )}
+                        />
+                        <FormWrap
+                            control={control}
+                            name="country" 
+                            error={errors.country} 
+                            placeholder="Country"
+                            style={globalStyles.input}
+                            icon={<Feather name="flag" size={20} color={globalColor.primary} />}
+                        />
+                        <FormWrap
+                            control={control}
+                            name="city" 
+                            error={errors.city} 
+                            placeholder="City"
+                            style={globalStyles.input}
+                            icon={<MaterialIcons name="location-city" size={20} color={globalColor.primary} />}
+                        />
+                        <Button
+                            title={!isEdit ? 'Upload Sight' : 'Update sight'}
+                            //todo icon
+                            onPress={handleSubmit(onSubmit)}
+                            loading={saving}
+                            disabled={saving}
+                            style={styles.submitButton}
                             />
-                            <FormWrap
-                                control={control}
-                                name="description" 
-                                error={errors.description}  
-                                label="Description"
-                                placeholder="What is special about that place..."
-                            />
-                            <FormWrap
-                                control={control}
-                                name="country" 
-                                error={errors.country} 
-                                label="Country"
-                                placeholder=""
-                            />
-                            <FormWrap
-                                control={control}
-                                name="city" 
-                                error={errors.city} 
-                                label="City"
-                                placeholder=""
-                            />
-                            <Button
-                                title={!isEdit ? 'Upload Sight' : 'Update sight'}
-                                //todo icon
-                                onPress={handleSubmit(onSubmit)}
-                                loading={saving}
-                                disabled={saving}
-                                style={styles.submitButton}
-                                />
-                    </View>
-                </View>  
-            </KeyboardAwareScrollView>
-            
-        </View>
+            </View>
+        </ScreenWrapper>
             
     );
 }
@@ -203,6 +248,17 @@ const styles = StyleSheet.create({
         marginBottom: 16,
         color: "#35701e",
         fontWeight: "500",
+    },
+    modernInput: {
+        backgroundColor: "#f4e7f8",
+        borderRadius: 18,
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        marginBottom: 18,
+        fontSize: 16,
+        color: "#7d3d94",
+        borderWidth: 1,
+        borderColor: "#af57a6",
     },
 
     publishButton: {
