@@ -1,4 +1,5 @@
 import { StyleSheet, Text, TextInput, View } from "react-native"
+import { globalStyles } from "../globalStyles.js";
 
 const Input = ({
     label,
@@ -6,22 +7,34 @@ const Input = ({
     onChangeText,
     placeholder,
     keyboardType = 'default',
+    secureTextEntry,
     error,
     style,
     placeholderTextColor,
+    icon,
 }) => {
     return (
-        <View>
-            {label && <Text style={styles.inputLabel}>{label}</Text>}
-                <TextInput style={style}
+        <View style={globalStyles.inputBlock}>
+            
+            <View style={globalStyles.inputGroup}>
+
+                {icon}
+                
+                {label && <Text style={[globalStyles.inputLabel, {paddingLeft: 8}]}>{label}</Text>}
+
+                <TextInput 
+                    style={style}
                     value={value}
                     onChangeText={onChangeText}
                     placeholder={placeholder}
                     keyboardType={keyboardType}
+                    secureTextEntry={secureTextEntry}
                     placeholderTextColor={placeholderTextColor}
                 />
-                <View>
-                {error && <Text style={{color: "#ff0000"}}>{error}</Text>}</View>
+            </View>
+            <View>
+                {error && <Text style={{color: "#ff0000", paddingBottom: 29}}>{error}</Text>}
+            </View>
         </View>
     )
 }

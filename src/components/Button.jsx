@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         gap: 8,
     },
     primary: {
-        backgroundColor: '#64a8af',
+        backgroundColor: '#d969a5',
     },
     secondary: {
         backgroundColor: '#000'

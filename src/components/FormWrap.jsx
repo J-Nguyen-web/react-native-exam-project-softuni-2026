@@ -8,9 +8,11 @@ export default function FormWrap({
     label,
     placeholder,
     keyboardType,
+    secureTextEntry,
     error,
     style,
     placeholderTextColor,
+    icon,
 }) {
 
     return (
@@ -25,9 +27,11 @@ export default function FormWrap({
                         onChangeText={onChange}
                         placeholder={placeholder}
                         keyboardType = {keyboardType}
+                        secureTextEntry = {secureTextEntry}
                         error={error?.message}
                         style={style}
                         placeholderTextColor={placeholderTextColor}
+                        icon={icon}
                     />
                 </View>
             )}

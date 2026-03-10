@@ -13,6 +13,8 @@ import { globalColor, globalStyles } from "../globalStyles.js";
 import { Feather, FontAwesome, MaterialIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import StarsRating from "../components/StarsRating.jsx";
+import { Controller } from "react-hook-form";
+import  DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function FormSightScreen( {route, navigation}) {
     
@@ -29,10 +31,12 @@ export default function FormSightScreen( {route, navigation}) {
         title: sight?.title || '',
         description: sight?.description || '',
         category: sight?.category || '',
-        rating: sight?.rating || '',
+        rating: sight?.rating || 0,
         country: sight?.country || '',
         city: sight?.city || '',
-        liked: sight?.liked || '',
+        liked: sight?.liked || false,
+        startDate: sight?.startDate ? new Date(sight.startDate) : new Date(),
+        endDate: sight?.endDate ? new Date(sight.endDate) : new Date()
     });
 
     const makeUriUsable = async(tempUri) => {
@@ -86,41 +90,112 @@ export default function FormSightScreen( {route, navigation}) {
                         <FormWrap
                             control={control}
                             name="title" 
+                            label="Title"
                             error={errors.title} 
-                            placeholder="Title of your sight"
+                            placeholder="Name your sight"
                             style={globalStyles.input}
                             icon={<MaterialIcons name="title" size={20} color={globalColor.primary} />}
                         />
                         <FormWrap
                             control={control}
                             name="description" 
+                            label="Description"
                             error={errors.description}  
-                            placeholder="Describe your sight"
+                            placeholder="What makes it special"
                             style={globalStyles.input}
                             icon={<FontAwesome name="file-text-o" size={20} color={globalColor.primary} />}
                         />
                         <FormWrap
                             control={control}
-                            name="description"
+                            name="country"
+                            label="Country"
+                            error={errors.country} 
+                            placeholder=""
+                            style={globalStyles.input}
+                            icon={<Feather name="flag" size={20} color={globalColor.primary} />}
+                        />
+                        <FormWrap
+                            control={control}
+                            name="city" 
+                            label="City"
+                            error={errors.city} 
+                            placeholder=""
+                            style={globalStyles.input}
+                            icon={<MaterialIcons name="location-city" size={20} color={globalColor.primary} />}
+                        />
+                        <View style={globalStyles.container}>
+                            <Text style={[globalStyles.subtitle, {fontSize: 20 }]}>
+                                Best time to visit
+                            </Text>
+                            
+                            <View style={{flexDirection: "row", gap: 14}}>
+                                <Controller
+                                    control={control}
+                                    name="startDate"
+                                    defaultValue={new Date()}
+                                    render={({ field: { onChange, value } }) => (
+                                        <View style={{flex:1, alignItems: "center"}}>
+                                            <Text style={{color: globalColor.primary}}>Start</Text>
+                                            <DateTimePicker
+                                                value={value || new Date()}
+                                                mode="date"
+                                                display="compact"
+                                                onChange={(event, date) => {
+                                                    if(date) {
+                                                        onChange(date)
+                                                    }
+                                                }}
+                                            />
+                                        </View>
+                                    )}
+                                />
+
+                                <Controller
+                                    control={control}
+                                    name="endDate"
+                                    defaultValue={new Date()}
+                                    render={({ field: { onChange, value } }) => (
+                                        <View style={{flex:1, alignItems: "center"}}>
+                                            <Text style={{color: globalColor.primary}}>End</Text>
+                                            <DateTimePicker
+                                                value={value || new Date()}
+                                                mode="date"
+                                                display="compact"
+                                                onChange={(event, date) => {
+                                                    if(date) {
+                                                        onChange(date)
+                                                    }
+                                                }}
+                                            />
+                                        </View>
+                                    )}
+                                />
+                            </View>
+                        <Controller
+                            control={control}
+                            name="category"
                             defaultValue="nature"
                             render={({ field: { onChange, value } }) => (
-                                <View>
-                                    <Text>Category</Text>
+                                <View style={{paddingTop: 20}}>
+                                    <Text style={[globalStyles.subtitle, {fontSize: 20 }]}>Category</Text>
                                     <Picker
                                         selectedValue={value}
                                         onValueChange={onChange}
                                     >
-                                        <Picker.Item label="Nature" value="nature" />
-                                        <Picker.Item label="Mountain" value="mountain" />
-                                        <Picker.Item label="Sea Side" value="sea" />
-                                        <Picker.Item label="City Landmarks" value="city" />
-                                        <Picker.Item label="Religious Site" value="religios" />
-                                        <Picker.Item label="Historical Site" value="history" />
+                                        <Picker.Item label="Nature" value="Nature" />
+                                        <Picker.Item label="Mountain" value="Mountain" />
+                                        <Picker.Item label="Sea Side" value="Sea Side" />
+                                        <Picker.Item label="City Landmarks" value="City Landmarks" />
+                                        <Picker.Item label="Religious" value="Religious" />
+                                        <Picker.Item label="Historical" value="Historical" />
                                     </Picker>
                                 </View>
                             )}
                         />
-                        <FormWrap 
+                            
+                        </View>
+                        
+                        {/* <Controller
                             control={control}
                             name="rating"
                             render={({ field: { onChange, value } }) => (
@@ -130,36 +205,21 @@ export default function FormSightScreen( {route, navigation}) {
                                 </View>
                             )}
                         />
-                        <FormWrap 
+                        <Controller 
                             control={control}
-                            name="rating"
+                            name="liked"
+                            defaultValue={0}
                             render={({ field: { onChange, value } }) => (
                                 <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: 8}}>
                                     <Text>Liked</Text>
                                     
                                     <Switch 
                                         value={value} 
-                                        onChange={onChange}   
+                                        onValueChange={onChange}   
                                     />
                                 </View>
                             )}
-                        />
-                        <FormWrap
-                            control={control}
-                            name="country" 
-                            error={errors.country} 
-                            placeholder="Country"
-                            style={globalStyles.input}
-                            icon={<Feather name="flag" size={20} color={globalColor.primary} />}
-                        />
-                        <FormWrap
-                            control={control}
-                            name="city" 
-                            error={errors.city} 
-                            placeholder="City"
-                            style={globalStyles.input}
-                            icon={<MaterialIcons name="location-city" size={20} color={globalColor.primary} />}
-                        />
+                        /> */}
                         <Button
                             title={!isEdit ? 'Upload Sight' : 'Update sight'}
                             //todo icon
@@ -179,36 +239,6 @@ const styles = StyleSheet.create({
     submitButton: {
         color: '#fff'
     },
-    
-    photoCard: {
-        background: "#fff",
-        borderRadius: 30,
-        padding: 20,
-        shadowColor: "#000",
-        shadowOpacity: 0.12,
-        shadowOffset: { width: 0, height: 6 },
-        shadowRadius: 14,
-        elevation: 6,
-        position: "relative",
-        paddingBottom: 50,
-    },
-
-    placeholder: {
-        height: 200,
-        backgroundColor: "transperant",
-        borderRadius: 20,
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 16,
-        overflow: "hidden", 
-        alignItems: "left",
-        borderColor: "#7d3d94",
-        shadowColor: "#000",
-        shadowOpacity: 0.12,
-        shadowOffset: { width: 0, height: 6 },
-        shadowRadius: 14,
-    },
-    placeholderText: { color: "#7d3d94", fontSize: 16, fontStyle: "italic", fontWeight: "600", padding: 14 },
 
     imagePreview: { 
         width: "100%", 
@@ -223,74 +253,4 @@ const styles = StyleSheet.create({
         borderColor: "#000"
     },
 
-    formContainer: {
-        marginTop: 16,
-        width: "100%",
-    },
-
-    formCard: {
-        backgroundColor: "#ffffff",
-        borderRadius: 26,
-        padding: 20,
-        shadowColor: "#000",
-        shadowOpacity: 0.08,
-        shadowOffset: {width: 0, height: 6},
-        shadowRadius: 11,
-        elevation: 6,
-    },
-
-    input: {
-        backgroundColor: "#ffffff",
-        borderRadius: 20,
-        padding: 14,
-        minHeight: 100,
-        textAlignVertical: "top",
-        marginBottom: 16,
-        color: "#35701e",
-        fontWeight: "500",
-    },
-    modernInput: {
-        backgroundColor: "#f4e7f8",
-        borderRadius: 18,
-        paddingVertical: 12,
-        paddingHorizontal: 16,
-        marginBottom: 18,
-        fontSize: 16,
-        color: "#7d3d94",
-        borderWidth: 1,
-        borderColor: "#af57a6",
-    },
-
-    publishButton: {
-        background: "#50bdf0",
-        paddingVertical: 16,
-        borderRadius: 22,
-        alignItems: "center",
-    },
-    publishtext: { color: "#fff", fontWeight: "900", fontSize: 18},
-
-    permissionContainer: {
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 30,
-        backgroundColor: "#ffffff",
-    },
-
-    imagePreview: { 
-        width: "100%", 
-        height: 220, 
-        borderRadius: 20, 
-        marginBottom: 8,
-    
-        shadowColor: "#000",
-        shadowOpacity: 0.08,
-        shadowOffset: {width: 0, height: 6},
-        shadowRadius: 11,
-        borderColor: "#000"
-    },
-
-    formContainer: {
-        marginTop: 16,
-        width: "100%",
-    },
 })

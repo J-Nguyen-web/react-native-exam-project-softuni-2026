@@ -59,8 +59,9 @@ export default function RegisterScreen() {
                         icon={<Ionicons name="person-outline" size={20} color={globalColor.primary}/>}
                         control={control}
                         name="username" 
+                        label="Username"
                         error={errors.username}
-                        placeholder="Username"
+                        placeholder="Your display name"
                         style={globalStyles.input}
                         placeholderTextColor={globalColor.primary}
                     />
@@ -69,8 +70,9 @@ export default function RegisterScreen() {
                         icon={<Ionicons name="mail-outline" size={20} color={globalColor.primary}/>}
                         control={control}
                         name="email" 
+                        label="E-mail"
                         error={errors.email}
-                        placeholder="Email"
+                        placeholder="example@email.com"
                         style={globalStyles.input}
                         autoCapitalize="none"
                         autoCorrect={false}
@@ -82,8 +84,9 @@ export default function RegisterScreen() {
                         icon={<Ionicons name="lock-closed-outline" size={20} color={globalColor.primary}/>}
                         control={control}
                         name="password" 
+                        label="Password"
                         error={errors.password}
-                        placeholder="Password"
+                        placeholder=""
                         style={globalStyles.input}
                         secureTextEntry
                         placeholderTextColor={globalColor.primary}
@@ -93,8 +96,9 @@ export default function RegisterScreen() {
                         icon={<Ionicons name="lock-closed-outline" size={20} color={globalColor.primary}/>}
                         control={control}
                         name="confirmPassword" 
+                        label="Re-Password"
                         error={errors.confirmPassword}
-                        placeholder="Confirm Password"
+                        placeholder=""
                         style={globalStyles.input}
                         secureTextEntry
                         placeholderTextColor={globalColor.primary}

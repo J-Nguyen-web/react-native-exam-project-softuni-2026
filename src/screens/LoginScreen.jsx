@@ -48,8 +48,9 @@ export default function LoginScreen() {
                     <FormWrap
                         control={control}
                         name="email" 
+                        label="E-mail"
                         error={errors.email}
-                        placeholder="E-mail"
+                        placeholder="example@mail.com"
                         keyboardType="email-address"
                         style={globalStyles.input}
                         placeholderTextColor={globalColor.primary}
@@ -59,8 +60,9 @@ export default function LoginScreen() {
                     <FormWrap
                         control={control}
                         name="password" 
+                        label="Password"
                         error={errors.password}
-                        placeholder="Password"
+                        placeholder=""
                         secureTextEntry={true}
                         style={globalStyles.input}
                         placeholderTextColor={globalColor.primary}
