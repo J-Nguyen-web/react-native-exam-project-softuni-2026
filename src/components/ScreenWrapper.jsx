@@ -13,8 +13,8 @@ export default function ScreenWrapper({children, scroll = true}) {
                         enableOnAndroid = {true}
                         keyboardShouldPersistTaps="handled"
                         enableAutomaticScroll={true}
-                        extraHeight={80}
-                        extraScrollHeight={80}
+                        extraHeight={110}
+                        extraScrollHeight={110}
                         contentContainerStyle={globalStyles.container}
                         keyboardOpeningTime={0}                        
                     >

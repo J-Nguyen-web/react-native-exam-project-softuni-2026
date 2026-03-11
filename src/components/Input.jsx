@@ -12,6 +12,11 @@ const Input = ({
     style,
     placeholderTextColor,
     icon,
+    numberOfLines,
+    textAlignVertical,
+    multiline,
+
+    
 }) => {
     return (
         <View style={globalStyles.inputBlock}>
@@ -23,12 +28,15 @@ const Input = ({
                 {label && <Text style={[globalStyles.inputLabel, {paddingLeft: 8}]}>{label}</Text>}
 
                 <TextInput 
+                    multiline={multiline}
+                    numberOfLines={numberOfLines}
+                    textAlignVertical={textAlignVertical}
                     style={style}
                     value={value}
                     onChangeText={onChangeText}
                     placeholder={placeholder}
                     keyboardType={keyboardType}
-                    secureTextEntry={secureTextEntry}
+                    secureTextEntry={secureTextEntry}   
                     placeholderTextColor={placeholderTextColor}
                 />
             </View>

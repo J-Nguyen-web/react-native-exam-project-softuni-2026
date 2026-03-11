@@ -5,6 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { sightService } from "../services/index.js";
 import { useSight } from "../context/useSight.js";
 import { LinearGradient } from "expo-linear-gradient";
+import { globalColor } from "../globalStyles.js";
 
 export default function SightScreen() {
   const {sights, reloadSights} = useSight();
@@ -20,7 +21,7 @@ export default function SightScreen() {
     return (
       <LinearGradient colors={["#ffffff", "#ddd6fe"]} style={{flex: 1}}>      
         <View style={style.container}>
-          {/* <View style={style.titleContainer}> <Text>swipe down to refresh the list of sights</Text> </View> */}
+          {/* <View style={style.titleContainer}> <Text style={{fontStyle: "italic", color: "#01b9a9"}}>swipe down to refresh content</Text> </View> */}
             <FlatList 
             data={sights}
             keyExtractor={(item) => item.id.toString()}
@@ -35,9 +36,7 @@ export default function SightScreen() {
 
 export const style = StyleSheet.create({
   gradient: {flex: 1},
-  container: {
-    paddingTop: 25,
-  },
+  container: { paddingTop: 25, },
   title: {
     fontSize: 25,
     fontWeight: "700",

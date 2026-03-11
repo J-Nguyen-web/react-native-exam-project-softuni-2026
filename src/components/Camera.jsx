@@ -1,6 +1,5 @@
 import { launchCameraAsync, useCameraPermissions } from "expo-image-picker";
-import { ActivityIndicator, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 export default function Camera({
     onPhotoTaken,
@@ -14,14 +13,14 @@ export default function Camera({
 
     if(!status.granted) {
         return (
-            <SafeAreaView style={styles.permissionContainer}>
+            <View style={{ flexDirection: "column", alignItems: "center"}}>
                 <Text style={styles.permissionTitle}>Enable Camera</Text>
                 <Text style={styles.permissionText}>This app need permission to use camera for your sights!</Text>
             
                 <TouchableOpacity style={styles.primaryButton} onPress={requestPermission}>
                     <Text style={styles.primaryButtonText}>Grant Permission</Text>
                 </TouchableOpacity>
-            </SafeAreaView>
+            </View>
         )
     }
 

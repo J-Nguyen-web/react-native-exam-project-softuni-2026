@@ -1,11 +1,8 @@
-import { LinearGradient } from "expo-linear-gradient";
-import { KeyboardAwareScrollView, KeyBoardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Text, StyleSheet, View, ImageBackground } from "react-native";
-import FormSightScreen from "./FormSightScreen.jsx";
 import { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import Camera from "../components/Camera.jsx";
-import { SafeAreaView } from "react-native-safe-area-context";
+import ScreenWrapper from "../components/ScreenWrapper.jsx";
 
 export default function HomeScreen() {
     
@@ -21,10 +18,9 @@ export default function HomeScreen() {
     },[photo])
 
     return (
-        <LinearGradient colors={["#ffffff", "#ddd6fe"]} style={styles.gradient}>
-            <SafeAreaView style={styles.container}>
+        <ScreenWrapper>
                 <Text style={styles.title}>Share Your Sight</Text>
-                <Text style={styles.subtitle}>Share Your World</Text>
+                {/* <Text style={styles.subtitle}>Share Your World</Text> */}
                 <Text style={styles.subtitle}>Every place has a story. Inspire others.</Text>
                     <View style={{padding: 20}}>
                         <ImageBackground
@@ -39,8 +35,7 @@ export default function HomeScreen() {
 
                         <Camera onPhotoTaken={setPhoto}/>
                     </View>   
-            </SafeAreaView>
-        </LinearGradient>
+        </ScreenWrapper>
     );
 }
 
@@ -62,7 +57,7 @@ const styles = StyleSheet.create({
         fontStyle: "italic", 
         textAlign:"center", 
         color: "#7d3d94", 
-        marginBottom: 30
+        marginBottom: 18
     },
     photoCard: {
         background: "#fff",

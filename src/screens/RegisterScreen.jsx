@@ -88,6 +88,7 @@ export default function RegisterScreen() {
                         error={errors.password}
                         placeholder=""
                         style={globalStyles.input}
+                        multiline={false}
                         secureTextEntry
                         placeholderTextColor={globalColor.primary}
                     />
@@ -100,6 +101,7 @@ export default function RegisterScreen() {
                         error={errors.confirmPassword}
                         placeholder=""
                         style={globalStyles.input}
+                        multiline={false}
                         secureTextEntry
                         placeholderTextColor={globalColor.primary}
                     />

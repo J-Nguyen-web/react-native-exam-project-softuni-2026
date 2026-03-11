@@ -13,6 +13,9 @@ export default function FormWrap({
     style,
     placeholderTextColor,
     icon,
+    numberOfLines,
+    textAlignVertical,
+    multiline,
 }) {
 
     return (
@@ -32,6 +35,9 @@ export default function FormWrap({
                         style={style}
                         placeholderTextColor={placeholderTextColor}
                         icon={icon}
+                        numberOfLines={numberOfLines}
+                        textAlignVertical={textAlignVertical}
+                        multiline={multiline}
                     />
                 </View>
             )}

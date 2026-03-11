@@ -63,7 +63,8 @@ export default function LoginScreen() {
                         label="Password"
                         error={errors.password}
                         placeholder=""
-                        secureTextEntry={true}
+                        multiline={false}
+                        secureTextEntry
                         style={globalStyles.input}
                         placeholderTextColor={globalColor.primary}
                         icon={<Ionicons name="lock-closed-outline" size={20} color={globalColor.primary}/>}

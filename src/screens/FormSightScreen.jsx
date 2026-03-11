@@ -101,8 +101,11 @@ export default function FormSightScreen( {route, navigation}) {
                             name="description" 
                             label="Description"
                             error={errors.description}  
-                            placeholder="What makes it special"
-                            style={globalStyles.input}
+                            placeholder="Why is special..."
+                            multiline = {true}
+                            numberOfLines={3}
+                            textAlignVertical="top"
+                            style={[globalStyles.input, {minHeight: 80, flex: 1}]}
                             icon={<FontAwesome name="file-text-o" size={20} color={globalColor.primary} />}
                         />
                         <FormWrap
