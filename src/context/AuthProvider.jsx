@@ -24,8 +24,7 @@ export function AuthProvider({ children}) {
             try {
                 const token = await AsyncStorage.getItem("token");
                     if(token) {
-                        const data = await authService.getProfile(token);
-                        setUser(data.user);
+                        setUser({token});
                     }
             } catch (error) {
                 await AsyncStorage.removeItem("token");

@@ -6,15 +6,18 @@ import FormSightScreen from "../screens/FormSightScreen.jsx";
 import { useAuth } from "../context/useAuth.js";
 import AuthNavigator from "./AuthNavigator.jsx";
 import { ActivityIndicator, View } from "react-native";
+import LogoutButton from "../components/LogoutButton.jsx"
+import { globalColor } from "../globalStyles.js";
+
+const Stack = createNativeStackNavigator(); // да не се recreat всеки render
 
 export default function RootNavigator() {
 
-    const Stack = createNativeStackNavigator();
     const { isAuthenticated, isLoading, checkingAuth } = useAuth();
 
     if(checkingAuth){
         return (
-            <View>
+            <View style={{flex:1, justifyContent: "center", alignItems: "center"}}>
                 <ActivityIndicator color={"#793d94"}/>
             </View>
         )
@@ -24,15 +27,22 @@ export default function RootNavigator() {
 
     return (
         <Stack.Navigator>
-            { isAuthenticated ? (
-                <Stack.Screen name='Auth' component={AuthNavigator} options={{headerShown: false}} />
+            { !isAuthenticated ? (
+                <Stack.Screen
+                name='Auth'
+                component={AuthNavigator}
+                options={{headerShown: false}} 
+                />
             )
             : (
             <>
             <Stack.Screen
                 name='Tabs'
                 component={TabNavigator}
-                options={{headerShown: false}}
+                options={{
+                    headerShown: false,
+                    title: "Sight2Share"
+                }}
             />
             
             <Stack.Screen 
@@ -40,6 +50,7 @@ export default function RootNavigator() {
                 options={{
                     title:'Details',
                     headerBackTitle: 'Back',
+                    headerTintColor: globalColor.blue
                 }}
                 component={DetailsSightScreen}
             />
