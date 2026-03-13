@@ -1,16 +1,17 @@
-import { Image, ImageBackground, StyleSheet, Switch, Text, View } from "react-native";
+import { Image, ImageBackground, Keyboard, StyleSheet, Switch, Text, View } from "react-native";
 import Input from "../components/Input.jsx";
 import Camera from "../components/Camera.jsx";
 import { useState } from "react";
 import Button from "../components/Button.jsx";
 import { useSight } from "../context/useSight.js";
+import { useAuth } from "../context/useAuth.js";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as ImagePicker from 'expo-image-picker'
 import { useFormSight } from "../validators/useFormSight.js";
 import FormWrap from "../components/FormWrap.jsx";
 import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import { globalColor, globalStyles } from "../globalStyles.js";
-import { Feather, FontAwesome, MaterialIcons } from "@expo/vector-icons";
+import { Feather, FontAwesome, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import StarsRating from "../components/StarsRating.jsx";
 import { Controller } from "react-hook-form";
@@ -21,22 +22,24 @@ export default function FormSightScreen( {route, navigation}) {
     // const [title, setTitle] = useState(sight?.title || '');
     // const [description, setDescription] = useState(sight?.description || '');
     // const [country, setCountry] = useState(sight?.country || '');
-    // const [city, setCity] = useState(sight?.city || '');
+    // const [location, setLocation] = useState(sight?.location || '');
     const {sight, isEdit,initialPhoto} = route.params;
     const [tempUri, setTempUri] = useState(initialPhoto || sight?.photo || null);
     const [saving, setSaving] = useState(false);
 
     const { createSight, updateSight } = useSight();
+    const {user} = useAuth();
     const { control, errors, handleSubmit} = useFormSight({
         title: sight?.title || '',
         description: sight?.description || '',
-        category: sight?.category || '',
+        category: sight?.category || 'Nature',
         rating: sight?.rating || 0,
         country: sight?.country || '',
-        city: sight?.city || '',
+        location: sight?.location || '',
         liked: sight?.liked || false,
         startDate: sight?.startDate ? new Date(sight.startDate) : new Date(),
-        endDate: sight?.endDate ? new Date(sight.endDate) : new Date()
+        endDate: sight?.endDate ? new Date(sight.endDate) : new Date(),
+        ownerId: user.id,
     });
 
     const makeUriUsable = async(tempUri) => {
@@ -48,33 +51,39 @@ export default function FormSightScreen( {route, navigation}) {
         }
         return pickedImage.assets[0].uri;
     }
+    
+    const onError = () => {
+        Keyboard.dismiss();
+    }
 
     const onSubmit = async (data) => {
+        Keyboard.dismiss();
+
         if(saving ) return;
+
         if(!tempUri) {
             Alert("Please add photo");
-        return;
+            return;
         }
+
         setSaving(true)
 
         try {              
-            
             const usableUri = await makeUriUsable(tempUri)
-            
             const sightData = { ...data, photo: usableUri  };
-            
             let result;
             if(isEdit && sight?.id) {
                 result = await updateSight(sight.id, sightData)
+                navigation.goBack()
             } else {
                 result = await createSight(sightData)
+                navigation.replace('Details', {id: result.id})
             }
-            navigation.replace('Details', {id: result.id})
-
         } finally {
             setSaving(false)
         }
     } 
+
     return (
         
         <ScreenWrapper>
@@ -119,16 +128,16 @@ export default function FormSightScreen( {route, navigation}) {
                         />
                         <FormWrap
                             control={control}
-                            name="city" 
-                            label="City"
-                            error={errors.city} 
+                            name="location" 
+                            label="Location"
+                            error={errors.location} 
                             placeholder=""
                             style={globalStyles.input}
-                            icon={<MaterialIcons name="location-city" size={20} color={globalColor.primary} />}
+                            icon={<FontAwesome6 name="map-location-dot" size={20} color={globalColor.primary} />}
                         />
-                        <View style={globalStyles.container}>
-                            <Text style={[globalStyles.subtitle, {fontSize: 20 }]}>
-                                Best time to visit
+                        <View style={[globalStyles.subtitle, {flexDirection: 'column',alignItems:"center",}]}>
+                            <Text style={[globalStyles.subtitle, {fontSize: 18 }]}>
+                                Best time to visit:
                             </Text>
                             
                             <View style={{flexDirection: "row", gap: 14}}>
@@ -138,7 +147,7 @@ export default function FormSightScreen( {route, navigation}) {
                                     defaultValue={new Date()}
                                     render={({ field: { onChange, value } }) => (
                                         <View style={{flex:1, alignItems: "center"}}>
-                                            <Text style={{color: globalColor.primary}}>Start</Text>
+                                            {/* <Text style={{color: globalColor.primary}}>Start</Text> */}
                                             <DateTimePicker
                                                 value={value || new Date()}
                                                 mode="date"
@@ -151,38 +160,39 @@ export default function FormSightScreen( {route, navigation}) {
                                             />
                                         </View>
                                     )}
-                                />
+                                // />
 
-                                <Controller
-                                    control={control}
-                                    name="endDate"
-                                    defaultValue={new Date()}
-                                    render={({ field: { onChange, value } }) => (
-                                        <View style={{flex:1, alignItems: "center"}}>
-                                            <Text style={{color: globalColor.primary}}>End</Text>
-                                            <DateTimePicker
-                                                value={value || new Date()}
-                                                mode="date"
-                                                display="compact"
-                                                onChange={(event, date) => {
-                                                    if(date) {
-                                                        onChange(date)
-                                                    }
-                                                }}
-                                            />
-                                        </View>
-                                    )}
+                                // <Controller
+                                //     control={control}
+                                //     name="endDate"
+                                //     defaultValue={new Date()}
+                                //     render={({ field: { onChange, value } }) => (
+                                //         <View style={{flex:1, alignItems: "center"}}>
+                                //             <Text style={{color: globalColor.primary}}>End</Text>
+                                //             <DateTimePicker
+                                //                 value={value || new Date()}
+                                //                 mode="date"
+                                //                 display="compact"
+                                //                 onChange={(event, date) => {
+                                //                     if(date) {
+                                //                         onChange(date)
+                                //                     }
+                                //                 }}
+                                //             />
+                                //         </View>
+                                //     )}
                                 />
                             </View>
+                        </View>
                         <Controller
                             control={control}
                             name="category"
-                            defaultValue="nature"
+                            defaultValue="Nature"
                             render={({ field: { onChange, value } }) => (
                                 <View style={{paddingTop: 20}}>
                                     <Text style={[globalStyles.subtitle, {fontSize: 20 }]}>Category</Text>
                                     <Picker
-                                        selectedValue={value}
+                                        selectedValue={value || "Nature"}
                                         onValueChange={onChange}
                                     >
                                         <Picker.Item label="Nature" value="Nature" />
@@ -196,7 +206,7 @@ export default function FormSightScreen( {route, navigation}) {
                             )}
                         />
                             
-                        </View>
+                        
                         
                         {/* <Controller
                             control={control}
@@ -226,7 +236,7 @@ export default function FormSightScreen( {route, navigation}) {
                         <Button
                             title={!isEdit ? 'Upload Sight' : 'Update sight'}
                             //todo icon
-                            onPress={handleSubmit(onSubmit)}
+                            onPress={handleSubmit(onSubmit, onError)}
                             loading={saving}
                             disabled={saving}
                             style={styles.submitButton}

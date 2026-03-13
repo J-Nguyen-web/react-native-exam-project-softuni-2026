@@ -47,7 +47,7 @@ export const cardStyles = StyleSheet.create({
   },
 
   title: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: "800",
     color: "#0077b6",
     flex: 1,
@@ -69,6 +69,7 @@ export const cardStyles = StyleSheet.create({
 
   description: {
     marginTop: 16,
+    marginBottom: 16,
     fontSize: 18,
   }
 });

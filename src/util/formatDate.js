@@ -4,7 +4,7 @@ export function formatDate(date) {
     const storedDate = new Date(date)
     const options = {
         day: "2-digit",
-        month: "short",
+        month: "long",
         //without year: "numeric"
     }
     return storedDate.toLocaleDateString("en-GB", options)

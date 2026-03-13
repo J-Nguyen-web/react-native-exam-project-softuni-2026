@@ -7,19 +7,21 @@ import { AuthProvider } from './context/AuthProvider.jsx';
 
     export default function App() {
         return (
-            <AuthProvider>
-                <SightProvider>
-                    <NavigationContainer>
-                    {/* за да работят всички навигатори всички се обвиват в него*/}
-                        
-                        <StatusBar style="auto" />
-                            <SafeAreaProvider>
-                                {/* <SafeAreaView> bugged for now - its depricated - use SafeAreaView from react-native-safe-area-context*/}                                   
-                                    <RootNavigator />                                    
-                                {/* </SafeAreaView> */}
-                            </SafeAreaProvider>
-                    </NavigationContainer>
-                </SightProvider>
-            </AuthProvider>
+                <AuthProvider>
+                    <SightProvider>
+                        <NavigationContainer>
+                        {/* за да работят всички навигатори всички се обвиват в него*/}
+                            
+                            <StatusBar style="auto" />
+                                <SafeAreaProvider>
+                                    {/* <SafeAreaView> bugged for now - its depricated - use SafeAreaView from react-native-safe-area-context*/}
+                                                                    
+                                        <RootNavigator />
+                                                                        
+                                    {/* </SafeAreaView> */}
+                                </SafeAreaProvider>
+                        </NavigationContainer>
+                    </SightProvider>
+                </AuthProvider>
         );
     }

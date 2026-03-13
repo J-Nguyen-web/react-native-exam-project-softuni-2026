@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#d969a5',
     },
     secondary: {
-        backgroundColor: '#000'
+        backgroundColor: '#15c6c3'
     },
     outline: {
         backgroundColor: 'transparent',
@@ -76,13 +76,13 @@ const styles = StyleSheet.create({
         fontWeight: '600',
     },
     primaryText: {
-        color: '#dec717',
+        color: '#ffffff',
     },
     secondaryText: {
-        color: '#1010b7'
+        color: '#151515'
     },
     disabledText: {
-        color: '#8d7070'
+        color: '#aba0a0'
     }
 })
 
