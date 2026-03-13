@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native"
 
 export const globalColor = {
     primary: "#793d94",
+    blue: "#0077b6",
     placeholder: "#f2e3f0",
     gradientPrimo: "#ffffff",
     gradientSecundo: "#ddd6fe",
@@ -10,6 +11,20 @@ export const globalColor = {
 export const globalStyles = StyleSheet.create({
 
     gradient: { flex: 1},
+
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignContent: 'center',
+        paddingHorizontal: 20,
+        textAlign: 'center'
+    },
+    loadingText: {
+        marginTop: 20,
+        textAlign: 'center',
+        fontSize: 16,
+        color:"#777",
+    },
 
     container: { 
         padding: 20, 
