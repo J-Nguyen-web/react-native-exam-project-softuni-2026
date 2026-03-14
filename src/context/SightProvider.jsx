@@ -37,7 +37,7 @@ export function SightProvider ({children}) {
     const getSightById = async (id) => {
         try {
             setLoading(true)
-            await new Promise(resolve => setTimeout(resolve, 5000));
+            
             return await sightService.getById(id);
         } catch (error) {
             console.error('Error get sight: ', error);

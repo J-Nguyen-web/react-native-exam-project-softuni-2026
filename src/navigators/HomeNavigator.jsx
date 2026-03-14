@@ -8,7 +8,8 @@ export default function HomeNavigator() {
     return (
         
         // всички screens в който ще са със stack navigator (със стрелка за back, за да не се stack множество екрани)
-        <Stack.Navigator screenOptions={{headerRight: () => <LogoutButton /> }}>
+        <Stack.Navigator>
+        {/* <Stack.Navigator screenOptions={{headerRight: () => <LogoutButton /> }}> */}
             <Stack.Screen name="Home" component={HomeScreen} options={{ 
                 title: "Sight 2 Share",
                 tabBarActiveTintColor: globalColor.primary,

@@ -7,19 +7,17 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-          "NSCameraUsageDescription": "This app need your camera to shoot your sight.",
-          "NSPhotoLibraryUsageDescription": "To upload photos this app need access to your collection."
-        }
+        "NSCameraUsageDescription": "This app need your camera to shoot your sight.",
+        "NSPhotoLibraryUsageDescription": "To upload photos this app need access to your collection."
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -28,12 +26,14 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "com.nguyen.sight2share",
-      "permission": ["CAMERA", "READ_EXTERNAL_STORAGE"]
+      "permission": [
+        "CAMERA",
+        "READ_EXTERNAL_STORAGE"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    
     "plugins": [
       [
         "expo-image-picker",
@@ -41,7 +41,8 @@
           "cameraPermission": "Camera is required to take pictures.",
           "photosPermission": "This App need access to your photos, otherwise you can not select images."
         }
-      ]
+      ],
+      "@react-native-community/datetimepicker"
     ]
   }
 }
