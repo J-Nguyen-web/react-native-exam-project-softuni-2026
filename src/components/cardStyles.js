@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { globalColor } from "../globalStyles.js";
 
 export const cardStyles = StyleSheet.create({
   style: {
@@ -49,7 +50,8 @@ export const cardStyles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "800",
-    color: "#0077b6",
+    // color: "#0077b6",
+    color: globalColor.primary,
     flex: 1,
   },
 

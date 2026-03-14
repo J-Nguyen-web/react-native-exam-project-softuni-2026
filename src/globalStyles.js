@@ -2,10 +2,13 @@ import { StyleSheet } from "react-native"
 
 export const globalColor = {
     primary: "#793d94",
+    roseAsh: "#c4b0cf",
     blue: "#0077b6",
+    turqouise: "#01b9a9",
     placeholder: "#f2e3f0",
     gradientPrimo: "#ffffff",
     gradientSecundo: "#ddd6fe",
+    gradientVerdi: "#befec7"
 }
 
 export const globalStyles = StyleSheet.create({

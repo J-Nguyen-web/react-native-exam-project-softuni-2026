@@ -71,7 +71,7 @@ export default function LoginScreen() {
                     />
                                 
                 {error && (
-                    <Text style={{ color: "red", marginBottom: 11}}>{error.message  }</Text>
+                    <Text style={{ color: "red", marginBottom: 11}}>{error}</Text>
                 )}
 
                 <Button

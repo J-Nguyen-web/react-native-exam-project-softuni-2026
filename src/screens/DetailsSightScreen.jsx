@@ -83,10 +83,10 @@ export default function DetailsSightScreen({route}) {
                     <Text style={cardStyles.description}>{sight?.description}</Text>
 
                     {/* todo link to all the sights with same category */}
-                    <Text style={[cardStyles.description, {fontStyle:'italic'}]}><Text style={{color: globalColor.blue}}>Category:  </Text> {sight?.category}</Text>
+                    <Text style={[cardStyles.description, {fontStyle:'italic'}]}><Text style={{color: globalColor.turqouise}}>Category:  </Text> {sight?.category}</Text>
                     
                     <View style={{ flexDirection: 'row', alignItems: 'baseline'}}>
-                        <Text style={[cardStyles.description, {color: globalColor.blue}]}>
+                        <Text style={[cardStyles.description, {color: globalColor.turqouise}]}>
                             Best time to visit:
                         </Text>
                         <Text style={[cardStyles.description, {fontStyle: 'italic'}]}>  around {formatDate(sight?.startDate) }</Text>

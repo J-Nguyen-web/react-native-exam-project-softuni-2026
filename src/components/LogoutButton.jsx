@@ -19,7 +19,7 @@ export default function LogoutButton() {
     return (
         <TouchableOpacity onPress={logoutHandler} style={{marginRight: 0}}>
             <View style={{flexDirection: "row", gap: 8}}>
-                <Text style={{color: globalColor.primary}}>Logout</Text>
+                <Text style={{color: globalColor.primary , fontSize:20}}>Logout</Text>
                 <Ionicons name="log-out-outline" size={25} color={globalColor.primary} />
             </View>    
         </TouchableOpacity>
