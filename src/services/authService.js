@@ -1,7 +1,6 @@
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export async function login(email, password) {
-
     const res = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -27,15 +26,18 @@ export async function register(email, password, username) {
     });
 
     if(!res.ok) {
-        throw new Error("Wrong email or password")
+        const err = await res.text();
+        console.log("Register ERROR", err);
+
+        throw new Error("Email already exist!")
     }
 
-    return res.json();
+    return await res.json();
 }
 
 export async function getProfile(token) { 
 
-    const res = await fetch(`${BASE_URL}/profile`,{
+    const res = await fetch(`${BASE_URL}/profile`,{ // не връща и не приема token-a, за това е функцията checkUser
         headers: {
             Authorization: `Bearer ${token}`
         }
@@ -48,7 +50,14 @@ export async function getProfile(token) {
     return res.json();
 }
 
+export async function checkUserExist(userId){
+    const res = await fetch(`${BASE_URL}/users/${userId}`);
 
+    if(!res.ok) {
+        throw new Error("User not found");
+    }
+    return res.json();
+}
 // import  api  from "./api.js";
 
 // export async function login(email, password) {

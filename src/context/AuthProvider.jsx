@@ -22,17 +22,36 @@ export function AuthProvider({ children}) {
     useEffect(() =>{
         const loadUser = async () => {
             try {
-                const token = await AsyncStorage.getItem("token");
+                const token = await AsyncStorage.getItem('token');
+                console.log(token)
                     if(token) {
                         setUser({token});
                     }
             } catch (error) {
-                await AsyncStorage.removeItem("token");
+                await AsyncStorage.removeItem('token');
                 setUser(null)
             } finally {
                 setCheckingAuth(false)
+                
+                startUserCheckInterval();
             }
         };
+
+        // json-server-aut doesnt accept the token, за това използвам проверка дали не е изтрит потребителя, 
+        // ако случайно оставите телефона си по средата на тестване, защото задреме ли сървъра се изтриват регистрираните потребите
+        const startUserCheckInterval = () => {
+            const interval = setInterval(async () => {
+                const userId = await AsyncStorage.getItem('userId');
+                if(!userId) return;
+                try {
+                    await authService.checkUserExist(userId)
+                    console.log(await authService.checkUserExist(userId))
+                } catch {
+                    await logout();
+                }
+            },60000)
+            return () => clearInterval(interval);
+        }
         loadUser();
     }, [])
 
@@ -41,11 +60,12 @@ export function AuthProvider({ children}) {
             setIsLoading(true);
             const data = await authService.login(email, password);
             if(data.accessToken) {
-                await AsyncStorage.setItem("token", data.accessToken);
+                await AsyncStorage.setItem('token', data.accessToken);
+                await AsyncStorage.setItem('userId', data.user.id);
                 setUser(data.user);
                 setError(null)
             } else {
-                await AsyncStorage.removeItem("token");
+                await AsyncStorage.removeItem('token');
                 setUser(null)
             }
         } catch (error) {
@@ -62,7 +82,8 @@ export function AuthProvider({ children}) {
             
             const data = await authService.login(email, password) // thats why log separetly
 
-            await AsyncStorage.setItem("token", data.accessToken);
+            await AsyncStorage.setItem('token', data.accessToken);
+            await AsyncStorage.setItem('userId', data.user.id);
             setUser(data.user);
             setError(null);
         } catch (error) {
@@ -73,7 +94,8 @@ export function AuthProvider({ children}) {
     }
 
     const logout = async () =>{
-        await AsyncStorage.removeItem("token")
+        await AsyncStorage.removeItem('token')
+        await AsyncStorage.removeItem('userId')
         setUser(null);}  
 
     const clearError = () => setError(null);
