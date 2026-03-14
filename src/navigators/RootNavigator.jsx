@@ -8,25 +8,28 @@ import AuthNavigator from "./AuthNavigator.jsx";
 import { ActivityIndicator, View } from "react-native";
 import LogoutButton from "../components/LogoutButton.jsx"
 import { globalColor } from "../globalStyles.js";
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthProvider.jsx";
 
 const Stack = createNativeStackNavigator(); // да не се recreat всеки render
 
 export default function RootNavigator() {
 
-    const { isAuthenticated, isLoading, checkingAuth } = useAuth();
+    const { isAuthenticated, isLoading, checkingAuth } = useContext(AuthContext);
 
     if(checkingAuth){
-        return (
-            <View style={{flex:1, justifyContent: "center", alignItems: "center"}}>
-                <ActivityIndicator color={"#793d94"}/>
-            </View>
-        )
+        return null
+        // (
+        //     <View style={{flex:1, justifyContent: "center", alignItems: "center"}}>
+        //         <ActivityIndicator color={globalColor.primary}/>
+        //     </View>
+        // )
     }
 
     if(isLoading) return null;
 
     return (
-        <Stack.Navigator>
+        <Stack.Navigator key={isAuthenticated ? "auth" : "guest"}>
             { !isAuthenticated ? (
                 <Stack.Screen
                 name='Auth'
@@ -50,7 +53,7 @@ export default function RootNavigator() {
                 options={{
                     title:'Details',
                     headerBackTitle: 'Back',
-                    headerTintColor: globalColor.blue
+                    headerTintColor: globalColor.turqouise
                 }}
                 component={DetailsSightScreen}
             />
