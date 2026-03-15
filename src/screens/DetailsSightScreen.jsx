@@ -8,6 +8,7 @@ import { formatDate } from "../util/formatDate.js";
 import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import Button from "../components/Button.jsx";
 import { globalColor, globalStyles } from "../globalStyles.js";
+import { GestureDetector, Gesture, Directions } from "react-native-gesture-handler";
 
 export default function DetailsSightScreen({route}) {
     
@@ -38,6 +39,13 @@ export default function DetailsSightScreen({route}) {
         )
     }
 
+    const swipeBack = Gesture.Pan()
+            .onEnd((event) => {
+                if(event.translationX > 120 ){
+                    navigation.goBack();
+                }                
+            })
+
     async function handleDeleteSight() {
         try {
             Alert.alert(
@@ -61,6 +69,8 @@ export default function DetailsSightScreen({route}) {
     }
 
     return (
+        <GestureDetector gesture={swipeBack}>
+
         <ScreenWrapper>
              
             <View style={cardStyles.style}>
@@ -119,6 +129,7 @@ export default function DetailsSightScreen({route}) {
                 </View>
             </View>
     </ScreenWrapper>
+    </GestureDetector>
     );
 }
 

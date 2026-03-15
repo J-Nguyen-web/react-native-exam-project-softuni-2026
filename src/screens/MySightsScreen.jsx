@@ -8,6 +8,7 @@ import { useSight } from "../context/useSight.js";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
+import { GestureDetector, Gesture, Directions } from "react-native-gesture-handler";
 
 export default function MySightsScreen() {
     const { sights, reloadSights } = useSight();
@@ -15,7 +16,6 @@ export default function MySightsScreen() {
     const {user} = useAuth();
 
     const mySights = sights.filter(sight => sight.ownerId === user.id)
-    console.log('Mys igte     ', mySights)
 
     useFocusEffect(
         useCallback(()=> {
@@ -23,7 +23,15 @@ export default function MySightsScreen() {
         },[])
     )
 
+    const swipeBack = Gesture.Pan()
+            .onEnd((event) => {
+                if(event.translationX > 120 ){
+                    navigation.goBack();
+                }                
+            })
+
     return (
+        <GestureDetector gesture={swipeBack}>
         <LinearGradient colors={[globalColor.gradientPrimo, globalColor.gradientSecundo]} style={{flex:1 }}>
             <SafeAreaView style={{flex:1}}>
                 {/* <Text style={globalStyles.title}>
@@ -48,6 +56,7 @@ export default function MySightsScreen() {
                 </TouchableOpacity>
             )}
             </SafeAreaView> 
-        </LinearGradient>   
+        </LinearGradient>
+        </GestureDetector>   
     );
 }

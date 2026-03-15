@@ -4,9 +4,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'react-native';
 import { SightProvider } from './context/SightProvider.jsx';
 import { AuthProvider } from './context/AuthProvider.jsx';
+import { enableScreens } from "react-native-screens";
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
+enableScreens();
 
     export default function App() {
         return (
+            <GestureHandlerRootView>
                 <AuthProvider>
                     <SightProvider>
                         <NavigationContainer>
@@ -23,5 +28,6 @@ import { AuthProvider } from './context/AuthProvider.jsx';
                         </NavigationContainer>
                     </SightProvider>
                 </AuthProvider>
+            </GestureHandlerRootView>
         );
     }

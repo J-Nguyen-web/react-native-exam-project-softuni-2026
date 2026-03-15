@@ -18,18 +18,24 @@ export default function RootNavigator() {
     const { isAuthenticated, isLoading, checkingAuth } = useContext(AuthContext);
 
     if(checkingAuth){
-        return null
-        // (
-        //     <View style={{flex:1, justifyContent: "center", alignItems: "center"}}>
-        //         <ActivityIndicator color={globalColor.primary}/>
-        //     </View>
-        // )
+        return (
+            <View style={{flex:1, justifyContent: "center", alignItems: "center"}}>
+                <ActivityIndicator color={globalColor.primary}/>
+            </View>
+        )
     }
 
     if(isLoading) return null;
 
     return (
-        <Stack.Navigator key={isAuthenticated ? "auth" : "guest"}>
+        <Stack.Navigator 
+            key={isAuthenticated ? "auth" : "guest"}
+            screenOptions={{
+                gestureEnabled: true,
+                fullScreenGestureEnabled: true,
+                animation: 'slide_from_right',
+            }}
+        >
             { !isAuthenticated ? (
                 <Stack.Screen
                 name='Auth'
