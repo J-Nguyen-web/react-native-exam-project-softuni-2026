@@ -1,13 +1,12 @@
-// Мястото за основния навигатор ( в случая е bottom tabs)
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigator from "./TabNavigator.jsx";
 import DetailsSightScreen from "../screens/DetailsSightScreen.jsx";
 import FormSightScreen from "../screens/FormSightScreen.jsx";
 import { useAuth } from "../context/useAuth.js";
 import AuthNavigator from "./AuthNavigator.jsx";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, Text, View } from "react-native";
 import LogoutButton from "../components/LogoutButton.jsx"
-import { globalColor } from "../globalStyles.js";
+import { globalColor, globalStyles } from "../globalStyles.js";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider.jsx";
 
@@ -17,10 +16,13 @@ export default function RootNavigator() {
 
     const { isAuthenticated, isLoading, checkingAuth } = useContext(AuthContext);
 
-    if(checkingAuth){
+    if(checkingAuth || isLoading){
         return (
             <View style={{flex:1, justifyContent: "center", alignItems: "center"}}>
                 <ActivityIndicator color={globalColor.primary}/>
+                                <Text style={globalStyles.loadingText}>
+                                    Loading sights...  may take up to 50 seconds if the server is waking up
+                                </Text>
             </View>
         )
     }
@@ -34,6 +36,7 @@ export default function RootNavigator() {
                 gestureEnabled: true,
                 fullScreenGestureEnabled: true,
                 animation: 'slide_from_right',
+                headerTitleAlign: 'center',
             }}
         >
             { !isAuthenticated ? (
