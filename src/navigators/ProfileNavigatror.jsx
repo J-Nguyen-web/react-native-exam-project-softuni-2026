@@ -8,7 +8,7 @@ export default function ProfileNavigator() {
     return (
         
         // всички screens в който ще са със stack navigator (със стрелка за back, за да не се stack множество екрани)
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{ headerTitleAlign: 'center' }}>
             <Stack.Screen 
                 name="ProfileDetails" 
                 component={ProfileScreen} 

@@ -15,12 +15,13 @@ return (
     <Tabs.Navigator 
         screenOptions={{
             tabBarStyle: {paddingTop:8 ,},
-            tabBarLabelStyle: {fontSize: 14}
-            }}>
+            tabBarLabelStyle: {fontSize: 14},
+        }}>
         <Tabs.Screen name="HomeNavigator"  component={HomeNavigator} options={{
             // /* подаваме друг навигатор вместо screen , за да се използват всичките screen от него */
             headerShown: false,
             title: "Home",
+            headerTitleAlign: 'center',
             tabBarActiveTintColor: globalColor.primary,
             tabBarInactiveTintColor: globalColor.roseAsh,
             tabBarIcon: ({ focused ,color, size}) => (

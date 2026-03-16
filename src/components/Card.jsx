@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import { Image, Pressable, Text, View } from "react-native";
 import { cardStyles } from "./cardStyles.js";
 import { Entypo, Ionicons } from "@expo/vector-icons";
+import { globalColor } from "../globalStyles.js";
 
 export default function Card({
   id,
@@ -11,6 +12,7 @@ export default function Card({
   rating,
   country,
   location,
+  author,
 }) {
 
   const navigation = useNavigation();
@@ -29,6 +31,7 @@ export default function Card({
             <View style={cardStyles.titleRow}>
               <Text style={cardStyles.title}>{title}</Text>
               {/* todo <Text style={cardStyles.rating}># {rating}</Text> */}
+              <Text style={{fontStyle:"italic"}}>Author: <Text style={{color: globalColor.turqouise}}>{author}</Text></Text>
             </View>
               {/* todo add flags for country */}
               {/* todo location link to the place*/}

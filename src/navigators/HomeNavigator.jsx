@@ -12,6 +12,7 @@ export default function HomeNavigator() {
         {/* <Stack.Navigator screenOptions={{headerRight: () => <LogoutButton /> }}> */}
             <Stack.Screen name="Home" component={HomeScreen} options={{ 
                 title: "Sight 2 Share",
+                headerTitleAlign: 'center',
                 tabBarActiveTintColor: globalColor.primary,
                 headerTitleStyle: {fontWeight: 'bold', fontSize: 20},
                 headerTintColor: globalColor.primary,
