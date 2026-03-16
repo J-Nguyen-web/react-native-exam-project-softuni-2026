@@ -2,6 +2,7 @@ import { StyleSheet } from "react-native"
 
 export const globalColor = {
     primary: "#793d94",
+    pink: '#d949a5',
     roseAsh: "#c4b0cf",
     blue: "#0077b6",
     turqouise: "#01b9a9",

@@ -1,4 +1,5 @@
 import { ActivityIndicator, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { globalColor } from "../globalStyles.js";
 
 const Button = ({
     title,
@@ -47,10 +48,10 @@ const styles = StyleSheet.create({
         gap: 8,
     },
     primary: {
-        backgroundColor: '#d969a5',
+        backgroundColor: globalColor.pink,
     },
     secondary: {
-        backgroundColor: '#15c6c3'
+        backgroundColor: globalColor.turqouise,
     },
     outline: {
         backgroundColor: 'transparent',

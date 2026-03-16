@@ -179,11 +179,20 @@ export default function FormSightScreen( {route, navigation}) {
                             name="category"
                             defaultValue="Nature"
                             render={({ field: { onChange, value } }) => (
-                                <View style={{paddingTop: 20}}>
+                                <View style={{
+                                    borderWidth: 1,
+                                    borderBlockColor: globalColor.pink,
+                                    borderRadius: 16,
+                                    paddingHorizontal: 8,
+                                    justifyContent: 'flex-start',
+                                    overflow: 'hidden',
+                                    height:160,
+                                }}>
                                     <Text style={[globalStyles.subtitle, {fontSize: 20 }]}>Category</Text>
                                     <Picker
                                         selectedValue={value || "Nature"}
                                         onValueChange={onChange}
+                                        style={{color:'#000'}}
                                     >
                                         <Picker.Item label="Nature" value="Nature" />
                                         <Picker.Item label="Mountain" value="Mountain" />
