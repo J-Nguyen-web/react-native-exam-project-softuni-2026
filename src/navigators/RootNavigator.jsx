@@ -9,8 +9,10 @@ import LogoutButton from "../components/LogoutButton.jsx"
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider.jsx";
+import { createStackNavigator } from "@react-navigation/stack";
+import { CardStyleInterpolators } from "@react-navigation/stack";
 
-const Stack = createNativeStackNavigator(); // да не се recreat всеки render
+const Stack = createStackNavigator(); // извън навигатора - да не се recreat всеки render
 
 export default function RootNavigator() {
 
@@ -34,6 +36,8 @@ export default function RootNavigator() {
             key={isAuthenticated ? "auth" : "guest"}
             screenOptions={{
                 gestureEnabled: true,
+                gestureDirection: "horizontal",
+                cardStyleInterpolator: CardStyleInterpolators.forHorizontalIOS,
                 fullScreenGestureEnabled: true,
                 animation: 'slide_from_right',
                 headerTitleAlign: 'center',
