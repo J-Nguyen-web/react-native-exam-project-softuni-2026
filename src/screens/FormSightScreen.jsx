@@ -16,6 +16,7 @@ import { Picker } from "@react-native-picker/picker";
 import StarsRating from "../components/StarsRating.jsx";
 import { Controller } from "react-hook-form";
 import  DateTimePicker from "@react-native-community/datetimepicker";
+import DateInput from "../components/DateInput.jsx";
 
 export default function FormSightScreen( {route, navigation}) {
     
@@ -40,6 +41,7 @@ export default function FormSightScreen( {route, navigation}) {
         startDate: sight?.startDate ? new Date(sight.startDate) : new Date(),
         endDate: sight?.endDate ? new Date(sight.endDate) : new Date(),
         ownerId: user.id,
+        author: user.username,
     });
 
     const makeUriUsable = async(tempUri) => {
@@ -58,7 +60,7 @@ export default function FormSightScreen( {route, navigation}) {
 
     const onSubmit = async (data) => {
         Keyboard.dismiss();
-
+        console.log(user)
         if(saving ) return;
 
         if(!tempUri) {
@@ -146,19 +148,7 @@ export default function FormSightScreen( {route, navigation}) {
                                     name="startDate"
                                     defaultValue={new Date()}
                                     render={({ field: { onChange, value } }) => (
-                                        <View style={{flex:1, alignItems: "center"}}>
-                                            {/* <Text style={{color: globalColor.primary}}>Start</Text> */}
-                                            <DateTimePicker
-                                                value={value || new Date()}
-                                                mode="date"
-                                                display="compact"
-                                                onChange={(event, date) => {
-                                                    if(date) {
-                                                        onChange(date)
-                                                    }
-                                                }}
-                                            />
-                                        </View>
+                                        <DateInput value={value} onChange={onChange}/>
                                     )}
                                 // />
 
@@ -240,7 +230,7 @@ export default function FormSightScreen( {route, navigation}) {
                             loading={saving}
                             disabled={saving}
                             style={styles.submitButton}
-                            />
+                        />
             </View>
         </ScreenWrapper>
             
