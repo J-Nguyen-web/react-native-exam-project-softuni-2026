@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import CountryFlag from "react-native-country-flag";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useSight } from "../context/useSight.js";
+import { useAuth } from "../context/useAuth.js";
 import { formatDate } from "../util/formatDate.js";
 import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import Button from "../components/Button.jsx";
@@ -17,6 +18,9 @@ export default function DetailsSightScreen({route}) {
     const { id: id } = route.params;
     const navigation = useNavigation();
     const { loading, getSightById, deleteSight } = useSight()
+    const {user} = useAuth();
+
+    let isOwner = sight?.ownerId === user?.id
 
     useFocusEffect(
         useCallback(() => {
@@ -40,6 +44,8 @@ export default function DetailsSightScreen({route}) {
     }
 
     const swipeBack = Gesture.Pan()
+            .activeOffsetX(50)
+            .activeOffsetY([-20,20])
             .onEnd((event) => {
                 if(event.translationX > 120 ){
                     navigation.goBack();
@@ -69,67 +75,69 @@ export default function DetailsSightScreen({route}) {
     }
 
     return (
-        <GestureDetector gesture={swipeBack}>
-
+        
         <ScreenWrapper>
-             
-            <View style={cardStyles.style}>
-                <Image source={{ uri: sight.photo || sight.titleImage }} style={cardStyles.image} />
-                <View style={cardStyles.content}>
-                    <Text style={cardStyles.title}>{sight?.title}</Text>
-                    {/* <Text style={cardStyles.rating}># {sight?.rating}</Text> todo rating */}
-                    {/* todo add flags for country */}
-                    {/* <CountryFlag isoCode={sight.Country} size={20} /> */}
-                    <Text 
-                        style={[
-                            cardStyles.location, {
-                                borderBottomColor: "#555555", 
-                                borderBottomWidth: 1, 
-                                borderStyle: "solid", 
-                                paddingBottom: 14
-                            }]}>
-                                {sight?.location} ({sight?.country})
-                    </Text>
-                    <Text style={cardStyles.description}>{sight?.description}</Text>
-
-                    {/* todo link to all the sights with same category */}
-                    <Text style={[cardStyles.description, {fontStyle:'italic'}]}><Text style={{color: globalColor.turqouise}}>Category:  </Text> {sight?.category}</Text>
-                    
-                    <View style={{ flexDirection: 'row', alignItems: 'baseline'}}>
-                        <Text style={[cardStyles.description, {color: globalColor.turqouise}]}>
-                            Best time to visit:
+            <GestureDetector gesture={swipeBack}>
+                <View style={[cardStyles.style]}>
+                    <Image source={{ uri: sight.photo || sight.titleImage }} style={cardStyles.image} />
+                    <View style={cardStyles.content}>
+                        <Text style={cardStyles.title}>{sight?.title}</Text>
+                        {/* <Text style={cardStyles.rating}># {sight?.rating}</Text>
+                         TODO rating */}
+                        <Text style={cardStyles.author}>Author: <Text style={{color: globalColor.turqouise}}>{sight.author}</Text></Text>
+                        {/* TODO add flags for country */}
+                        {/* <CountryFlag isoCode={sight.Country} size={20} /> */}
+                        <Text 
+                            style={[
+                                cardStyles.location, {
+                                    borderBottomColor: "#555555", 
+                                    borderBottomWidth: 1, 
+                                    borderStyle: "solid", 
+                                    paddingBottom: 14
+                                }]}>
+                                    {sight?.location} ({sight?.country})
                         </Text>
-                        <Text style={[cardStyles.description, {fontStyle: 'italic'}]}>  around {formatDate(sight?.startDate) }</Text>
-                    </View>
-                    
-                    
-                    {/* todo until period of time */}
-                    {/* <Text style={cardStyles.description}>{formatDate(sight?.endDate)}</Text> */}
+                        <Text style={cardStyles.description}>{sight?.description}</Text>
 
-                        {sight?.defaultSight?   (
-                            <Text style={[globalStyles.subtitle, {color: '#ff0000'}]} onPress={()=>navigation.navigate('Tabs', {screen: 'Home'})}>
-                                For edit and delete functionality, create your own sight from home screen - here
+                        {/* TODO link to all the sights with same category */}
+                        <Text style={[cardStyles.description, {fontStyle:'italic'}]}><Text style={{color: globalColor.turqouise}}>Category:  </Text> {sight?.category}</Text>
+                        
+                        <View style={{ flexDirection: 'column', alignItems: 'baseline'}}>
+                            <Text style={[cardStyles.description, {color: globalColor.turqouise , marginBottom:0}]}>
+                                Best time to visit:
                             </Text>
-                   ) : (<View style={{flexDirection: "row", justifyContent: "flex-end", gap: 8}}>
-                        <Button 
-                            title="Edit"
-                            onPress={() => navigation.navigate('FormSight',{
-                                sight: sight,
-                                isEdit: true
-                            })}
-                            style={styles.edit}
-                            />
-                        <Button 
-                            title="Delete"
-                            onPress={(handleDeleteSight)}
-                            style={styles.delete}
-                            />
-                        {/* <Button title="Rate"></Button> */}
-                    </View>)} 
+                            <Text style={[cardStyles.description, {fontStyle: 'italic', marginTop:0}]}>around {formatDate(sight?.startDate) }</Text>
+                        </View>
+                        
+                        
+                        {/* TODO until period of time */}
+                        {/* <Text style={cardStyles.description}>{formatDate(sight?.endDate)}</Text> */}
+
+                            { sight?.defaultSight &&   (
+                                <Text style={[globalStyles.subtitle, {color: '#ff0000'}]} onPress={()=>navigation.navigate('Tabs', {screen: 'Home'})}>
+                                    For edit and delete functionality, create your own sight from home screen - here
+                                </Text>
+                            )}
+                        { isOwner && (<View style={{flexDirection: "row", justifyContent: "flex-end", gap: 8}}>
+                            <Button 
+                                title="Edit"
+                                onPress={() => navigation.navigate('FormSight',{
+                                    sight: sight,
+                                    isEdit: true
+                                })}
+                                style={styles.edit}
+                                />
+                            <Button 
+                                title="Delete"
+                                onPress={(handleDeleteSight)}
+                                style={styles.delete}
+                                />
+                            {/* <Button title="Rate"></Button> */}
+                        </View>)} 
                 </View>
             </View>
+        </GestureDetector>
     </ScreenWrapper>
-    </GestureDetector>
     );
 }
 
