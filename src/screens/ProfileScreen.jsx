@@ -86,7 +86,7 @@ export default function ProfileScreen() {
                     <Text style={styles.mySightsText}>My Sights</Text>
                 </TouchableOpacity>
                 
-                <View style={{paddingTop: 150}}>
+                <View style={{paddingTop: 50}}>
                     <LogoutButton />
                 </View>
                 

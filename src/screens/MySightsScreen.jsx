@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import { globalColor, globalStyles } from "../globalStyles.js";
-import { FlatList, Text, TouchableOpacity } from "react-native";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import Card from "../components/Card.jsx";
 import { useAuth } from "../context/useAuth.js";
 import { useSight } from "../context/useSight.js";
@@ -24,6 +24,8 @@ export default function MySightsScreen() {
     )
 
     const swipeBack = Gesture.Pan()
+            .activeOffsetX(50)
+            .activeOffsetY([-20,20])
             .onEnd((event) => {
                 if(event.translationX > 120 ){
                     navigation.goBack();
@@ -31,32 +33,39 @@ export default function MySightsScreen() {
             })
 
     return (
-        <GestureDetector gesture={swipeBack}>
+        
         <LinearGradient colors={[globalColor.gradientPrimo, globalColor.gradientSecundo]} style={{flex:1 }}>
-            <SafeAreaView style={{flex:1}}>
-                {/* <Text style={globalStyles.title}>
-                    My Sights
-                </Text> */}
-                <Text style={globalStyles.subtitle}>
-                    Explore and manage your sights
-                </Text>
-            { mySights.length > 0 ? (
-                <FlatList
-                    data={mySights}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({index, item}) => <Card index={index} {...item}/>}
-                    contentContainerStyle={{paddingHorizontal: 20, paddingBottom: 20}}
-                />
-            ) : (
-                <TouchableOpacity onPress={()=>navigation.navigate('HomeNavigator', {screen: 'Home'})}>
-                    <Text style={globalStyles.subtitle}>
-                        No sights created yet.</Text>
-                    <Text style={[globalStyles.subtitle, {color: "#ff0000"}]}>
-                        Visit home to get started - press here.</Text>
-                </TouchableOpacity>
-            )}
-            </SafeAreaView> 
+            <GestureDetector gesture={swipeBack}>
+                <View style={{flex:1}}>
+                    <SafeAreaView style={{flex:1}}>
+                        {/* <Text style={globalStyles.title}>
+                            My Sights
+                        </Text> */}
+                        <Text style={globalStyles.subtitle}>
+                            Explore and manage your sights
+                        </Text>
+
+                        { mySights.length > 0 ? (
+                        <FlatList
+                            data={mySights}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({index, item}) => <Card index={index} {...item}/>}
+                            contentContainerStyle={{paddingHorizontal: 20, paddingBottom: 20}}
+                        />
+                        ) : (
+                            <TouchableOpacity onPress={()=>navigation.navigate('HomeNavigator', {screen: 'Home'})}>
+                                <Text style={globalStyles.subtitle}>
+                                    No sights created yet.
+                                </Text>
+                                <Text style={[globalStyles.subtitle, {color: "#ff0000"}]}>
+                                    Visit home to get started - press here.
+                                </Text>
+                            </TouchableOpacity>
+                        )}
+                    </SafeAreaView>
+                </View> 
+            </GestureDetector>
         </LinearGradient>
-        </GestureDetector>   
+           
     );
 }

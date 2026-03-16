@@ -6,7 +6,7 @@ export const sightSchema = yup.object({
         .trim()
         .required("Every beautiful place deserves a name :)")
         .min(3, "Sight should be at least 3 characters")
-        .max(20, "Maximum 20 characters, you can also use the description"),
+        .max(50, "Maximum 50 characters, you can also use the description"),
     
     description: yup
         .string()
