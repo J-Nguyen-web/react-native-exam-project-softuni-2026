@@ -36,7 +36,7 @@ export default function RegisterScreen() {
 
         try {
             await register({
-                email: data.email,
+                email: data.email.toLowerCase().trim(),
                 password: data.password,
                 username: data.username
              });

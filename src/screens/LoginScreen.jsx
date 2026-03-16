@@ -16,13 +16,6 @@ export default function LoginScreen() {
     const { login, isLoading, error, clearError} = useAuth();
 
     const navigation = useNavigation();
-
-    useEffect(() => {
-    fetch("https://react-native-api-3.onrender.com/users")
-      .then(res => res.json())
-      .then(data => console.log("API works:", data))
-      .catch(err => console.log("API error:", err));
-  }, []);
   
     const { control, errors, handleSubmit} = useLoginForm({
             email: '',
@@ -32,7 +25,7 @@ export default function LoginScreen() {
     const onSubmit = async (data) => {
         if(!data.email || !data.password ) return;
         try {
-            await login({ email: data.email, password: data.password });
+            await login({ email: data.email.toLowerCase().trim(), password: data.password });
         } catch(error) {
             console.error("Error during login", error)
         }
