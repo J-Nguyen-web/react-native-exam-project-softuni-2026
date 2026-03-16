@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState } from "react";
 import * as authService from "../services/authService.js"
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as SecureStore from 'expo-secure-store';
 
 export const AuthContext = createContext({
     user: null,
@@ -22,36 +23,21 @@ export function AuthProvider({ children}) {
     useEffect(() =>{
         const loadUser = async () => {
             try {
-                const token = await AsyncStorage.getItem('token');
-                console.log(token)
-                    if(token) {
-                        setUser({token});
+                const user = await SecureStore.getItemAsync('user');
+                console.log('user  ',user)
+                    if(user) {
+                        setUser(JSON.parse(user));
                     }
             } catch (error) {
-                await AsyncStorage.removeItem('token');
+                console.error('Failed to load user from SecureStore', error)
+                await SecureStore.deleteItemAsync('user');
                 setUser(null)
             } finally {
                 setCheckingAuth(false)
-                
-                startUserCheckInterval();
             }
         };
 
-        // json-server-aut doesnt accept the token, за това използвам проверка дали не е изтрит потребителя, 
-        // ако случайно оставите телефона си по средата на тестване, защото задреме ли сървъра се изтриват регистрираните потребите
-        const startUserCheckInterval = () => {
-            const interval = setInterval(async () => {
-                const userId = await AsyncStorage.getItem('userId');
-                if(!userId) return;
-                try {
-                    await authService.checkUserExist(userId)
-                    console.log(await authService.checkUserExist(userId))
-                } catch {
-                    await logout();
-                }
-            },60000)
-            return () => clearInterval(interval);
-        }
+        
         loadUser();
     }, [])
 
@@ -60,12 +46,14 @@ export function AuthProvider({ children}) {
             setIsLoading(true);
             const data = await authService.login(email, password);
             if(data.accessToken) {
-                await AsyncStorage.setItem('token', data.accessToken);
-                await AsyncStorage.setItem('userId', data.user.id);
+                await SecureStore.setItemAsync('userId', data.user.id);
+                await SecureStore.setItemAsync('user', JSON.stringify(data.user));
+                await SecureStore.setItemAsync('token', data.accessToken);
                 setUser(data.user);
                 setError(null)
             } else {
-                await AsyncStorage.removeItem('token');
+                await SecureStore.deleteItemAsync('token');
+                await SecureStore.deleteItemAsync('user');
                 setUser(null)
             }
         } catch (error) {
@@ -78,12 +66,14 @@ export function AuthProvider({ children}) {
         try {
             setIsLoading(true);
             await authService.register(email, password, username);
-            // we dont const data bcoz the server needs to work on token and hash the password
+            // няма const data защото има нужда от token, който не разпонава и прави hash password, което не става веднага за login
             
-            const data = await authService.login(email, password) // thats why log separetly
+            const data = await authService.login(email, password) // thats why i do log separetly
 
-            await AsyncStorage.setItem('token', data.accessToken);
-            await AsyncStorage.setItem('userId', data.user.id);
+            await SecureStore.setItemAsync('token', data.accessToken);
+            await SecureStore.setItemAsync('userId', data.user.id);
+            await SecureStore.setItemAsync('user', JSON.stringify(data.user));
+
             setUser(data.user);
             setError(null);
         } catch (error) {
@@ -94,8 +84,8 @@ export function AuthProvider({ children}) {
     }
 
     const logout = async () =>{
-        await AsyncStorage.removeItem('token')
-        await AsyncStorage.removeItem('userId')
+        await SecureStore.deleteItemAsync('token')
+        await SecureStore.deleteItemAsync('userId')
         setUser(null);}  
 
     const clearError = () => setError(null);
