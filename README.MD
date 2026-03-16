@@ -2,7 +2,7 @@
 
 Folder - https://github.com/J-Nguyen-web/react-native-exam-project-softuni-2026/releases/
 
-File - https://github.com/J-Nguyen-web/react-native-exam-project-softuni-2026/releases/download/link/app-s2s.version-1.0.1.apk
+File - https://github.com/J-Nguyen-web/react-native-exam-project-softuni-2026/releases/download/link/app-s2s-version1.0.2.apk
 
 
 React Native – Exam Project Functional Guide
