@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 ## APK link:
 
 Folder - https://github.com/J-Nguyen-web/react-native-exam-project-softuni-2026/releases/
@@ -43,239 +42,86 @@ User session is stored in SecureStore only stringify object of a user (there was
 
 **4.Navigation Structure**
 Root Navigation Logic
-How is navigation split between authenticated and unauthenticated users?
-By
+unauthenticated users are routed to AUthStack(Login / Register).
+Authenticated user are  routed to MainTabs with acces to Sights and Profile screens.
 Main Navigation
-Describe the main navigation structure: - Number and type of main sections (e.g. Tabs)
+Main sections:
+Home (encouraging to create sight on spot with a camera only)
+Sights (FLatList of sights (in future to create sight by picking image from library))
+Profile (account info - using image picker to choose photo and button to users created sights (in future, liked, and svaed for visit sights))
 
 Nested Navigation
-Is there nested navigation (e.g. Stack inside a Tab)?
-What type of screens are included?
+Stack Navigators inside Sight tab:
+Sight Detail ( its a root screen which makes it easy to access and used to show details from many screens ( searched filtered lists of sights, My Sights in profile screen and so on))
+FormSightScreen ( It can be use for edit and create and thats why is a root screen that can be easily reached. It can be call from Home when create, and details screen when edit (in future in SIghts Screen to upload photo from library))
+
 5.List → Details Flow
 List / Overview Screen
-What type of data is displayed?
-How does the user interact with the list?
-Details Screen
-How is navigation triggered?
-What data is received via route parameters?
+
+Displays all sights with thumbnail, title, location, country and author.
+(in future liked, rating, add to visit).
+Pull-to-refresh updates thelist dynamically from the API.
+
+Details screen:
+Navigation triggered by tappin a sight card.
+Received id vie route.params to fetch full sight details from API or context.
+Shows images, title, location, description,  best time of the year to be visited, category and buttons edit/delete if its owner.
+
 6.Data Source & Backend
 Backend Type
-Simulated backend (MockAPI / DummyJSON)
-Real backend (Firebase or equivalent)
+Real backed hosted on Render.com
+JSON-server-aut provides REST API endpoints with authentication
+
 7.Data Operations (CRUD)
-Describe the implemented data operations:
 Read (GET)
-Where is data fetched and displayed?
+Fetched via sightService.getAll()for list (on Sights Screen)
+sightService.getById(id) for details (on Details Screen)
+
 Create (POST)
-How does the user create new data?
+Authenticated users can create a sight via FormSightScreen.
+Image, title, description, country location are submitted to the API.
+react-hook-form validates the fields by schema-a.
+
 Update / Delete (Mutation)
-Which operation is implemented (Update and/or Delete)?
-How is the UI updated after the change?
+Only owners can see the buttons and access the functionality
+Again via FormSightScreen which show different title for the button depending isEdit flag is boolean true.
+
+updateSight(id, data) updates sight information and navigate.goBack() to details screen.
+deleteSIghts(id) removes sight from API and updates UI using SightContext
+UI Refresh
+List screen listen to SightProvider for automatic updates after CRUD
+
 8.Forms & Validation
-Forms Used
+Forms Used:
+Login / Register forms
+Create / Edit Sight form
+Validation Rules:
+Email: required must be valid email format (react-hook-form has it own, no regex used, special keyboard with @ is used for the input)
+Password: Required, minimum 8 characters (securityTextEntry is used for the hidding letter in password input) 
+Sight title: Required, max 50 characters
+Optional: Country and location must not be empty
+(in future location will fill that inputs automaticly if user use the feature)
+
 9.List all forms in the application:
-Validation Rules
-Describe at least three validated fields: - Field name and rules: - Field name and rules: - Field name with multiple validation rules:
+
 10. Native Device Features
 Used Native Feature(s)
-Select and describe at least one: - Camera / Image Picker - Location / Maps - Biometrics - Sensors
-Usage Description
-Where is it used?
-What functionality does it provide?
+Camera - used in FOrmSIghtScreen to capture a photo sights with live camera preview and attaches photo URI to sight
+Image Picker - used in profile for take-retake-update pictures from library or photos from user's phone
+DateTImePicker - used to choose best time of the year when to visit it show calendar from which you can choose a data.
+picker - simiral to drop down menu, used for choosing options of categories.
 
 11. Typical User Flow
-Describe a normal user journey through the app: 1. 2. 3. 4.
+User opens the app - authCHeck start if the SecureStored user is the same, if not login or register the user setItemASync in SecureStore and Stack.Navigator gives access to the stack screens.
+Authenticated user may give permission camera to be used for creating photo sight - fills the form - submit - details of the sight appears with buttons for edit and delete the sight - user can edit or delete By press upper left corner back arrow can go back home
+
+Authenticated users can tab sights - from the list of sights user can tap any sights and see the Details Scree, only the owner will see buttons for edit/delete the sight
+
 12. Error & Edge Case Handling
-Describe how the app handles: - Authentication errors - Network or data errors - Empty or missing data states
-
-
-## React Native – Exam Project 
-## Functional Guide
-
-1. Project Overview
-- *App name:* Sight2Share
-- *Application Category / Topic: Travel* - Sightseeing - Tourism
-- *Main Purpose:*
-Sight2share allows users to browse and discover interesting sights and landmarks. Authenticated users can create, edit, and delete their own sightings, including photos and descriptions. The app solves the problem of keeping track of visited or favorite places, providing a simple way to share travel experiences.
-
-2. User Access & Permissions
-
-Guest (Not Authenticated)
-
-Available screens or actions:
-
-View the list of sights (SightScreen)
-
-View sight details (DetailsSightScreen)
-
-Pull-to-refresh list
-
-Cannot create, edit, or delete sights
-
-Authenticated User
-
-Main sections / tabs:
-
-Sights List (browse all sights)
-
-Profile (view account info)
-
-Create Sight (add new sight)
-
-Details screens:
-
-Sight Details (view full sight information, including images and description)
-
-Create / Edit / Delete actions:
-
-Create new sight via form (FormSightScreen)
-
-Edit existing sight from DetailsSightScreen
-
-Delete sight via button on DetailsSightScreen
-
-3. Authentication & Session Handling
-
-Authentication Flow:
-
-On app start, the app checks AsyncStorage for a stored token.
-
-If a token exists, the user is considered logged in and routed to the main app screens.
-
-If no token is found, the user sees the login / register screens.
-
-Successful login or registration stores the token and user info in AsyncStorage and updates the AuthContext.
-
-Logout clears the token from storage and resets authentication state.
-
-Session Persistence:
-
-User session is stored using AsyncStorage (token key).
-
-Automatic login is handled by reading the token from storage on app initialization.
-
-4. Navigation Structure
-
-Root Navigation Logic:
-
-Unauthenticated users are routed to AuthStack (Login / Register).
-
-Authenticated users are routed to MainTabs with access to sights and profile.
-
-Main Navigation:
-
-Main sections:
-
-Sights (FlatList of sights)
-
-Profile (account info)
-
-Nested Navigation:
-
-Stack Navigator inside Sights tab:
-
-Sight Details
-
-FormSightScreen (for creating or editing a sight)
-
-5. List → Details Flow
-
-List / Overview Screen:
-
-Displays all sights with thumbnail, title, country, and location.
-
-Pull-to-refresh updates the list dynamically from the API.
-
-Details Screen:
-
-Navigation triggered by tapping a sight card.
-
-Receives id via route params to fetch full sight details from API or context.
-
-Shows title, description, location, images, and edit/delete buttons if authenticated.
-
-6. Data Source & Backend
-
-Backend Type:
-
-Real backend hosted on Render.com
-
-JSON-server-auth provides REST API endpoints with authentication
-
-
-
-7. Data Operations (CRUD)
-
-Read (GET):
-
-Fetched via sightService.getAll() for list
-
-sightService.getById(id) for details
-
-Create (POST):
-
-Authenticated users can create a sight via FormSightScreen.
-
-Image, title, description, country, location are submitted to the API.
-
-Update / Delete (Mutation):
-
-updateSight(id, data) updates sight information
-
-deleteSight(id) removes sight from API and updates UI using SightContext
-
-UI Refresh:
-
-List screen listens to SightContext.sights for automatic updates after CRUD operations
-
-8. Forms & Validation
-
-Forms Used:
-
-Login / Register forms
-
-Create / Edit Sight form
-
-Validation Rules:
-
-Email: Required, must be valid email format
-
-Password: Required, minimum 6 characters
-
-Sight Title: Required, max 50 characters
-
-Optional: Country and location must not be empty
-
-9. Native Device Features
-
-Used Native Feature(s):
-
-Camera / Image Picker
-
-Usage Description:
-
-Used in FormSightScreen to capture or pick images for a sight
-
-Provides live camera preview, retake option, and attaches photo URI to sight
-
-10. Typical User Flow
-
-User opens the app → automatic token check
-
-Guest sees list of sights → taps sight → views details
-
-Authenticated user → taps “+” to create sight → fills form → submits → sight appears in list
-
-Authenticated user → taps sight → edits or deletes sight
-
-11. Error & Edge Case Handling
-
-Authentication errors: Login/register failure shows alert with error message from API
-
-Network or data errors: API fetch errors display alert and maintain UI state
-
-Empty or missing data states: Empty list shows “No sights available”; image placeholder used if photo missing
-
+Atuhentication errors: Login/register failure shows alert with eerror message from API
+Network or data errors: API fetch errors display alert and maintain UI state EMpty or missing data state: EMpty list in My SIghts shows "No sights created yet." and navigation text to home Screen where user can create sight - Visit home to get started - press here.
+Sights have 3 hardcoded entries with navigation encouraging user to create his own sights.
+Image placeholder is used if photo is missing.
 
 // keyboard avoiding and for email with @
 // expo-file-system installed (shouldnt be used)
@@ -295,6 +141,3 @@ Empty or missing data states: Empty list shows “No sights available”; image 
 //npm remove json-server and json-server-auth
 
 "server": "json-server --watch db.json --host 0.0.0.0 --port 3000"
-=======
-
->>>>>>> fb68a69582cf2f6af4a99558bf9998f4b6ddf49d
