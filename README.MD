@@ -4,6 +4,9 @@ Folder - https://github.com/J-Nguyen-web/react-native-exam-project-softuni-2026/
 
 File - https://github.com/J-Nguyen-web/react-native-exam-project-softuni-2026/releases/download/link/app-s2s.apk
 
+**important notes** - THere is a hardcoded user if some problem with registration appear - **user: test@gmail.com password: 12345678**
+
+There is 3 hardcoded sights, so it wont be need to create many sights to check how the types of scroll view works (scroll view may act strangely bcoz of the swipe to right pan gesture added for go back, but it works)
 
 ## React Native – Exam Project
 ## Functional Guide
@@ -19,20 +22,25 @@ File - https://github.com/J-Nguyen-web/react-native-exam-project-softuni-2026/re
 
 Sight2Share provide a simple way to share travel expirience directly by opening the home screen and solves the problem of keeping track of visited or favorite places (future features). The app allows users to Browse and Discover interesting sights and landmarks. Authenticated users can create, edit (sight photo, location and descriptions) or delete their own sights.
 
+---
 **2.User Access & Permissions**
 
-* Guest (Not Authenticated) 
+* Guest (Not Authenticated) - 
 *cant use the app. The main goal of the app is users to start making photos and create records. Nowdays every person want to be a influencer so the main focus is to share.* 
 
-* Authenticated User 
+* Authenticated User -
 *can create (vie FormSightScreen), edit( again FormSightScreen via button in Details Screen) or delete (button in Details Screen) actions only for their sights (in future there will be like, rate and put in visit plan colection which will be visible on their profile). They can visit profile screen, where they can see sights created by them and logout button.*
 
+---
+
 **3.Authentication & Session Handling**
-* Authentication Flow
-1. When you press the icon and app start authentication logic start
-2. auth context check on mount if there is a user in the persistedState (stored in SecureStore) if exist user considered logged in and routed to the home screen.
-3. On registration user automaticly login (bcoz of the hasing password we need to make a fetch and then setItem in SecureStore and update AuthContext) considered that user is logged in home screen is open and ask about permission to use camera
-4. on logout the item stored in SecureStore is deleted, so the authChecking is triggered and the auth Screen is activated (other screens are not rendered)
+
+Authentication Flow
+- When you press the icon and app start authentication logic start
+- auth context check on mount if there is a user in the persistedState (stored in SecureStore) if exist user considered logged in and routed to the home screen.
+- On registration user automaticly login (bcoz of the hasing password we need to make a fetch and then setItem in SecureStore and update AuthContext) considered that user is logged in home screen is open and ask about permission to use camera
+- on logout the item stored in SecureStore is deleted, so the authChecking is triggered and the auth Screen is activated (other screens are not rendered)
+
 
 **Session Persistence**
 
@@ -40,8 +48,10 @@ User session is stored in SecureStore only stringify object of a user (there was
 
 Аutomatic login is handle by reading the user stored in SecureStore  on app initialization.
 
+---
+
 **4.Navigation Structure**
-Root Navigation Logic
+* Root Navigation Logic
 unauthenticated users are routed to AUthStack(Login / Register).
 Authenticated user are  routed to MainTabs with acces to Sights and Profile screens.
 Main Navigation
@@ -86,10 +96,10 @@ Update / Delete (Mutation)
 Only owners can see the buttons and access the functionality
 Again via FormSightScreen which show different title for the button depending isEdit flag is boolean true.
 
-updateSight(id, data) updates sight information and navigate.goBack() to details screen.
+updateSight(id, data) updates sight information and navigate.goBack() to details screen. Using useFocusEffect callback re-fetch and update the edited sight.
 deleteSIghts(id) removes sight from API and updates UI using SightContext
 UI Refresh
-List screen listen to SightProvider for automatic updates after CRUD
+List screen listen to SightProvider for automatic updates after CRUD (via refreshHandler and setRefresh)
 
 8.Forms & Validation
 Forms Used:
@@ -123,17 +133,10 @@ Network or data errors: API fetch errors display alert and maintain UI state EMp
 Sights have 3 hardcoded entries with navigation encouraging user to create his own sights.
 Image placeholder is used if photo is missing.
 
-// keyboard avoiding and for email with @
-// expo-file-system installed (shouldnt be used)
-// image picker installed
-// refresh sight list on swripe down
-// one screen for create and edit
-// register navigation goBack
-// auth and no other screens until register
-// auto login
+
 // button prevent double saving
-// react-hook-form validation
-// StatusBar is global
+
+
 // ScreenWrapper for keyboard safeArea
 // keyboard dismiss on error and fields can be seen
 // active indicater with message about the server waking up
