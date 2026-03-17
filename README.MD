@@ -1,14 +1,115 @@
-APK link:
+## Link to APK
 https://github.com/J-Nguyen-web/react-native-exam-project-softuni-2026/releases/download/link/app-release.apk
 
-React Native – Exam Project Functional Guide
+// keyboard avoiding and for email with @
+// expo-file-system installed (shouldnt be used)
+// image picker installed
+// refresh sight list on swripe down
+// one screen for create and edit
+// register navigation goBack
+// auth and no other screens until register
+// auto login
+// button prevent double saving
+// react-hook-form validation
+// StatusBar is global
+// ScreenWrapper for keyboard safeArea
+// keyboard dismiss on error and fields can be seen
+// active indicater with message about the server waking up
+
+//npm remove json-server and json-server-auth
+
+"server": "json-server --watch db.json --host 0.0.0.0 --port 3000"
+
+
+## React Native – Exam Project
+## Functional Guide
+
+
+**1.Project Overview**
+
+* **Application Name:** Sight2Share
+
+* **Application Category / Topic:** Traveling-Sightseeing-Tourism
+
+**Main Purpose:**
+
+Sight2Share provide a simple way to share travel expirience directly by opening the home screen and solves the problem of keeping track of visited or favorite places (future features). The app allows users to Browse and Discover interesting sights and landmarks. Authenticated users can create, edit (sight photo, location and descriptions) or delete their own sights.
+
+**2.User Access & Permissions**
+
+* Guest (Not Authenticated) 
+*cant use the app. The main goal of the app is users to start making photos and create records. Nowdays every person want to be a influencer so the main focus is to share.* 
+
+* Authenticated User 
+*can create (vie FormSightScreen), edit( again FormSightScreen via button in Details Screen) or delete (button in Details Screen) actions only for their sights (in future there will be like, rate and put in visit plan colection which will be visible on their profile). They can visit profile screen, where they can see sights created by them and logout button.*
+
+**3.Authentication & Session Handling**
+* Authentication Flow
+1. When you press the icon and app start authentication logic start
+2. auth context check on mount if there is a user in the persistedState (stored in SecureStore) if exist user considered logged in and routed to the home screen.
+3. On registration user automaticly login (bcoz of the hasing password we need to make a fetch and then setItem in SecureStore and update AuthContext) considered that user is logged in home screen is open and ask about permission to use camera
+4. on logout the item stored in SecureStore is deleted, so the authChecking is triggered and the auth Screen is activated (other screens are not rendered)
+
+**Session Persistence**
+
+User session is stored in SecureStore only stringify object of a user (there was a problem with the token from json/profile и понеже ми е трети front-end курс всеки път се занимавам 80% със сървъра вместо със материала от курса искак да продължа по материала от курса)
+
+Аutomatic login is handle by reading the user stored in SecureStore  on app initialization.
+
+**4.Navigation Structure**
+Root Navigation Logic
+How is navigation split between authenticated and unauthenticated users?
+Main Navigation
+Describe the main navigation structure: - Number and type of main sections (e.g. Tabs)
+
+Nested Navigation
+Is there nested navigation (e.g. Stack inside a Tab)?
+What type of screens are included?
+5.List → Details Flow
+List / Overview Screen
+What type of data is displayed?
+How does the user interact with the list?
+Details Screen
+How is navigation triggered?
+What data is received via route parameters?
+6.Data Source & Backend
+Backend Type
+Simulated backend (MockAPI / DummyJSON)
+Real backend (Firebase or equivalent)
+7.Data Operations (CRUD)
+Describe the implemented data operations:
+Read (GET)
+Where is data fetched and displayed?
+Create (POST)
+How does the user create new data?
+Update / Delete (Mutation)
+Which operation is implemented (Update and/or Delete)?
+How is the UI updated after the change?
+8.Forms & Validation
+Forms Used
+9.List all forms in the application:
+Validation Rules
+Describe at least three validated fields: - Field name and rules: - Field name and rules: - Field name with multiple validation rules:
+10. Native Device Features
+Used Native Feature(s)
+Select and describe at least one: - Camera / Image Picker - Location / Maps - Biometrics - Sensors
+Usage Description
+Where is it used?
+What functionality does it provide?
+
+11. Typical User Flow
+Describe a normal user journey through the app: 1. 2. 3. 4.
+12. Error & Edge Case Handling
+Describe how the app handles: - Authentication errors - Network or data errors - Empty or missing data states
+
+
+## React Native – Exam Project 
+## Functional Guide
+
 1. Project Overview
-
-Application Name: Sight2share
-
-Application Category / Topic: Travel / Sightseeing
-
-Main Purpose:
+- *App name:* Sight2Share
+- *Application Category / Topic: Travel* - Sightseeing - Tourism
+- *Main Purpose:*
 Sight2share allows users to browse and discover interesting sights and landmarks. Authenticated users can create, edit, and delete their own sightings, including photos and descriptions. The app solves the problem of keeping track of visited or favorite places, providing a simple way to share travel experiences.
 
 2. User Access & Permissions
@@ -95,7 +196,7 @@ FormSightScreen (for creating or editing a sight)
 
 List / Overview Screen:
 
-Displays all sights with thumbnail, title, country, and city.
+Displays all sights with thumbnail, title, country, and location.
 
 Pull-to-refresh updates the list dynamically from the API.
 
@@ -129,7 +230,7 @@ Create (POST):
 
 Authenticated users can create a sight via FormSightScreen.
 
-Image, title, description, country, city are submitted to the API.
+Image, title, description, country, location are submitted to the API.
 
 Update / Delete (Mutation):
 
@@ -157,7 +258,7 @@ Password: Required, minimum 6 characters
 
 Sight Title: Required, max 50 characters
 
-Optional: Country and city must not be empty
+Optional: Country and location must not be empty
 
 9. Native Device Features
 
@@ -189,15 +290,4 @@ Network or data errors: API fetch errors display alert and maintain UI state
 
 Empty or missing data states: Empty list shows “No sights available”; image placeholder used if photo missing
 
-// keyboard avoiding and for email with @
-// expo-file-system installed (shouldnt be used)
-// image picker installed
-// refresh sight list on swripe down
-// register navigation goBack
-// auth and no other screens until register
-// auto login
-// button prevent double saving
 
-//npm remove json-server and json-server-auth
-
-"server": "json-server --watch db.json --host 0.0.0.0 --port 3000"
