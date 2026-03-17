@@ -1,24 +1,8 @@
-## Link to APK
-https://github.com/J-Nguyen-web/react-native-exam-project-softuni-2026/releases/download/link/app-release.apk
+## APK link:
 
-// keyboard avoiding and for email with @
-// expo-file-system installed (shouldnt be used)
-// image picker installed
-// refresh sight list on swripe down
-// one screen for create and edit
-// register navigation goBack
-// auth and no other screens until register
-// auto login
-// button prevent double saving
-// react-hook-form validation
-// StatusBar is global
-// ScreenWrapper for keyboard safeArea
-// keyboard dismiss on error and fields can be seen
-// active indicater with message about the server waking up
+Folder - https://github.com/J-Nguyen-web/react-native-exam-project-softuni-2026/releases/
 
-//npm remove json-server and json-server-auth
-
-"server": "json-server --watch db.json --host 0.0.0.0 --port 3000"
+File - https://github.com/J-Nguyen-web/react-native-exam-project-softuni-2026/releases/download/link/app-s2s.apk
 
 
 ## React Native – Exam Project
@@ -291,3 +275,21 @@ Network or data errors: API fetch errors display alert and maintain UI state
 Empty or missing data states: Empty list shows “No sights available”; image placeholder used if photo missing
 
 
+// keyboard avoiding and for email with @
+// expo-file-system installed (shouldnt be used)
+// image picker installed
+// refresh sight list on swripe down
+// one screen for create and edit
+// register navigation goBack
+// auth and no other screens until register
+// auto login
+// button prevent double saving
+// react-hook-form validation
+// StatusBar is global
+// ScreenWrapper for keyboard safeArea
+// keyboard dismiss on error and fields can be seen
+// active indicater with message about the server waking up
+
+//npm remove json-server and json-server-auth
+
+"server": "json-server --watch db.json --host 0.0.0.0 --port 3000"
