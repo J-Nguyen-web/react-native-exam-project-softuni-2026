@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ## APK link:
 
 Folder - https://github.com/J-Nguyen-web/react-native-exam-project-softuni-2026/releases/
@@ -294,3 +295,6 @@ Empty or missing data states: Empty list shows “No sights available”; image 
 //npm remove json-server and json-server-auth
 
 "server": "json-server --watch db.json --host 0.0.0.0 --port 3000"
+=======
+
+>>>>>>> fb68a69582cf2f6af4a99558bf9998f4b6ddf49d
