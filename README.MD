@@ -43,6 +43,7 @@ User session is stored in SecureStore only stringify object of a user (there was
 **4.Navigation Structure**
 Root Navigation Logic
 How is navigation split between authenticated and unauthenticated users?
+By
 Main Navigation
 Describe the main navigation structure: - Number and type of main sections (e.g. Tabs)
 
