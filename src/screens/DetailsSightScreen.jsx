@@ -10,6 +10,7 @@ import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import Button from "../components/Button.jsx";
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { GestureDetector, Gesture, Directions } from "react-native-gesture-handler";
+import StarsRating from "../components/StarsRating.jsx";
 
 export default function DetailsSightScreen({route}) {
     
@@ -82,8 +83,11 @@ export default function DetailsSightScreen({route}) {
                     <Image source={{ uri: sight.photo || sight.titleImage }} style={cardStyles.image} />
                     <View style={cardStyles.content}>
                         <Text style={cardStyles.title}>{sight?.title}</Text>
-                        {/* <Text style={cardStyles.rating}># {sight?.rating}</Text>
-                         TODO rating */}
+                         {/*TODO rating */}
+                         <Text>Rating{sight?.rating}</Text>
+                         <StarsRating value={avarageRating} readonly/>
+                         <Text>Your rating</Text>
+                         <StarsRating value={userRating} onChange={handleRating}/>
                         <Text style={cardStyles.author}>Author: <Text style={{color: globalColor.turqouise}}>{sight.author}</Text></Text>
                         {/* TODO add flags for country */}
                         {/* <CountryFlag isoCode={sight.Country} size={20} /> */}
