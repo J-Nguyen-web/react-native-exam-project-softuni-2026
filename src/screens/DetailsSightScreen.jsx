@@ -11,14 +11,17 @@ import Button from "../components/Button.jsx";
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { GestureDetector, Gesture, Directions } from "react-native-gesture-handler";
 import StarsRating from "../components/StarsRating.jsx";
+import { create, getSightRating, update } from "../services/ratingService.js";
 
 export default function DetailsSightScreen({route}) {
     
     const [sight, setSight] = useState();
+    const [rating, setRating] = useState();
+    const [userRating, setUserRating] = useState();
 
     const { id: id } = route.params;
     const navigation = useNavigation();
-    const { loading, getSightById, deleteSight } = useSight()
+    const { loading, getSightById, deleteSight } = useSight();
     const {user} = useAuth();
 
     let isOwner = sight?.ownerId === user?.id
@@ -52,6 +55,28 @@ export default function DetailsSightScreen({route}) {
                     navigation.goBack();
                 }                
             })
+
+    async function loadRating() {
+        const rating = getSightRating(sight.id)
+        setRating(rating);
+
+        const isMine = rating.find(rate => rate.userId === user.id);
+        if(isMine) setUserRating(isMine);
+        
+    }
+
+    async function handleRating(value) {
+        if(userRating){
+            await update (userRating.id, {...userRating, rating: value})
+        } else {
+            await create({
+                sightId: sight.id,
+                userId: user.id,
+                rating: value
+            })
+        }
+        loadRating();
+    }
 
     async function handleDeleteSight() {
         try {

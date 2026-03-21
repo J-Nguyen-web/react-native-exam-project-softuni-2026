@@ -4,15 +4,15 @@ const endpoint = "/rating"
 
 
 export async function create(sight) {
-    const newSight = await api.post(`${endpoint}`, sight);
-    return newSight.data;
+    const newRating = await api.post(`${endpoint}`, sight);
+    return newRating.data;
 }
 
 export async function getSightRating(sightId){
     if(!id){ throw new Error('No entry with such id!') }
     
-    const sightById = await api.get(`${endpoint}/${sightId}`);
-    return sightById.data;
+    const sightRating = await api.get(`${endpoint}/${sightId}`);
+    return sightRating.data;
 }
 
 export async function update(sightId, updatedRating) {
