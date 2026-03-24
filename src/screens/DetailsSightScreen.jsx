@@ -1,17 +1,19 @@
 import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, View } from "react-native";
 import { cardStyles } from "../components/cardStyles.js";
 import { useCallback, useEffect, useState } from "react";
-import CountryFlag from "react-native-country-flag";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useSight } from "../context/useSight.js";
 import { useAuth } from "../context/useAuth.js";
 import { formatDate } from "../util/formatDate.js";
-import ScreenWrapper from "../components/ScreenWrapper.jsx";
-import Button from "../components/Button.jsx";
+import { create, getSightRating, update } from "../services/ratingService.js";
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { GestureDetector, Gesture, Directions } from "react-native-gesture-handler";
+import { useRating } from "../context/RatingProvider.js";
+import ScreenWrapper from "../components/ScreenWrapper.jsx";
+import Button from "../components/Button.jsx";
 import StarsRating from "../components/StarsRating.jsx";
-import { create, getSightRating, update } from "../services/ratingService.js";
+import * as ratingService from "../services/ratingService.js"
+import CountryFlag from "react-native-country-flag";
 
 export default function DetailsSightScreen({route}) {
     
@@ -22,6 +24,7 @@ export default function DetailsSightScreen({route}) {
     const { id: id } = route.params;
     const navigation = useNavigation();
     const { loading, getSightById, deleteSight } = useSight();
+    const { loadRating } = useRating();
     const {user} = useAuth();
 
     let isOwner = sight?.ownerId === user?.id
@@ -57,7 +60,7 @@ export default function DetailsSightScreen({route}) {
             })
 
     async function loadRating() {
-        const rating = getSightRating(sight.id)
+        const rating = ratingService.getSightRating(sight.id)
         setRating(rating);
 
         const isMine = rating.find(rate => rate.userId === user.id);
@@ -67,9 +70,9 @@ export default function DetailsSightScreen({route}) {
 
     async function handleRating(value) {
         if(userRating){
-            await update (userRating.id, {...userRating, rating: value})
+            await ratingService.updateRating (userRating.id, {...userRating, rating: value})
         } else {
-            await create({
+            await ratingService.createRating({
                 sightId: sight.id,
                 userId: user.id,
                 rating: value

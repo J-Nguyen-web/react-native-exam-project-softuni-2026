@@ -6,6 +6,7 @@ import { SightProvider } from './context/SightProvider.jsx';
 import { AuthProvider } from './context/AuthProvider.jsx';
 import { enableScreens } from "react-native-screens";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { RatingProvider } from './context/ratingProvider.jsx';
 
 enableScreens();
 
@@ -14,18 +15,20 @@ export default function App() {
         <GestureHandlerRootView>
             <AuthProvider>
                 <SightProvider>
-                    <NavigationContainer>
+                    <RatingProvider>
+                        <NavigationContainer>
                     {/* за да работят всички навигатори всички се обвиват в него*/}
                         
-                        <StatusBar style="auto" />
-                            <SafeAreaProvider>
-                                {/* <SafeAreaView> bugged for now - its depricated - use SafeAreaView from react-native-safe-area-context*/}
-                                                                
-                                    <RootNavigator />
+                            <StatusBar style="auto" />
+                                <SafeAreaProvider>
+                                    {/* <SafeAreaView> bugged for now - its depricated - use SafeAreaView from react-native-safe-area-context*/}
                                                                     
-                                {/* </SafeAreaView> */}
-                            </SafeAreaProvider>
-                    </NavigationContainer>
+                                        <RootNavigator />
+                                                                        
+                                    {/* </SafeAreaView> */}
+                                </SafeAreaProvider>
+                        </NavigationContainer>
+                    </RatingProvider>
                 </SightProvider>
             </AuthProvider>
         </GestureHandlerRootView>

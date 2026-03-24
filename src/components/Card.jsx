@@ -3,6 +3,7 @@ import { Image, Pressable, Text, View } from "react-native";
 import { cardStyles } from "./cardStyles.js";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { globalColor } from "../globalStyles.js";
+import { useRating } from "../context/useRating.js"
 
 export default function Card({
   id,
@@ -16,6 +17,8 @@ export default function Card({
 }) {
 
   const navigation = useNavigation();
+  const { ratingsMap } = useRating();
+  const ratingData = ratingsMap[id];
 
     return (
         <Pressable style={({pressed}) => [
@@ -30,7 +33,7 @@ export default function Card({
           <View style={cardStyles.content}>
             <View style={cardStyles.titleRow}>
               <Text style={cardStyles.title}>{title}</Text>
-              {/* todo <Text style={cardStyles.rating}># {rating}</Text> */}
+              <Text style={cardStyles.rating}>{ratingData?.average?.toFixed(1) || "0"} </Text>
               <Text style={{fontStyle:"italic"}}>Author: <Text style={{color: globalColor.turqouise}}>{author}</Text></Text>
             </View>
               {/* todo add flags for country */}
