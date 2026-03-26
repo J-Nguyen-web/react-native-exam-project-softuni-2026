@@ -23,7 +23,7 @@ export default function RootNavigator() {
             <View style={{flex:1, justifyContent: "center", alignItems: "center"}}>
                 <ActivityIndicator color={globalColor.primary}/>
                                 <Text style={globalStyles.loadingText}>
-                                    Loading sights...  may take up to 50 seconds if the server is waking up
+                                    Loading...  may take up to 50 seconds if the server is waking up
                                 </Text>
             </View>
         )

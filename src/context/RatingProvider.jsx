@@ -5,11 +5,14 @@ export const RatingContext = createContext();
 
 export function RatingProvider({children}) {
     const [ratingsMap, setRatingsMap] = useState();
-
-    const loadingRatings = async () => {
+    const loadRatings = async () => {
         try {
             const allRatings = await ratingService.getAllRatings();
             
+            if(!Array.isArray(allRatings)) {
+                setRatingsMap({}); // ако няма правилна инфо дата да се сложи празен object да не crash
+                return
+            }
             const grouped = {};
 
             allRatings.forEach(rate => {
@@ -25,23 +28,24 @@ export function RatingProvider({children}) {
 
             Object.keys(grouped).forEach(id => {
                 result[id] = {
-                    average: grouped[id].sum /grouped[id].count,
+                    average: grouped[id].sum / grouped[id].count,
                     count: grouped[id].count
                 };
             });
 
             setRatingsMap(result)
         } catch (error) {
-            console.error("Rating load error", error)
+            console.error("Rating load error", error);
+            setRatingsMap({}); // ако няма правилна инфо дата да се сложи празен object да не crash
         }
     }
 
     useEffect(() => {
-        loadingRatings()
+        loadRatings()
     },[]);
 
     return (
-        <RatingContext.Provider value={{ratingsMap, loadingRatings}}>
+        <RatingContext.Provider value={{ratingsMap, loadRatings}}>
             {children}
         </RatingContext.Provider>
     )

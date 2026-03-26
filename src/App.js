@@ -6,7 +6,7 @@ import { SightProvider } from './context/SightProvider.jsx';
 import { AuthProvider } from './context/AuthProvider.jsx';
 import { enableScreens } from "react-native-screens";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { RatingProvider } from './context/ratingProvider.jsx';
+import { RatingProvider } from './context/RatingProvider.jsx';
 
 enableScreens();
 

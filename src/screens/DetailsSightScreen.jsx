@@ -5,10 +5,9 @@ import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useSight } from "../context/useSight.js";
 import { useAuth } from "../context/useAuth.js";
 import { formatDate } from "../util/formatDate.js";
-import { create, getSightRating, update } from "../services/ratingService.js";
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { GestureDetector, Gesture, Directions } from "react-native-gesture-handler";
-import { useRating } from "../context/RatingProvider.js";
+import { useRating } from "../context/useRating.js";
 import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import Button from "../components/Button.jsx";
 import StarsRating from "../components/StarsRating.jsx";
@@ -17,17 +16,33 @@ import CountryFlag from "react-native-country-flag";
 
 export default function DetailsSightScreen({route}) {
     
-    const [sight, setSight] = useState();
-    const [rating, setRating] = useState();
-    const [userRating, setUserRating] = useState();
+    const [sight, setSight] = useState(null);
+    const [userRating, setUserRating] = useState(null);
 
     const { id: id } = route.params;
     const navigation = useNavigation();
-    const { loading, getSightById, deleteSight } = useSight();
-    const { loadRating } = useRating();
     const {user} = useAuth();
+    const { loading, getSightById, deleteSight } = useSight();
+    const { ratingsMap, loadRatings } = useRating();
+
+    const sightRating = ratingsMap?.[sight?.id]
 
     let isOwner = sight?.ownerId === user?.id
+
+    useEffect(() => {
+        if(!sight?.id || !user?.id) return;
+
+        async function loadUserRating() {
+            try {
+                const rating = await ratingService.getUserRating(sight?.id, user?.id)
+                setUserRating(rating || null)
+            } catch (error) {
+                setUserRating(null)
+            }
+        }
+
+        loadUserRating();
+    },[sight?.id]);
 
     useFocusEffect(
         useCallback(() => {
@@ -59,26 +74,21 @@ export default function DetailsSightScreen({route}) {
                 }                
             })
 
-    async function loadRating() {
-        const rating = ratingService.getSightRating(sight.id)
-        setRating(rating);
-
-        const isMine = rating.find(rate => rate.userId === user.id);
-        if(isMine) setUserRating(isMine);
-        
-    }
-
     async function handleRating(value) {
-        if(userRating){
-            await ratingService.updateRating (userRating.id, {...userRating, rating: value})
+        let updated;
+
+        if(userRating && userRating.id){
+            updated = await ratingService.updateRating (userRating.id, {...userRating, rating: value})
         } else {
-            await ratingService.createRating({
+            updated = await ratingService.createRating({
                 sightId: sight.id,
                 userId: user.id,
                 rating: value
             })
         }
-        loadRating();
+        
+        setUserRating(updated)
+        loadRatings();
     }
 
     async function handleDeleteSight() {
@@ -111,11 +121,14 @@ export default function DetailsSightScreen({route}) {
                     <Image source={{ uri: sight.photo || sight.titleImage }} style={cardStyles.image} />
                     <View style={cardStyles.content}>
                         <Text style={cardStyles.title}>{sight?.title}</Text>
-                         {/*TODO rating */}
-                         <Text>Rating{sight?.rating}</Text>
-                         <StarsRating value={avarageRating} readonly/>
-                         <Text>Your rating</Text>
-                         <StarsRating value={userRating} onChange={handleRating}/>
+                        <Text>Rating {sightRating ? sightRating?.average.toFixed(1) : 'No rating yet'}</Text>
+                        <StarsRating value={sightRating?.average || 0} readonly/>
+                        {!isOwner && (
+                            <View>
+                                <Text>Your rating</Text>
+                                <StarsRating value={userRating?.rating || 0} onChange={handleRating}/>
+                            </View>
+                        )}
                         <Text style={cardStyles.author}>Author: <Text style={{color: globalColor.turqouise}}>{sight.author}</Text></Text>
                         {/* TODO add flags for country */}
                         {/* <CountryFlag isoCode={sight.Country} size={20} /> */}
