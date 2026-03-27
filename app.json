@@ -36,6 +36,12 @@
     },
     "plugins": [
       [
+       "expo-location",
+       {
+        "locationWhenInUsePermission": "Allow this app to access your location."
+       } 
+      ],
+      [
         "expo-image-picker",
         {
           "cameraPermission": "Camera is required to take pictures.",

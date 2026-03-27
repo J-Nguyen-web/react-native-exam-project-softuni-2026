@@ -1,22 +1,21 @@
-import { Image, ImageBackground, Keyboard, StyleSheet, Switch, Text, View } from "react-native";
-import Input from "../components/Input.jsx";
-import Camera from "../components/Camera.jsx";
+import { Image, ImageBackground, Keyboard, Linking, StyleSheet, Switch, Text, View } from "react-native";
 import { useState } from "react";
-import Button from "../components/Button.jsx";
 import { useSight } from "../context/useSight.js";
 import { useAuth } from "../context/useAuth.js";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import * as ImagePicker from 'expo-image-picker'
 import { useFormSight } from "../validators/useFormSight.js";
-import FormWrap from "../components/FormWrap.jsx";
-import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { Feather, FontAwesome, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
-import StarsRating from "../components/StarsRating.jsx";
 import { Controller } from "react-hook-form";
-import  DateTimePicker from "@react-native-community/datetimepicker";
+import Camera from "../components/Camera.jsx";
+import Button from "../components/Button.jsx";
+import FormWrap from "../components/FormWrap.jsx";
+import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import DateInput from "../components/DateInput.jsx";
+import * as Location from 'expo-location'
+import { getCurrentLocation } from "../services/locationService.js";
 
 export default function FormSightScreen( {route, navigation}) {
     
@@ -30,19 +29,22 @@ export default function FormSightScreen( {route, navigation}) {
 
     const { createSight, updateSight } = useSight();
     const {user} = useAuth();
-    const { control, errors, handleSubmit} = useFormSight({
+    const { control, errors, handleSubmit, setValue} = useFormSight({
         title: sight?.title || '',
         description: sight?.description || '',
         category: sight?.category || 'Nature',
         rating: sight?.rating || 0,
         country: sight?.country || '',
         location: sight?.location || '',
+        lat: sight?.lat || null,
+        lng: sight?.lng || null,
         liked: sight?.liked || false,
         startDate: sight?.startDate ? new Date(sight.startDate) : new Date(),
         endDate: sight?.endDate ? new Date(sight.endDate) : new Date(),
         ownerId: user.id,
         author: user.username,
     });
+    
 
     const makeUriUsable = async(tempUri) => {
         if(!tempUri) return null;
@@ -85,6 +87,28 @@ export default function FormSightScreen( {route, navigation}) {
             setSaving(false)
         }
     } 
+
+    const handleCurrentLocation = async () => {
+        const result = await getCurrentLocation();
+
+        if(!result.success) {
+             if (!result.canAskAgain) {
+                Alert.alert(
+                    "Permission required",
+                    "Enable location service from phone settings",
+                    [
+                        { text: "Open App Settings", onPress: ()=> Linking.openSettings()},
+                        { text: "Dismiss" }
+                    ]
+                );
+            }
+            return;
+        }
+        setValue('location', result.address,);
+        setValue('country', result.country);
+        setValue('lat', result.latitude);
+        setValue('lng', result.longitude);
+    }
 
     return (
         
@@ -130,13 +154,18 @@ export default function FormSightScreen( {route, navigation}) {
                         />
                         <FormWrap
                             control={control}
-                            name="location" 
+                            name="location"
                             label="Location"
                             error={errors.location} 
                             placeholder=""
+                            multiline = {true}
+                            numberOfLines={3}
+                            textAlignVertical="top"
                             style={globalStyles.input}
                             icon={<FontAwesome6 name="map-location-dot" size={20} color={globalColor.primary} />}
                         />
+                        <MaterialIcons name="my-location" size={20} color={globalColor.primary} onPress={handleCurrentLocation} style={{marginLeft:8}} />
+                        <Button title="Use curent location" onPress={handleCurrentLocation} />
                         <View style={[globalStyles.subtitle, {flexDirection: 'column',alignItems:"center",}]}>
                             <Text style={[globalStyles.subtitle, {fontSize: 18 }]}>
                                 Best time to visit:
