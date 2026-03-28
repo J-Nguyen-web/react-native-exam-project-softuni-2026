@@ -1,13 +1,18 @@
+import { auth } from "../firebaseConfig.js"
+import { signInWithEmailAndPassword } from "firebase/auth";
+
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export async function login(email, password) {
     email = email.trim().toLowerCase();
     
-    const res = await fetch(`${BASE_URL}/login`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-    });
+    // const res = await fetch(`${BASE_URL}/login`, {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({ email, password }),
+    // }); // json-server-auth
+
+    const res = await signInWithEmailAndPassword(auth, email, password) // firebase
 
     if(!res.ok) {
         const err  = await res.text()
@@ -16,7 +21,8 @@ export async function login(email, password) {
         throw new Error("Wrong email or password")
     }
 
-    return res.json();
+    // return res.json();
+    return res.user;
 }
 
 export async function register(email, password, username) {

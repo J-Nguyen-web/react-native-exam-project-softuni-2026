@@ -2,9 +2,11 @@ import { createContext, useEffect, useState } from "react";
 import * as authService from "../services/authService.js"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as SecureStore from 'expo-secure-store';
+import { usePersistedState } from "../hooks/usePersistedState.js";
 
 export const AuthContext = createContext({
     user: null,
+    auth: null,
     isLoading: false,
     error: null,
     login: async () => {},
@@ -18,6 +20,11 @@ export function AuthProvider({ children}) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
+    const [auth, setAuth] = usePersistedState("auth", {
+        user:null
+    }
+        
+    );
     const [checkingAuth, setCheckingAuth] = useState(true)
 
     useEffect(() =>{
@@ -44,18 +51,27 @@ export function AuthProvider({ children}) {
     const login = async ({email, password}) => {
         try {
             setIsLoading(true);
-            const data = await authService.login(email, password);
-            if(data.accessToken) {
-                await SecureStore.setItemAsync('userId', data.user.id);
-                await SecureStore.setItemAsync('user', JSON.stringify(data.user));
-                await SecureStore.setItemAsync('token', data.accessToken);
-                setUser(data.user);
-                setError(null)
-            } else {
-                await SecureStore.deleteItemAsync('token');
-                await SecureStore.deleteItemAsync('user');
-                setUser(null)
-            }
+            // const data = await authService.login(email, password);
+            const user = await authService.login(email, password);
+            setAuth({
+                user:{
+                    id: user.uid,
+                    email: user.email
+                }
+            })
+
+            // if(data.accessToken) {
+            //     await SecureStore.setItemAsync('userId', data.user.id);
+            //     await SecureStore.setItemAsync('user', JSON.stringify(data.user));
+            //     await SecureStore.setItemAsync('token', data.accessToken);
+            //     setUser(data.user);
+            //     setError(null)
+            // } else {
+            //     await SecureStore.deleteItemAsync('token');
+            //     await SecureStore.deleteItemAsync('user');
+            //     setUser(null)
+            // }
+
         } catch (error) {
             setError(error.message || 'Error during login')
         } finally {
@@ -94,6 +110,7 @@ export function AuthProvider({ children}) {
     const contextValue = {
         isAuthenticated: !!user,
         user,
+        auth,
         isLoading,
         error,
         checkingAuth,

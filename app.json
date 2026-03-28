@@ -36,10 +36,10 @@
     },
     "plugins": [
       [
-       "expo-location",
-       {
-        "locationWhenInUsePermission": "Allow this app to access your location."
-       } 
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "Allow this app to access your location."
+        }
       ],
       [
         "expo-image-picker",
@@ -55,7 +55,8 @@
           "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
         }
       ],
-      "@react-native-community/datetimepicker"
+      "@react-native-community/datetimepicker",
+      "@react-native-firebase/app"
     ]
   }
 }
