@@ -4,7 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
-import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+import { initializeAuth, getReactNativePersistence, getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration it may switch between different enviroment for production and development
 const firebaseConfig = JSON.parse(process.env.EXPO_PUBLIC_FIREBASE_CONFIG);
@@ -20,7 +20,16 @@ const firebaseConfig = JSON.parse(process.env.EXPO_PUBLIC_FIREBASE_CONFIG);
 
 // Initialize Firebase
 export const app = initializeApp(firebaseConfig);
+
 // Initialize Firebase Authentication and get a reference to the service
-export const auth = initializeAuth(app,{
+
+let auth
+try {
+    auth = initializeAuth(app,{
     persistence: getReactNativePersistence(AsyncStorage)
 });
+} catch (error) {
+    auth = getAuth(app)
+}
+
+export {auth}

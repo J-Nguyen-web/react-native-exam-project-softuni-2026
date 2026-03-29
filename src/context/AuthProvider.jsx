@@ -1,8 +1,10 @@
 import { createContext, useEffect, useState } from "react";
 import * as authService from "../services/authService.js"
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as SecureStore from 'expo-secure-store';
+// import * as SecureStore from 'expo-secure-store';
 import { usePersistedState } from "../hooks/usePersistedState.js";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../firebaseConfig.js";
 
 export const AuthContext = createContext({
     user: null,
@@ -20,7 +22,7 @@ export function AuthProvider({ children}) {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
-    const [auth, setAuth] = usePersistedState("auth", {
+    const [authState, setAuthState] = useState({
         user:null
     }
         
@@ -28,24 +30,43 @@ export function AuthProvider({ children}) {
     const [checkingAuth, setCheckingAuth] = useState(true)
 
     useEffect(() =>{
-        const loadUser = async () => {
-            try {
-                const user = await SecureStore.getItemAsync('user');
-                console.log('user  ',user)
-                    if(user) {
-                        setUser(JSON.parse(user));
+
+        const unsubscribe = onAuthStateChanged(auth,(fireBaseUser) => { // функция на SDK за която се subscribe и при промяна в Auth State извиква callback()
+            if (fireBaseUser) { //ако има запазен user в Async Storage
+                setAuthState({
+                    user: { // придобива тези параметри
+                        id: fireBaseUser.uid,
+                        email: fireBaseUser.email
                     }
-            } catch (error) {
-                console.error('Failed to load user from SecureStore', error)
-                await SecureStore.deleteItemAsync('user');
-                setUser(null)
-            } finally {
-                setCheckingAuth(false)
+                })
+            } else { // ако няма се занулява state-a
+                setAuthState({ user: null })
             }
-        };
+            setCheckingAuth(false)
+        })
 
         
-        loadUser();
+
+        return () => unsubscribe(); // самата функция е subscribe, за това се извиква като clean up при else-a
+
+        // const loadUser = async () => {
+        //     try {
+        //         const user = await SecureStore.getItemAsync('user');
+        //         console.log('user  ',user)
+        //             if(user) {
+        //                 setUser(JSON.parse(user));
+        //             }
+        //     } catch (error) {
+        //         console.error('Failed to load user from SecureStore', error)
+        //         await SecureStore.deleteItemAsync('user');
+        //         setUser(null)
+        //     } finally {
+        //         setCheckingAuth(false)
+        //     }
+        // };
+
+        
+        // loadUser();
     }, [])
 
     const login = async ({email, password}) => {
@@ -53,7 +74,7 @@ export function AuthProvider({ children}) {
             setIsLoading(true);
             // const data = await authService.login(email, password);
             const user = await authService.login(email, password);
-            setAuth({
+            setAuthState({
                 user:{
                     id: user.uid,
                     email: user.email
@@ -86,9 +107,9 @@ export function AuthProvider({ children}) {
             
             const data = await authService.login(email, password) // thats why i do log separetly
 
-            await SecureStore.setItemAsync('token', data.accessToken);
-            await SecureStore.setItemAsync('userId', data.user.id);
-            await SecureStore.setItemAsync('user', JSON.stringify(data.user));
+            // await SecureStore.setItemAsync('token', data.accessToken);
+            // await SecureStore.setItemAsync('userId', data.user.id);
+            // await SecureStore.setItemAsync('user', JSON.stringify(data.user));
 
             setUser(data.user);
             setError(null);
@@ -100,8 +121,8 @@ export function AuthProvider({ children}) {
     }
 
     const logout = async () =>{
-        await SecureStore.deleteItemAsync('token')
-        await SecureStore.deleteItemAsync('userId')
+        // await SecureStore.deleteItemAsync('token')
+        // await SecureStore.deleteItemAsync('userId')
         setUser(null);}  
 
     const clearError = () => setError(null);

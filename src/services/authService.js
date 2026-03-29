@@ -12,17 +12,24 @@ export async function login(email, password) {
     //     body: JSON.stringify({ email, password }),
     // }); // json-server-auth
 
-    const res = await signInWithEmailAndPassword(auth, email, password) // firebase
+    try {
+        const res = await signInWithEmailAndPassword(auth, email, password) // firebase
+        return res.user;
+    } catch (error) {
+                console.log('FIREBASE ERROR ', error.code, error.message)
 
-    if(!res.ok) {
-        const err  = await res.text()
-        console.log('LOGIN ERROR ', err)
-
-        throw new Error("Wrong email or password")
+        throw error;
     }
+    
+
+    // if(!res.ok) {
+    //     const err  = await res.text()
+    //     console.log('LOGIN ERROR ', err)
+
+    //     throw new Error("Wrong email or password")
+    // }
 
     // return res.json();
-    return res.user;
 }
 
 export async function register(email, password, username) {
