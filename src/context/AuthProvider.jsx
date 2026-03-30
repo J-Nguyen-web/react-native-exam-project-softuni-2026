@@ -3,7 +3,7 @@ import * as authService from "../services/authService.js"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 // import * as SecureStore from 'expo-secure-store';
 import { usePersistedState } from "../hooks/usePersistedState.js";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged, signOut } from "firebase/auth";
 import { auth } from "../firebaseConfig.js";
 
 export const AuthContext = createContext({
@@ -36,7 +36,8 @@ export function AuthProvider({ children}) {
                 setAuthState({
                     user: { // придобива тези параметри
                         id: fireBaseUser.uid,
-                        email: fireBaseUser.email
+                        email: fireBaseUser.email,
+                        username: fireBaseUser.displayName
                     }
                 })
             } else { // ако няма се занулява state-a
@@ -77,7 +78,8 @@ export function AuthProvider({ children}) {
             setAuthState({
                 user:{
                     id: user.uid,
-                    email: user.email
+                    email: user.email,
+                    username: user.displayName
                 }
             })
 
@@ -102,16 +104,25 @@ export function AuthProvider({ children}) {
     const register = async ({email, password, username}) => {
         try {
             setIsLoading(true);
-            await authService.register(email, password, username);
+            // await authService.register(email, password, username);
             // няма const data защото има нужда от token, който не разпонава и прави hash password, което не става веднага за login
-            
-            const data = await authService.login(email, password) // thats why i do log separetly
 
+            const user = await authService.register(email, password, username);
+
+            setAuthState({
+                user:{
+                    id: user.uid,
+                    email: user.email,
+                    username: user.displayName
+                }
+            })
+            
+            // const data = await authService.login(email, password) // thats why i do log separetly
             // await SecureStore.setItemAsync('token', data.accessToken);
             // await SecureStore.setItemAsync('userId', data.user.id);
             // await SecureStore.setItemAsync('user', JSON.stringify(data.user));
+            // setUser(data.user);
 
-            setUser(data.user);
             setError(null);
         } catch (error) {
             setError(error.message || 'Error during Registration')
@@ -123,20 +134,40 @@ export function AuthProvider({ children}) {
     const logout = async () =>{
         // await SecureStore.deleteItemAsync('token')
         // await SecureStore.deleteItemAsync('userId')
-        setUser(null);}  
+        // setUser(null);}
+
+        try {
+            await signOut(auth);
+            setAuthState({
+                user: null
+            })
+        } catch (error) {
+            setError(error.message || 'Error during logout')
+        }
+    }
 
     const clearError = () => setError(null);
     
 
     const contextValue = {
-        isAuthenticated: !!user,
-        user,
-        auth,
+        isAuthenticated: !!user || !!authState,
+        user: authState.user,
+        auth: authState,
         isLoading,
         error,
         checkingAuth,
         clearError,
-        logout,
+        logout: async () => {
+            try {
+                await signOut(auth);
+                setAuthState({
+                    user: null
+                })
+            } catch (error) {
+                setError(error.message || 'Error during logout')
+            }
+            
+        },
         login,
         register,
     };

@@ -1,5 +1,5 @@
 import { auth } from "../firebaseConfig.js"
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateCurrentUser } from "firebase/auth";
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -35,20 +35,30 @@ export async function login(email, password) {
 export async function register(email, password, username) {
     email = email.trim().toLowerCase();
 
-    const res = await fetch(`${BASE_URL}/register`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, username }),
-    });
+    // const res = await fetch(`${BASE_URL}/register`, {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({ email, password, username }),
+    // });
 
-    if(!res.ok) {
-        const err = await res.text();
-        console.log("Register ERROR", err);
+    // if(!res.ok) {
+    //     const err = await res.text();
+    //     console.log("Register ERROR", err);
 
-        throw new Error("Email already exist!")
+    //     throw new Error("Email already exist!")
+    // }
+
+    // return await res.json();
+
+    try {
+        const res = await createUserWithEmailAndPassword(auth, email, password) // firebase
+        await updateCurrentUser(res.user, {displayName: username}) //photoUri за аватари
+
+        return res.user;
+    } catch (error) {
+        console.log('FIREBASE ERROR ', error.code, error.message)
+        throw error;
     }
-
-    return await res.json();
 }
 
 export async function getProfile(token) { 
