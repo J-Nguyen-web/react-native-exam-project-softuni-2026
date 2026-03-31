@@ -21,7 +21,7 @@ export function AuthProvider({ children}) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [user, setUser] = useState(null);
+    // const [user, setUser] = useState(null);
     const [authState, setAuthState] = useState({
         user:null
     }
@@ -113,7 +113,7 @@ export function AuthProvider({ children}) {
                 user:{
                     id: user.uid,
                     email: user.email,
-                    username: user.displayName
+                    displayName: user.displayName
                 }
             })
             
@@ -138,9 +138,7 @@ export function AuthProvider({ children}) {
 
         try {
             await signOut(auth);
-            setAuthState({
-                user: null
-            })
+            setAuthState({ user: null })
         } catch (error) {
             setError(error.message || 'Error during logout')
         }
@@ -150,24 +148,15 @@ export function AuthProvider({ children}) {
     
 
     const contextValue = {
-        isAuthenticated: !!user || !!authState,
+        isAuthenticated: !!authState.user, // конкретно за .user защотоa authState е object и е винаги truthy след като съществува
+        // isAuthenticated: !!user,
         user: authState.user,
         auth: authState,
         isLoading,
         error,
         checkingAuth,
         clearError,
-        logout: async () => {
-            try {
-                await signOut(auth);
-                setAuthState({
-                    user: null
-                })
-            } catch (error) {
-                setError(error.message || 'Error during logout')
-            }
-            
-        },
+        logout,
         login,
         register,
     };

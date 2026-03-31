@@ -1,16 +1,10 @@
 import { auth } from "../firebaseConfig.js"
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateCurrentUser } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
 export async function login(email, password) {
     email = email.trim().toLowerCase();
-    
-    // const res = await fetch(`${BASE_URL}/login`, {
-    //     method: "POST",
-    //     headers: { "Content-Type": "application/json" },
-    //     body: JSON.stringify({ email, password }),
-    // }); // json-server-auth
 
     try {
         const res = await signInWithEmailAndPassword(auth, email, password) // firebase
@@ -20,7 +14,12 @@ export async function login(email, password) {
 
         throw error;
     }
-    
+
+    // const res = await fetch(`${BASE_URL}/login`, {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify({ email, password }),
+    // }); // json-server-auth
 
     // if(!res.ok) {
     //     const err  = await res.text()
@@ -34,6 +33,16 @@ export async function login(email, password) {
 
 export async function register(email, password, username) {
     email = email.trim().toLowerCase();
+
+    try {
+        const res = await createUserWithEmailAndPassword(auth, email, password) // firebase
+        await updateProfile(res.user, {displayName: username}) //photoUri за аватари
+
+        return res.user;
+    } catch (error) {
+        console.log('FIREBASE ERROR ', error.code, error.message)
+        throw error;
+    }
 
     // const res = await fetch(`${BASE_URL}/register`, {
     //     method: "POST",
@@ -49,21 +58,11 @@ export async function register(email, password, username) {
     // }
 
     // return await res.json();
-
-    try {
-        const res = await createUserWithEmailAndPassword(auth, email, password) // firebase
-        await updateCurrentUser(res.user, {displayName: username}) //photoUri за аватари
-
-        return res.user;
-    } catch (error) {
-        console.log('FIREBASE ERROR ', error.code, error.message)
-        throw error;
-    }
 }
 
 export async function getProfile(token) { 
 
-    const res = await fetch(`${BASE_URL}/profile`,{ // не връща и не приема token-a, за това е функцията checkUser
+    const res = await fetch(`${BASE_URL}/profile`,{
         headers: {
             Authorization: `Bearer ${token}`
         }

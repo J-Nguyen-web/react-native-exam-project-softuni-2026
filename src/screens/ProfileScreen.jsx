@@ -17,6 +17,7 @@ export default function ProfileScreen() {
 
     const pickImageHandler = async () => {
         const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        console.log(user)
         if(status !== "granted") {
             Alert.alert(
                 "Permission required",
@@ -48,7 +49,7 @@ export default function ProfileScreen() {
             <View style={styles.container}>
                 <View style={styles.usernameContainer}>
                     <Text style={styles.usernameText}>
-                        {user.username}
+                        {user.displayName}
                     </Text>
                 </View>
                     <View style={styles.avatarContainer}>
