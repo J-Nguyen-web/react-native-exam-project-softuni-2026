@@ -1,3 +1,4 @@
+import { collection, addDoc } from "firebase/firestore";
 import api from "./api.js";
 
 export async function getAll(){
@@ -7,8 +8,11 @@ export async function getAll(){
 }
 
 export async function create(sight) {
-    const newSight = await api.post('/sights', sight);
-    return newSight.data;
+    // const newSight = await api.post('/sights', sight);
+    // return newSight.data;
+
+    const ref = await addDoc(collection(db, 'sights'), sight);
+    return ref;
 }
 
 export async function getById(id){
