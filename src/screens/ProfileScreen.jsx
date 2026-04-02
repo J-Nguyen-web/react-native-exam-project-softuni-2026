@@ -43,7 +43,7 @@ export default function ProfileScreen() {
         Alert.alert("Photo uploaded succesfully!")
     }
     
-
+// TODO RESET PASSWORD INVITE BY GOOGLE PROFILE
     return (
         <ScreenWrapper>
             <View style={styles.container}>
