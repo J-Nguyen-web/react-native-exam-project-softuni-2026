@@ -8,6 +8,7 @@ export function useFormSight(defaultValues = {}) {
         control,
         handleSubmit,
         setValue,
+        watch,
         formState: { errors, isSubmitting }
     } = useForm({
         resolver: yupResolver(sightSchema),
@@ -19,6 +20,7 @@ export function useFormSight(defaultValues = {}) {
         errors,
         handleSubmit,
         isSubmitting,
-        setValue
+        setValue,
+        watch,
     }
 }

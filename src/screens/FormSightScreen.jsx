@@ -3,19 +3,19 @@ import { useState } from "react";
 import { useSight } from "../context/useSight.js";
 import { useAuth } from "../context/useAuth.js";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import * as ImagePicker from 'expo-image-picker'
 import { useFormSight } from "../validators/useFormSight.js";
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { Feather, FontAwesome, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { Controller } from "react-hook-form";
+import { getCurrentLocation } from "../services/locationService.js";
 import Camera from "../components/Camera.jsx";
 import Button from "../components/Button.jsx";
 import FormWrap from "../components/FormWrap.jsx";
 import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import DateInput from "../components/DateInput.jsx";
 import * as Location from 'expo-location'
-import { getCurrentLocation } from "../services/locationService.js";
+import MapView, { Marker } from 'react-native-maps'
 
 export default function FormSightScreen( {route, navigation}) {
     
@@ -26,10 +26,11 @@ export default function FormSightScreen( {route, navigation}) {
     const {sight, isEdit,initialPhoto} = route.params;
     const [tempUri, setTempUri] = useState(initialPhoto || sight?.photo || null);
     const [saving, setSaving] = useState(false);
+    const [coords, setCoords] = useState(null);
 
     const { createSight, updateSight } = useSight();
     const {user} = useAuth();
-    const { control, errors, handleSubmit, setValue} = useFormSight({
+    const { control, errors, handleSubmit, setValue, watch} = useFormSight({
         title: sight?.title || '',
         description: sight?.description || '',
         category: sight?.category || 'Nature',
@@ -44,6 +45,10 @@ export default function FormSightScreen( {route, navigation}) {
         ownerId: user.id,
         author: user.username,
     });
+    // watch will rerender when react-form-hook changes
+    const lat = watch('lat');
+    const lng = watch('lng');
+    const location = watch('location')
     
 
     const makeUriUsable = async(tempUri) => {
@@ -89,6 +94,7 @@ export default function FormSightScreen( {route, navigation}) {
     } 
 
     const handleCurrentLocation = async () => {
+
         const result = await getCurrentLocation();
 
         if(!result.success) {
@@ -104,12 +110,15 @@ export default function FormSightScreen( {route, navigation}) {
             }
             return;
         }
+        setCoords({latitude: Number(result.latitude) , longitude: Number(result.longitude) })
+
         setValue('location', result.address,);
         setValue('country', result.country);
         setValue('lat', result.latitude);
         setValue('lng', result.longitude);
     }
 
+    //TODO message when location service off
     return (
         
         <ScreenWrapper>
@@ -117,7 +126,8 @@ export default function FormSightScreen( {route, navigation}) {
             <View style={globalStyles.formCard}>
 
                 <View>
-                    <Image source={{ uri: tempUri }} style={styles.imagePreview} />
+                        <Image source={{ uri: tempUri }} style={styles.imagePreview} />
+                    
                 </View>
 
                 <Camera onPhotoTaken={setTempUri} retake={true}/>
@@ -164,7 +174,26 @@ export default function FormSightScreen( {route, navigation}) {
                             style={globalStyles.input}
                             icon={<FontAwesome6 name="map-location-dot" size={20} color={globalColor.primary} />}
                         />
-                        <MaterialIcons name="my-location" size={20} color={globalColor.primary} onPress={handleCurrentLocation} style={{marginLeft:8}} />
+
+                        { coords && (
+                            <MapView
+                                style={{ height: 200, borderRadius: 11, marginTop: 8}}
+                                initialRegion={{
+                                    latitude: lat,
+                                    longitude: lng,
+                                    latitudeDelta: 0.01,
+                                    longitudeDelta: 0.01,
+                                }}
+                            >
+                                <Marker
+                                    coordinate={{ latitude: lat, longitude: lng }}
+                                    title={location || "Selected Location"}
+                                    description={location}
+                                />
+                            </MapView>
+                        )}
+
+                        {/* <MaterialIcons name="my-location" size={20} color={globalColor.primary} onPress={handleCurrentLocation} style={{marginLeft:8}} /> */}
                         <Button title="Use curent location" onPress={handleCurrentLocation} />
                         <View style={[globalStyles.subtitle, {flexDirection: 'column',alignItems:"center",}]}>
                             <Text style={[globalStyles.subtitle, {fontSize: 18 }]}>
