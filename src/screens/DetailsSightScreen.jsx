@@ -140,7 +140,7 @@ export default function DetailsSightScreen({route}) {
                                     borderStyle: "solid", 
                                     paddingBottom: 14
                                 }]}>
-                                    {sight?.location} ({sight?.country})
+                                    {sight?.location} ({sight?.country} <CountryFlag isoCode={sight?.isoCode} size={20} />)
                         </Text>
                         <Text style={cardStyles.description}>{sight?.description}</Text>
 

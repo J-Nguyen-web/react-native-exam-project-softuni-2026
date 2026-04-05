@@ -25,6 +25,7 @@ export const getCurrentLocation = async () => {
 
         let formatted = '';
         let country = '';
+        let isoCode = '';
 
         if (address.length > 0){
             const place = address[0];
@@ -35,6 +36,7 @@ export const getCurrentLocation = async () => {
             if (place.region)parts.push(`Region: ${place.region}`);
 
             if (place.country) country = place.country;
+            if (place.isoCode) isoCode = place.isoCode;
 
             formatted = parts.join('\n');
             
@@ -45,6 +47,7 @@ export const getCurrentLocation = async () => {
         latitude,
         longitude,
         address: formatted,
-        country
+        country,
+        isoCode,
     }
 }

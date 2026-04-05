@@ -36,6 +36,7 @@ export default function FormSightScreen( {route, navigation}) {
         category: sight?.category || 'Nature',
         rating: sight?.rating || 0,
         country: sight?.country || '',
+        isoCode: sight?.isoCode || '',
         location: sight?.location || '',
         lat: sight?.lat || null,
         lng: sight?.lng || null,
@@ -114,6 +115,7 @@ export default function FormSightScreen( {route, navigation}) {
 
         setValue('location', result.address,);
         setValue('country', result.country);
+        setValue('isoCode', result.isoCode);
         setValue('lat', result.latitude);
         setValue('lng', result.longitude);
     }

@@ -31,8 +31,9 @@ export function AuthProvider({ children}) {
 
     useEffect(() =>{
 
-        const unsubscribe = onAuthStateChanged(auth,(fireBaseUser) => { // функция на SDK за която се subscribe и при промяна в Auth State извиква callback()
-            if (fireBaseUser) { //ако има запазен user в Async Storage
+        const unsubscribe = onAuthStateChanged(auth,(fireBaseUser) => { 
+    // функция на SDK (user-a се запазва и persist) за която се subscribe и при промяна в Auth State извиква callback()
+            if (fireBaseUser) { //ако има запазен user в onAuthStateChanged
                 setAuthState({
                     user: { // придобива тези параметри
                         id: fireBaseUser.uid,
