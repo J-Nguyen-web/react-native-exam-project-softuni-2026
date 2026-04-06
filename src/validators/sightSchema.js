@@ -24,7 +24,7 @@ export const sightSchema = yup.object({
     location: yup
         .string()
         .required("Required field")
-        .max(50, "Maximum 50 characters")
+        .max(150, "Maximum 150 characters")
         .trim(),
 
 });

@@ -21,7 +21,7 @@ export const getCurrentLocation = async () => {
 
 
         const address = await Location.reverseGeocodeAsync({ latitude, longitude });
-        console.log('ADRESSS:   ', address)
+        console.log('ADRESSS:   ', address,'[0]', address[0])
 
         let formatted = '';
         let country = '';
@@ -36,7 +36,7 @@ export const getCurrentLocation = async () => {
             if (place.region)parts.push(`Region: ${place.region}`);
 
             if (place.country) country = place.country;
-            if (place.isoCode) isoCode = place.isoCode;
+            if (place.isoCountryCode) isoCode = place.isoCountryCode;
 
             formatted = parts.join('\n');
             

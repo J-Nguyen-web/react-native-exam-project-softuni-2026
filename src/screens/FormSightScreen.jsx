@@ -16,6 +16,7 @@ import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import DateInput from "../components/DateInput.jsx";
 import * as Location from 'expo-location'
 import MapView, { Marker } from 'react-native-maps'
+import CountryFlag from "react-native-country-flag";
 
 export default function FormSightScreen( {route, navigation}) {
     
@@ -50,6 +51,7 @@ export default function FormSightScreen( {route, navigation}) {
     const lat = watch('lat');
     const lng = watch('lng');
     const location = watch('location')
+    const isoCode = watch('isoCode')
     
 
     const makeUriUsable = async(tempUri) => {
@@ -97,6 +99,7 @@ export default function FormSightScreen( {route, navigation}) {
     const handleCurrentLocation = async () => {
 
         const result = await getCurrentLocation();
+        console.log('ON HANDLE...', result.isoCode)
 
         if(!result.success) {
              if (!result.canAskAgain) {
@@ -115,7 +118,10 @@ export default function FormSightScreen( {route, navigation}) {
 
         setValue('location', result.address,);
         setValue('country', result.country);
-        setValue('isoCode', result.isoCode);
+        setValue('isoCode', result.isoCode, {
+            shouldDirty: true,
+            shouldValidate: true,
+        });
         setValue('lat', result.latitude);
         setValue('lng', result.longitude);
     }
@@ -162,8 +168,9 @@ export default function FormSightScreen( {route, navigation}) {
                             error={errors.country} 
                             placeholder=""
                             style={globalStyles.input}
-                            icon={<Feather name="flag" size={20} color={globalColor.primary} />}
-                        />
+                            icon={isoCode? (<CountryFlag isoCode={isoCode} size={16}/>) : <Feather name="flag" size={20} color={globalColor.primary} />}
+                            
+                        /> 
                         <FormWrap
                             control={control}
                             name="location"
