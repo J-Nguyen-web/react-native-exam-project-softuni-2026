@@ -13,6 +13,7 @@ import Button from "../components/Button.jsx";
 import StarsRating from "../components/StarsRating.jsx";
 import * as ratingService from "../services/ratingService.js"
 import CountryFlag from "react-native-country-flag";
+import { sightService } from "../services/index.js";
 
 export default function DetailsSightScreen({route}) {
     
@@ -30,7 +31,13 @@ export default function DetailsSightScreen({route}) {
     let isOwner = sight?.ownerId === user?.id
 
     useEffect(() => {
-        if(!sight?.id || !user?.id) return;
+
+        const loadSight = async () => { 
+            const sightData = await sightService.getById(id)
+            setSight(sightData)
+            console.log(sight)
+        };
+        loadSight();
 
         async function loadUserRating() {
             try {
@@ -42,9 +49,10 @@ export default function DetailsSightScreen({route}) {
         }
 
         loadUserRating();
-    },[sight?.id]);
+    },[id]);
 
     useFocusEffect(
+        
         useCallback(() => {
             getSightById(id)
             .then (res => { setSight(res); })
@@ -52,6 +60,7 @@ export default function DetailsSightScreen({route}) {
             console.error('Error fetching sight', err)
         })
         },[id])
+        
     )
 
     if(!sight) {
@@ -140,7 +149,7 @@ export default function DetailsSightScreen({route}) {
                                     borderStyle: "solid", 
                                     paddingBottom: 14
                                 }]}>
-                                    {sight?.location} ({sight?.country} <CountryFlag isoCode={sight?.isoCode} size={20} />)
+                                    {sight?.location} (<CountryFlag isoCode={sight?.isoCode} size={16}/> {sight?.country} ) 
                         </Text>
                         <Text style={cardStyles.description}>{sight?.description}</Text>
 

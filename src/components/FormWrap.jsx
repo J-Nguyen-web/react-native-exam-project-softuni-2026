@@ -16,6 +16,7 @@ export default function FormWrap({
     numberOfLines,
     textAlignVertical,
     multiline,
+    rightComponent
 }) {
 
     return (
@@ -39,6 +40,8 @@ export default function FormWrap({
                         textAlignVertical={textAlignVertical}
                         multiline={multiline}
                     />
+                    {rightComponent} {/* може да се добави елемент до полето (проблема е че не е вътре) */}
+                    
                 </View>
             )}
         />

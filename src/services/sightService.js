@@ -26,7 +26,7 @@ export async function getById(sightId){
 
     const sight = await getDoc(doc(db, 'sights', sightId))
     console.log(sight.data)
-    return { id: sight.id, ...sight.data}; // result съдържа мета данни и ни праща само id като разчита че sight който сме пратили е при нас, за да спести трафик
+    return { id: sight.id, ...sight.data()}; // result съдържа мета данни и ни праща само id като разчита че sight който сме пратили е при нас, за да спести трафик
     // if(!id){ throw new Error('No entry with such id!') }
     
     // const sightById = await api.get(`/sights/${id}`);
