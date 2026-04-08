@@ -4,6 +4,7 @@ import { cardStyles } from "./cardStyles.js";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { globalColor } from "../globalStyles.js";
 import { useRating } from "../context/useRating.js"
+import CountryFlag from "react-native-country-flag";
 
 export default function Card({
   id,
@@ -12,6 +13,7 @@ export default function Card({
   photo,
   rating,
   country,
+  isoCode,
   location,
   author,
 }) {
@@ -33,12 +35,15 @@ export default function Card({
           <View style={cardStyles.content}>
             <View style={cardStyles.titleRow}>
               <Text style={cardStyles.title}>{title}</Text>
-              <Text style={cardStyles.rating}>{ratingData?.average?.toFixed(1) || "0"} </Text>
+              <Text style={cardStyles.rating}>{typeof ratingData?.average === "number" ? ratingData?.average?.toFixed(1) : "0"} </Text>
               <Text style={{fontStyle:"italic"}}>Author: <Text style={{color: globalColor.turqouise}}>{author}</Text></Text>
             </View>
               {/* todo add flags for country */}
               {/* todo location link to the place*/}
-            <Text style={cardStyles.location}><Entypo name="location" size={18} color="#555555" />  {location} ({country})</Text>
+            <Text style={cardStyles.location}>
+              <Entypo name="location" size={18} color="#555555" /> {location} 
+                ({isoCode ? (<CountryFlag isoCode={isoCode} size={16}/>) : null} {country})
+            </Text>
           </View>
 
         </Pressable>

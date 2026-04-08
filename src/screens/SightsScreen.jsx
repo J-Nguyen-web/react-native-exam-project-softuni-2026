@@ -45,8 +45,8 @@ export default function SightScreen() {
                 </Text>
               </View>
             ): ( <FlatList 
-                data={sights}
-                keyExtractor={(item) => item.id.toString()}
+                data={sights || []}
+                keyExtractor={(item) => item.id.toString() || Math.random().toString()}
                 renderItem={({item, index}) => <Card index={index} {...item} />}
                 refreshing={refreshing}
                 onRefresh={refreshHandler}
