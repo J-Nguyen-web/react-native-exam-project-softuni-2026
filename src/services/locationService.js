@@ -2,6 +2,15 @@ import * as Location from 'expo-location'
 
 export const getCurrentLocation = async () => {
 
+        const serviceEnabled = await Location.hasServicesEnabledAsync();
+
+        if(!serviceEnabled) {
+            return {
+                success: false,
+                reason: 'serviceOff'
+            }
+        }
+
         const { status, canAskAgain } =  await Location.requestForegroundPermissionsAsync();
 
         console.log("Status: ", status)
@@ -10,6 +19,7 @@ export const getCurrentLocation = async () => {
         if (status !== 'granted') {
            return {
             success: false,
+            reason: "permissionDenied",
             status,
             canAskAgain
            }

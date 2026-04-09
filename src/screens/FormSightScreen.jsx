@@ -1,4 +1,4 @@
-import { Image, ImageBackground, Keyboard, Linking, StyleSheet, Switch, Text, View } from "react-native";
+import { Alert, Image, ImageBackground, Keyboard, Linking, StyleSheet, Switch, Text, View } from "react-native";
 import { useState } from "react";
 import { useSight } from "../context/useSight.js";
 import { useAuth } from "../context/useAuth.js";
@@ -97,22 +97,40 @@ export default function FormSightScreen( {route, navigation}) {
     } 
 
     const handleCurrentLocation = async () => {
+        
 
+        
         const result = await getCurrentLocation();
-        console.log('ON HANDLE...', result.isoCode)
-
         if(!result.success) {
-             if (!result.canAskAgain) {
+            console.log(result.success)
+            if (result.reason === 'serviceOff') {
+                console.log('in oFF')
                 Alert.alert(
-                    "Permission required",
-                    "Enable location service from phone settings",
+                    "Location is OFF",
+                    "Turn ON location services in Settings",
                     [
-                        { text: "Open App Settings", onPress: ()=> Linking.openSettings()},
-                        { text: "Dismiss" }
+                        { text: "Navigate from App to Location Service", onPress: () => Linking.openSettings() },
+                        { text: "Dismiss"}
                     ]
                 );
+                return;
             }
-            return;
+            if(result.reason === "permissionDenied"){
+               if(!result.canAskAgain) {
+                    Alert.alert(
+                        "Permission required",
+                        "Enable location service from phone settings",
+                        [
+                            { text: "Open App Settings", onPress: ()=> Linking.openSettings()},
+                            { text: "Dismiss" }
+                        ]
+                    );
+                } else {
+                    Alert.alert("Permission denied")
+                }
+                return; 
+            }
+                
         }
         setCoords({latitude: Number(result.latitude) , longitude: Number(result.longitude) })
 
@@ -125,8 +143,6 @@ export default function FormSightScreen( {route, navigation}) {
         setValue('lat', result.latitude);
         setValue('lng', result.longitude);
     }
-
-    //TODO message when location service off
     return (
         
         <ScreenWrapper>
@@ -134,8 +150,7 @@ export default function FormSightScreen( {route, navigation}) {
             <View style={globalStyles.formCard}>
 
                 <View>
-                        <Image source={{ uri: tempUri }} style={styles.imagePreview} />
-                    
+                    <Image source={{ uri: tempUri }} style={styles.imagePreview} />                    
                 </View>
 
                 <Camera onPhotoTaken={setTempUri} retake={true}/>
@@ -217,28 +232,29 @@ export default function FormSightScreen( {route, navigation}) {
                                     render={({ field: { onChange, value } }) => (
                                         <DateInput value={value} onChange={onChange}/>
                                     )}
-                                // />
+                                /> 
 
-                                // <Controller
-                                //     control={control}
-                                //     name="endDate"
-                                //     defaultValue={new Date()}
-                                //     render={({ field: { onChange, value } }) => (
-                                //         <View style={{flex:1, alignItems: "center"}}>
-                                //             <Text style={{color: globalColor.primary}}>End</Text>
-                                //             <DateTimePicker
-                                //                 value={value || new Date()}
-                                //                 mode="date"
-                                //                 display="compact"
-                                //                 onChange={(event, date) => {
-                                //                     if(date) {
-                                //                         onChange(date)
-                                //                     }
-                                //                 }}
-                                //             />
-                                //         </View>
-                                //     )}
-                                />
+                                {/*    TODO диапазон от време
+                                 <Controller 
+                                    control={control}
+                                    name="endDate"
+                                    defaultValue={new Date()}
+                                    render={({ field: { onChange, value } }) => (
+                                        <View style={{flex:1, alignItems: "center"}}>
+                                            <Text style={{color: globalColor.primary}}>End</Text>
+                                            <DateTimePicker
+                                                value={value || new Date()}
+                                                mode="date"
+                                                display="compact"
+                                                onChange={(event, date) => {
+                                                    if(date) {
+                                                        onChange(date)
+                                                    }
+                                                }}
+                                            />
+                                        </View>
+                                    )}
+                                /> */}
                             </View>
                         </View>
                         <Controller
@@ -255,7 +271,10 @@ export default function FormSightScreen( {route, navigation}) {
                                     overflow: 'hidden',
                                     height:160,
                                 }}>
-                                    <Text style={[globalStyles.subtitle, {fontSize: 20 }]}>Category</Text>
+                                    <Text style={[globalStyles.subtitle, {fontSize: 20 }]}>
+                                        Category
+                                    </Text>
+
                                     <Picker
                                         selectedValue={value || "Nature"}
                                         onValueChange={onChange}
@@ -272,33 +291,6 @@ export default function FormSightScreen( {route, navigation}) {
                             )}
                         />
                             
-                        
-                        
-                        {/* <Controller
-                            control={control}
-                            name="rating"
-                            render={({ field: { onChange, value } }) => (
-                                <View>
-                                    <Text>Rating</Text>
-                                    <StarsRating value={value} onChange={onChange}   />
-                                </View>
-                            )}
-                        />
-                        <Controller 
-                            control={control}
-                            name="liked"
-                            defaultValue={0}
-                            render={({ field: { onChange, value } }) => (
-                                <View style={{ flexDirection: "row", justifyContent: "space-between", marginVertical: 8}}>
-                                    <Text>Liked</Text>
-                                    
-                                    <Switch 
-                                        value={value} 
-                                        onValueChange={onChange}   
-                                    />
-                                </View>
-                            )}
-                        /> */}
                         <Button
                             title={!isEdit ? 'Upload Sight' : 'Update sight'}
                             //todo icon
