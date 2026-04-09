@@ -138,9 +138,10 @@ export default function DetailsSightScreen({route}) {
                                 <StarsRating value={userRating?.rating || 0} onChange={handleRating}/>
                             </View>
                         )}
-                        <Text style={cardStyles.author}>Author: <Text style={{color: globalColor.turqouise}}>{sight.author}</Text></Text>
-                        {/* TODO add flags for country */}
-                        {/* <CountryFlag isoCode={sight.Country} size={20} /> */}
+                        <Text style={cardStyles.author}>
+                            Author: <Text style={{color: globalColor.turqouise}}>{sight.author}</Text>
+                        </Text>
+
                         <Text 
                             style={[
                                 cardStyles.location, {

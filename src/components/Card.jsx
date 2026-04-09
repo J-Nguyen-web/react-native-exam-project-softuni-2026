@@ -38,7 +38,6 @@ export default function Card({
               <Text style={cardStyles.rating}>{typeof ratingData?.average === "number" ? ratingData?.average?.toFixed(1) : "0"} </Text>
               <Text style={{fontStyle:"italic"}}>Author: <Text style={{color: globalColor.turqouise}}>{author}</Text></Text>
             </View>
-              {/* todo add flags for country */}
               {/* todo location link to the place*/}
             <Text style={cardStyles.location}>
               <Entypo name="location" size={18} color="#555555" /> {location} 

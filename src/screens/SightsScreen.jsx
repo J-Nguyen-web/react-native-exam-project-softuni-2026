@@ -1,32 +1,49 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Card from "../components/Card.jsx";
 import { useSight } from "../context/useSight.js";
 import { LinearGradient } from "expo-linear-gradient";
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useNavigation } from "@react-navigation/native";
 
 export default function SightScreen() {
-  const {sights, loading, reloadSights} = useSight();
-  // const [sights, setSights] = useState([]);
+    const {sights, loading, reloadSights} = useSight();
+    // const [sights, setSights] = useState([]);
 
-  const [refreshing, setRefreshing] = useState(false);
+    const [refreshing, setRefreshing] = useState(false);
 
-  const refreshHandler = async () => {
-    setRefreshing(true)
-    await reloadSights()
-    setRefreshing(false)
-  }
+    const refreshHandler = async () => {
+        setRefreshing(true)
+        await reloadSights()
+        setRefreshing(false)
+    }
 
-      if(!sights) {
+    const navigation = useNavigation();
+
+    if(!sights) {
+      return (
+          <View style={globalStyles.loadingContainer}>
+              <ActivityIndicator size="large" color={globalColor.blue} />
+              <Text style={globalStyles.loadingText}>
+                  Loading sights...  may take up to 50 seconds if the server is waking up
+              </Text>
+          </View>
+      )
+    }
+
+    if (!sights.length > 0) {
         return (
-            <View style={globalStyles.loadingContainer}>
-                <ActivityIndicator size="large" color={globalColor.blue} />
-                <Text style={globalStyles.loadingText}>
-                    Loading sights...  may take up to 50 seconds if the server is waking up
+            <TouchableOpacity style={{flex:1, justifyContent: 'center'}} onPress={()=>navigation.navigate('HomeNavigator', {screen: 'Home'})}>
+                <Text style={globalStyles.subtitle}>
+                    No sights created yet.
                 </Text>
-            </View>
+                <Text style={[globalStyles.subtitle, {color: "#ff0000"}]}>
+                    Visit home to get started - press here.
+                </Text>
+            </TouchableOpacity>
         )
+
     }
     return (
       <LinearGradient colors={["#ffffff", "#ddd6fe"]} style={{flex: 1}}>
