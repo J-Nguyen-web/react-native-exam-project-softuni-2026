@@ -26,7 +26,7 @@ export default function DetailsSightScreen({route}) {
     const { loading, getSightById, deleteSight } = useSight();
     const { ratingsMap, loadRatings } = useRating();
 
-    const sightRating = ratingsMap?.[sight?.id]
+    const sightRating = sight?.id ? ratingsMap?.[sight?.id] : null;
 
     let isOwner = sight?.ownerId === user?.id
 

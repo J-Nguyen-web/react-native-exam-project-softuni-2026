@@ -8,7 +8,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 
 export default function SightScreen() {
-    const {sights, loading, reloadSights} = useSight();
+    // const {sights, loading, reloadSights} = useSight();
+    const sigthContext = useSight() || {};
+
+    const sights = Array.isArray(sigthContext.sights) ? sigthContext.sights : [];
+    const loading = sigthContext.loading ?? false;
+    const reloadSights = sigthContext.reloadSights ?? (() => {})
     // const [sights, setSights] = useState([]);
 
     const [refreshing, setRefreshing] = useState(false);
@@ -32,7 +37,7 @@ export default function SightScreen() {
       )
     }
 
-    if (!sights.length > 0) {
+    if (sights.length === 0) {
         return (
             <TouchableOpacity style={{flex:1, justifyContent: 'center'}} onPress={()=>navigation.navigate('HomeNavigator', {screen: 'Home'})}>
                 <Text style={globalStyles.subtitle}>
@@ -63,7 +68,8 @@ export default function SightScreen() {
               </View>
             ): ( <FlatList 
                 data={sights || []}
-                keyExtractor={(item) => item.id.toString() || Math.random().toString()}
+                // keyExtractor={(item) => item.id.toString() || Math.random().toString()}
+                keyExtractor={(item) => item?.id ? String(item.id) : String(index)}
                 renderItem={({item, index}) => <Card index={index} {...item} />}
                 refreshing={refreshing}
                 onRefresh={refreshHandler}

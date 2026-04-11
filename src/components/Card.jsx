@@ -20,7 +20,7 @@ export default function Card({
 
   const navigation = useNavigation();
   const { ratingsMap } = useRating();
-  const ratingData = ratingsMap[id];
+  const ratingData = ratingsMap?.[id] ?? null;
 
     return (
         <Pressable style={({pressed}) => [

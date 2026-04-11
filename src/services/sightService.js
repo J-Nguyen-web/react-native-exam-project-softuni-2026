@@ -5,6 +5,8 @@ import api from "./api.js";
 export async function getAll(){
 const querySnapshot = await getDocs(collection(db, 'sights'));
 
+if(!querySnapshot) return [];
+
 const sights = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) //querySNap=a има специални мета-данни
 // използваме id-тата за да създадем Key за обект с value doc.data спредната за даденото id за всеки записан sight
 
