@@ -6,17 +6,24 @@ import { LinearGradient } from "expo-linear-gradient";
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
+import Camera from "../components/Camera.jsx";
 
 export default function SightScreen() {
-    // const {sights, loading, reloadSights} = useSight();
-    const sigthContext = useSight() || {};
-
-    const sights = Array.isArray(sigthContext.sights) ? sigthContext.sights : [];
-    const loading = sigthContext.loading ?? false;
-    const reloadSights = sigthContext.reloadSights ?? (() => {})
+    const navigation = useNavigation();
+    const {sights, loading, reloadSights} = useSight();
     // const [sights, setSights] = useState([]);
 
     const [refreshing, setRefreshing] = useState(false);
+    const [photo, setPhoto] = useState(null)
+    const [showCamera, setShowCamera] = useState(false)
+    
+    useEffect(() => {
+        if(photo) {
+            navigation.navigate('FormSight', {initialPhoto: photo})
+            setPhoto(null);
+            setShowCamera(false);
+        }
+    },[photo])
 
     const refreshHandler = async () => {
         setRefreshing(true)
@@ -24,7 +31,17 @@ export default function SightScreen() {
         setRefreshing(false)
     }
 
-    const navigation = useNavigation();
+    const onScrollEndDrag = (event) => {
+        const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent
+
+        const holdUpDistance = contentSize.height - (layoutMeasurement.height + contentOffset.y);
+
+        
+
+        if (holdUpDistance < -80) {
+            setShowCamera(true)
+        }
+    }
 
     if(!sights) {
       return (
@@ -68,12 +85,36 @@ export default function SightScreen() {
               </View>
             ): ( <FlatList 
                 data={sights || []}
-                // keyExtractor={(item) => item.id.toString() || Math.random().toString()}
-                keyExtractor={(item) => item?.id ? String(item.id) : String(index)}
+                keyExtractor={(item, index) => item?.id ? String(item.id) : String(index)}
                 renderItem={({item, index}) => <Card index={index} {...item} />}
                 refreshing={refreshing}
                 onRefresh={refreshHandler}
-              />)}
+                onScrollEndDrag={onScrollEndDrag}
+                scrollEventThrottle={20}
+                ListFooterComponent={
+                    <View style={{ padding: 25, alignItems: 'center'}}>
+                        <Text style={globalStyles.loadingContainer}>
+                            That are all sights...
+                        </Text>
+                        <Text style={globalStyles.subtitle}>
+                            Hold up to create more by yourself ^_^
+                        </Text>
+                    </View>
+                }
+              />
+              
+              )}
+              
+              {showCamera && (
+                <View style={{position: "absolute",bottom: 0, left: 0, right: 0, padding: 20}}>
+                    <Camera onPhotoTaken={setPhoto} />
+                    <TouchableOpacity onPress={() => setShowCamera(false)}>
+                        <Text style={{color: "#ff0000", textAlign: 'center'}}>
+                            Dismiss
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+              )}
              
               {/* todo create sight on swipe Up - you want more? create one by yourself */}
           </View>
@@ -81,23 +122,3 @@ export default function SightScreen() {
       </LinearGradient>
     );
 }
-
-export const style = StyleSheet.create({
-  title: {
-    fontSize: 25,
-    fontWeight: "700",
-    textAlign: 'center',
-    color: globalColor.blue,
-    marginBottom: 25,
-    paddingBottom: 11,
-    width: '90%',
-
-    borderBottomWidth: 3,
-    borderBottomColor: '#d0cccc'
-
-  },
-  titleContainer: {
-    padding: 8,
-    alignItems: 'center',
-  },
-})
