@@ -5,6 +5,7 @@ import AboutScreen from "../screens/AboutScreen.jsx";
 import SightsScreen from "../screens/SightsScreen.jsx";
 import { globalColor } from "../globalStyles.js";
 import ProfileNavigator from "./ProfileNavigatror.jsx";
+import { TouchableOpacity } from "react-native";
 
     const Tabs = createBottomTabNavigator();
 
@@ -30,7 +31,15 @@ return (
             ),
         }}/>                
 
-        <Tabs.Screen name="Sights" component={SightsScreen} options={{
+        <Tabs.Screen name="Sights" component={SightsScreen} options={({ navigation }) => ({
+            headerRight: () => (
+                <TouchableOpacity
+                    onPress={() => navigation.navigate('Search')}
+                    style={{ marginRight: 15 }}
+                >
+                    <Ionicons name="search" size={20} color={globalColor.primary}/>
+                </TouchableOpacity>
+            ),
             headerTitleStyle: {fontWeight: 'bold', fontSize: 20},
             tabBarActiveTintColor: globalColor.primary,
             tabBarInactiveTintColor: globalColor.roseAsh,
@@ -40,7 +49,7 @@ return (
                 <MaterialCommunityIcons name="view-dashboard-outline" size={ focused ? size+6 : size } color={color}
                 />
             )
-        }}/>
+        })}/>
         <Tabs.Screen name="Profile" component={ProfileNavigator} options={{
             headerShown: false,
             tabBarActiveTintColor: globalColor.primary,

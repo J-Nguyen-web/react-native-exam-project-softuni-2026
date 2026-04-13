@@ -115,8 +115,6 @@ export default function SightScreen() {
                     </TouchableOpacity>
                 </View>
               )}
-             
-              {/* todo create sight on swipe Up - you want more? create one by yourself */}
           </View>
         </SafeAreaView>
       </LinearGradient>
