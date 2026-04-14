@@ -11,6 +11,7 @@ import { useContext } from "react";
 import { AuthContext } from "../context/AuthProvider.jsx";
 import { createStackNavigator } from "@react-navigation/stack";
 import { CardStyleInterpolators } from "@react-navigation/stack";
+import SearchScreen from "../screens/SearchScreen.jsx";
 
 const Stack = createStackNavigator(); // извън навигатора - да не се recreat всеки render
 
@@ -81,8 +82,12 @@ export default function RootNavigator() {
                 component={FormSightScreen}
             />
                 </>
-                
             )}
+            <Stack.Screen
+                name="Search"
+                component={SearchScreen}
+                options={{ presentation: 'modal'}}
+            />
         </Stack.Navigator>
     );
 }
