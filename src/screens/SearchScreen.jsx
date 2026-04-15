@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FlatList, TextInput, View } from "react-native";
+import { FlatList, Text, TextInput, View } from "react-native";
 import { globalColor } from "../globalStyles.js";
 import { useSight } from "../context/useSight.js";
 import Card from "../components/Card.jsx";
@@ -8,9 +8,16 @@ export default function SearchScreen() {
     
     const [query, setQuery] = useState('');
     const [searchResult, setSearchResult] = useState([]);
-    const [debounce, setDebounce] = useState(query); // за да не search при всяка буква
+    const [debouncedQuery, setDebouncedQuery] = useState(query); // за да не search при всяка буква
     const { sights } = useSight();
 
+    useEffect(() => {
+        const time = setTimeout(() => {
+            setDebouncedQuery(query);
+        }, 300);
+
+        return () => clearTimeout(time)
+    },[query])
     
     useEffect(()=>{
 
@@ -22,18 +29,18 @@ export default function SearchScreen() {
         }
         
         const filtered = sights.filter( sight => 
-            sight.title.toLowerCase().includes(q) ||
-            sight.city.toLowerCase().includes(q) ||
-            sight.country.toLowerCase().includes(q)
+            sight.title?.toLowerCase().includes(q) ||
+            sight.city?.toLowerCase().includes(q) ||
+            sight.country?.toLowerCase().includes(q)
         )
         setSearchResult(filtered)
-    },[query, sights])
+    },[debouncedQuery, sights])
 
     return (
-        <View style={{flex: 1}}>
+        <View style={{flex: 1, padding: 14}}>
             <TextInput 
                 autoFocus
-                placeholder="Search..."
+                placeholder="Search country, city or title..."
                 value={query}
                 onChangeText={setQuery}
                 style={{
@@ -43,12 +50,25 @@ export default function SearchScreen() {
                     padding: 14,
                 }}
             />
+
+            {debouncedQuery.length === 0 && (
+                <Text style={{textAlign: 'center', marginTop: 20}}>
+                    Start typing to search
+                </Text>
+            )}
+
+            {debouncedQuery.length > 0 && searchResult.length === 0 && (
+                <Text style={{textAlign: 'center', marginTop: 20}}>
+                    No result found
+                </Text>
+            )}
             { searchResult.length > 0 &&(
                 <FlatList 
                     data={searchResult || []}
                     keyExtractor={(item, index) => item?.id ? String(item.id) : String(index)}
                     renderItem={({item, index}) => <Card index={index} {...item} />}
                     scrollEventThrottle={20}
+                    keyboardShouldPersistTaps="handled"
                 />
             )}
         </View>
