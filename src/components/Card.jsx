@@ -38,11 +38,20 @@ export default function Card({
               <Text style={cardStyles.rating}>{typeof ratingData?.average === "number" ? ratingData?.average?.toFixed(1) : "0"} </Text>
               <Text style={{fontStyle:"italic"}}>Author: <Text style={{color: globalColor.turqouise}}>{author}</Text></Text>
             </View>
-              {/* todo location link to the place*/}
-            <Text style={cardStyles.location}>
-              <Entypo name="location" size={18} color="#555555" /> {location} 
-                ({isoCode ? (<CountryFlag isoCode={isoCode} size={16}/>) : null} {country})
-            </Text>
+
+            <Text style={cardStyles.location} onPress={() => navigation.push('Search', {initialQuery: country})}>
+              {/* предаване на стойност към новия screen (чрез useRoute) в който initialQuery e името на ключа за стойност 
+              push вместо navigate осигурява fresh screen everytime когато се натиска различна стойност за търсене*/}
+              <View style={{flex: 1}}>
+                <Entypo name="location" size={18} color="#555555" /> ({isoCode ? <CountryFlag isoCode={isoCode} size={16}/> : null} <Text>{country}</Text> )
+              </View>
+          
+              
+        
+                {location}
+          </Text>
+                
+            
           </View>
 
         </Pressable>

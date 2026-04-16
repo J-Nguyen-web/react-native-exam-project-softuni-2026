@@ -2,14 +2,22 @@ import { useEffect, useState } from "react";
 import { FlatList, Text, TextInput, View } from "react-native";
 import { globalColor } from "../globalStyles.js";
 import { useSight } from "../context/useSight.js";
+import { useRoute } from "@react-navigation/native";
 import Card from "../components/Card.jsx";
 
 export default function SearchScreen() {
     
-    const [query, setQuery] = useState('');
+    const route = useRoute();
+    const initialQuery = route.params?.initialQuery || '';
+    const [query, setQuery] = useState(initialQuery);
     const [searchResult, setSearchResult] = useState([]);
     const [debouncedQuery, setDebouncedQuery] = useState(query); // за да не search при всяка буква
     const { sights } = useSight();
+
+    useEffect(() => { // при промяна в търсенето да се презареди с новата търсена стойност
+        if(route.params?.initialQuery)
+        setQuery(route.params?.initialQuery)
+    },[route.params?.initialQuery])
 
     useEffect(() => {
         const time = setTimeout(() => {
