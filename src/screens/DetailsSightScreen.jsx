@@ -130,27 +130,31 @@ export default function DetailsSightScreen({route}) {
                     <Image source={{ uri: sight.photo || sight.titleImage }} style={cardStyles.image} />
                     <View style={cardStyles.content}>
                         <Text style={cardStyles.title}>{sight?.title}</Text>
-                        <Text>Rating {sightRating ? sightRating?.average.toFixed(1) : 'No rating yet'}</Text>
-                        <StarsRating value={sightRating?.average || 0} readonly/>
+                        <Text style={cardStyles.author}>
+                            Author: <Text style={{color: globalColor.turqouise}}>{sight.author}</Text>
+                        </Text>
+                        <Text>Rating - {sightRating ? sightRating?.average.toFixed(1) : 'No rating yet'}</Text>
+                        <View>{sightRating ? <StarsRating value={sightRating?.average || 0} readonly/> : null}</View>
                         {!isOwner && (
                             <View>
                                 <Text>Your rating</Text>
                                 <StarsRating value={userRating?.rating || 0} onChange={handleRating}/>
                             </View>
                         )}
-                        <Text style={cardStyles.author}>
-                            Author: <Text style={{color: globalColor.turqouise}}>{sight.author}</Text>
-                        </Text>
 
+                    <Text style={{ justifyContent: 'center'}}>
+                            Country: <CountryFlag isoCode={sight?.isoCode} size={16}/> {sight?.country}
+                                    {sight?.city}
+                        </Text>
                         <Text 
                             style={[
                                 cardStyles.location, {
                                     borderBottomColor: "#555555", 
                                     borderBottomWidth: 1, 
                                     borderStyle: "solid", 
-                                    paddingBottom: 14
+                                    paddingBottom: 14,
                                 }]}>
-                                    {sight?.location} (<CountryFlag isoCode={sight?.isoCode} size={16}/> {sight?.country} ) 
+                                    {sight?.location}
                         </Text>
                         <Text style={cardStyles.description}>{sight?.description}</Text>
 
