@@ -142,9 +142,11 @@ export default function DetailsSightScreen({route}) {
                             </View>
                         )}
 
-                    <Text style={{ justifyContent: 'center'}}>
+                        <Text style={{ justifyContent: 'center'}}>
                             Country: <CountryFlag isoCode={sight?.isoCode} size={16}/> {sight?.country}
-                                    {sight?.city}
+                        </Text>
+                        <Text>
+                            Location description:
                         </Text>
                         <Text 
                             style={[

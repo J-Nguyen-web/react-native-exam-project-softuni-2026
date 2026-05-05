@@ -35,6 +35,9 @@ export const getCurrentLocation = async () => {
 
         let formatted = '';
         let country = '';
+        let city = '';
+        let street = '';
+        let region = '';
         let isoCode = '';
 
         if (address.length > 0){
@@ -42,10 +45,13 @@ export const getCurrentLocation = async () => {
             const parts = []
 
             if (place.city)parts.push(`City: ${place.city}`);
-            if (place.street)parts.push(`Street: ${place.name}`);
+            if (place.street)parts.push(`Street: ${place.street}`);
             if (place.region)parts.push(`Region: ${place.region}`);
 
             if (place.country) country = place.country;
+            if (place.city) city = place.city;
+            if (place.street) street = place.street;
+            if (place.region) region = place.region;
             if (place.isoCountryCode) isoCode = place.isoCountryCode;
 
             formatted = parts.join('\n');
@@ -58,6 +64,9 @@ export const getCurrentLocation = async () => {
         longitude,
         address: formatted,
         country,
+        city,
+        street,
+        region,
         isoCode,
     }
 }

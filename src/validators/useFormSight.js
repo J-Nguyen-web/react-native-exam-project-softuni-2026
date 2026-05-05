@@ -8,6 +8,7 @@ export function useFormSight(defaultValues = {}) {
         control,
         handleSubmit,
         setValue,
+        reset,
         watch,
         formState: { errors, isSubmitting }
     } = useForm({
@@ -21,6 +22,7 @@ export function useFormSight(defaultValues = {}) {
         handleSubmit,
         isSubmitting,
         setValue,
+        reset,
         watch,
     }
 }

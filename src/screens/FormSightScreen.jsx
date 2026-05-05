@@ -27,16 +27,18 @@ export default function FormSightScreen( {route, navigation}) {
     const {sight, isEdit,initialPhoto} = route.params;
     const [tempUri, setTempUri] = useState(initialPhoto || sight?.photo || null);
     const [saving, setSaving] = useState(false);
-    const [coords, setCoords] = useState(null);
 
     const { createSight, updateSight } = useSight();
     const {user} = useAuth();
-    const { control, errors, handleSubmit, setValue, watch} = useFormSight({
+    const { control, errors, handleSubmit, setValue,reset, watch} = useFormSight({
         title: sight?.title || '',
         description: sight?.description || '',
         category: sight?.category || 'Nature',
         rating: sight?.rating || 0,
         country: sight?.country || '',
+        city: sight?.city || '',
+        street: sight?.street || '',
+        region: sight?.region || '',
         isoCode: sight?.isoCode || '',
         location: sight?.location || '',
         lat: sight?.lat || null,
@@ -51,9 +53,8 @@ export default function FormSightScreen( {route, navigation}) {
     const lat = watch('lat');
     const lng = watch('lng');
     const location = watch('location')
-    const isoCode = watch('isoCode')
+    const isoCode = watch('isoCode');
     
-
     const makeUriUsable = async(tempUri) => {
         if(!tempUri) return null;
 
@@ -98,13 +99,9 @@ export default function FormSightScreen( {route, navigation}) {
 
     const handleCurrentLocation = async () => {
         
-
-        
         const result = await getCurrentLocation();
         if(!result.success) {
-            console.log(result.success)
             if (result.reason === 'serviceOff') {
-                console.log('in oFF')
                 Alert.alert(
                     "Location is OFF",
                     "Turn ON location services in Settings",
@@ -130,18 +127,31 @@ export default function FormSightScreen( {route, navigation}) {
                 }
                 return; 
             }
-                
         }
-        setCoords({latitude: Number(result.latitude) , longitude: Number(result.longitude) })
 
-        setValue('location', result.address,);
-        setValue('country', result.country);
+    reset({
+        ...watch(),
+        address: result.address,
+        country: result.country,
+        city: result.city,
+        street: result.street,
+        region: result.region,
+        isoCode: result.isoCode,
+        latitude: result.latitude,
+        longitude: result.longitude, 
+    })
+        // setCoords({latitude: Number(result.latitude) , longitude: Number(result.longitude) })
+        setValue('location', result.address, {shouldDirty: true});
+        setValue('country', result.country, {shouldDirty: true});
+        setValue('city', result.city, {shouldDirty: true});
+        setValue('street', result.street, {shouldDirty: true});
+        setValue('region', result.region, {shouldDirty: true});
         setValue('isoCode', result.isoCode, {
             shouldDirty: true,
             shouldValidate: true,
         });
-        setValue('lat', result.latitude);
-        setValue('lng', result.longitude);
+        setValue('lat', result.latitude, {shouldDirty: true});
+        setValue('lng', result.longitude, {shouldDirty: true});
     }
     return (
         
@@ -199,10 +209,11 @@ export default function FormSightScreen( {route, navigation}) {
                             icon={<FontAwesome6 name="map-location-dot" size={20} color={globalColor.primary} />}
                         />
 
-                        { coords && (
+                        {/* { coords && ( */}
+                        { lat && lng && (
                             <MapView
                                 style={{ height: 200, borderRadius: 11, marginTop: 8}}
-                                initialRegion={{
+                                region={{
                                     latitude: lat,
                                     longitude: lng,
                                     latitudeDelta: 0.01,
