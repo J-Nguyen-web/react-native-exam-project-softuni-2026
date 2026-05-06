@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
-import { Image, Pressable, Text, View } from "react-native";
+import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { cardStyles } from "./cardStyles.js";
 import { Entypo, Ionicons } from "@expo/vector-icons";
-import { globalColor } from "../globalStyles.js";
+import { globalColor, globalStyles } from "../globalStyles.js";
 import { useRating } from "../context/useRating.js"
 import CountryFlag from "react-native-country-flag";
 import StarsRating from "./StarsRating.jsx";
@@ -52,13 +52,23 @@ export default function Card({
                 <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                     {/* предаване на стойност към новия screen (чрез useRoute) в който initialQuery e името на ключа за стойност 
                     push вместо navigate осигурява fresh screen everytime когато се натиска различна стойност за търсене*/}
-                    <View 
+                    <Pressable 
+                    // всеки път като се натисне отваря нов search прозорец и се стакват - must fix
                         onPress={() => navigation.push('Search', {initialQuery: country})}
                         style={{flex: 1, flexDirection: "row", alignItems: 'center', gap: 8}}
                     >
-                        <Entypo name="location" size={18} color="#555555" /> ({isoCode ? <CountryFlag isoCode={isoCode} size={16}/> : null} <Text style={{fontStyle: 'italic', fontSize: 15}}>{country}</Text> )
+                        <Entypo name="location" size={18} color="#555555" />
+                        <TouchableOpacity 
+                            onPress={() => navigation.push('Search', {initialQuery: country})}
+                            activeOpacity={0.7}
+                            style={globalStyles.countryPill}
+                            > 
+                            {isoCode ? (<CountryFlag isoCode={isoCode} size={16}/>) : null} 
+                            <Text style={globalStyles.countryName}>{country}</Text> 
+                            <Text style={globalStyles.countryChevron}>›</Text>
+                        </TouchableOpacity>
                         {/* {location} whole location will be shown on details */}
-                    </View>
+                    </Pressable>
 
                     <View>
                         <StarsRating value={typeof ratingData?.average === "number" ? ratingData?.average?.toFixed(1) : "0"}/>

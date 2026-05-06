@@ -18,21 +18,7 @@ export default function ScreenWrapper({children, scroll = true}) {
                         contentContainerStyle={globalStyles.container}
                         keyboardOpeningTime={0}                        
                     >
-                    {/* не ми xаресва как работи, ще оставя горния начин дори по спецификация да се изисква долното
-                    <KeyboardAvoidingView 
-                        style={{flex:1}} 
-                        behavior={Platform.OS === "ios" ? "padding" : "height"}
-                        keyboardVerticalOffset={80}
-                    >   
-                        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                            <ScrollView 
-                                contentContainerStyle={globalStyles.container}
-                                keyboardShouldPersistTaps="handled"> */}
-                                {children}
-                            {/* </ScrollView>
-                        </TouchableWithoutFeedback>
-                    </KeyboardAvoidingView> */}
-                        
+                        {children}
                     </KeyboardAwareScrollView>
                 </SafeAreaView>
             </LinearGradient>
@@ -40,7 +26,9 @@ export default function ScreenWrapper({children, scroll = true}) {
     }
     return (
         <LinearGradient colors={[globalColor.gradientPrimo, globalColor.gradientSecundo]} style={globalStyles.gradient}>
-            <SafeAreaView style={{flex:1}}></SafeAreaView>
+            <SafeAreaView style={{flex:1}}>
+                {children}
+            </SafeAreaView>
         </LinearGradient>
     );
 }

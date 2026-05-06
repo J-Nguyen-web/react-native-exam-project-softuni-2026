@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { cardStyles } from "../components/cardStyles.js";
 import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -14,6 +14,7 @@ import StarsRating from "../components/StarsRating.jsx";
 import * as ratingService from "../services/ratingService.js"
 import CountryFlag from "react-native-country-flag";
 import { sightService } from "../services/index.js";
+import { Feather } from "@expo/vector-icons";
 
 export default function DetailsSightScreen({route}) {
     
@@ -31,7 +32,6 @@ export default function DetailsSightScreen({route}) {
     let isOwner = sight?.ownerId === user?.id
 
     useEffect(() => {
-
         const loadSight = async () => { 
             const sightData = await sightService.getById(id)
             setSight(sightData)
@@ -52,7 +52,6 @@ export default function DetailsSightScreen({route}) {
     },[id]);
 
     useFocusEffect(
-        
         useCallback(() => {
             getSightById(id)
             .then (res => { setSight(res); })
@@ -60,7 +59,6 @@ export default function DetailsSightScreen({route}) {
             console.error('Error fetching sight', err)
         })
         },[id])
-        
     )
 
     if(!sight) {
@@ -122,52 +120,122 @@ export default function DetailsSightScreen({route}) {
         }
     }
 
+    function Divider() {
+        return <View style={globalStyles.divider} />
+    }
+
     return (
         
         <ScreenWrapper>
             <GestureDetector gesture={swipeBack}>
                 <View style={[cardStyles.style]}>
                     <Image source={{ uri: sight.photo || sight.titleImage }} style={cardStyles.image} />
-                    <View style={cardStyles.content}>
-                        <Text style={cardStyles.title}>{sight?.title}</Text>
-                        <Text style={cardStyles.author}>
-                            Author: <Text style={{color: globalColor.turqouise}}>{sight.author}</Text>
-                        </Text>
-                        <Text>Rating - {sightRating ? sightRating?.average.toFixed(1) : 'No rating yet'}</Text>
-                        <View>{sightRating ? <StarsRating value={sightRating?.average || 0} readonly/> : null}</View>
-                        {!isOwner && (
-                            <View>
-                                <Text>Your rating</Text>
-                                <StarsRating value={userRating?.rating || 0} onChange={handleRating}/>
+                    
+                    {/* // === CONTENT === // */}
+                    <View style={globalStyles.content}>
+
+                        {/* // === TITLE === // */}
+                        <View style={globalStyles.section}>
+                            <Text style={cardStyles.title}>{sight?.title}</Text>
+                            
+                            <View style={globalStyles.authorRow}>
+                                {/* <Feather name="user" size={18} color={globalColor.turqouise} style={globalStyles.authorAvatar}/> */}
+                                <Text style={globalStyles.authorText}>
+                                    by:{"  "} 
+                                    <Text style={[globalStyles.authorName,{color: globalColor.turqouise}]}>
+                                        {sight.author}
+                                    </Text>
+                                </Text>
                             </View>
-                        )}
+                        </View>
 
-                        <Text style={{ justifyContent: 'center'}}>
-                            Country: <CountryFlag isoCode={sight?.isoCode} size={16}/> {sight?.country}
-                        </Text>
-                        <Text>
-                            Location description:
-                        </Text>
-                        <Text 
-                            style={[
-                                cardStyles.location, {
-                                    borderBottomColor: "#555555", 
-                                    borderBottomWidth: 1, 
-                                    borderStyle: "solid", 
-                                    paddingBottom: 14,
-                                }]}>
-                                    {sight?.location}
-                        </Text>
-                        <Text style={cardStyles.description}>{sight?.description}</Text>
+                    <Divider />
 
-                        {/* TODO link to all the sights with same category */}
-                        <Text style={[cardStyles.description, {fontStyle:'italic'}]}><Text style={{color: globalColor.turqouise}}>Category:  </Text> {sight?.category}</Text>
+                        {/* // === RATING === // */}
+                        <View style={globalStyles.section}>
+                            <Text style={globalStyles.ratingCount}>Rating - {sightRating ? sightRating?.average.toFixed(1) : 'No rating yet'}</Text>
+                            <View>{sightRating ? <StarsRating value={sightRating?.average || 0} readonly/> : null}</View>
+                            {!isOwner && (
+                                <View style={globalStyles.section}>
+                                    <Text style={globalStyles.label}>Your rating</Text>
+                                    <View style={globalStyles.ratingBox}>
+                                        <Text style={globalStyles.ratingValue}>
+                                            {sightRating ? sightRating.average.toFixed(1) :"-"}
+                                        </Text>
+                                        <StarsRating value={userRating?.rating || 0} onChange={handleRating}/>
+                                    </View>
+                                </View>
+                            )}
+                        </View>
+
+                    <Divider />
+
+                        {/* // === Country === // */}
+                        <View style={globalStyles.section}>
+                            <View style={globalStyles.countryRow}>
+                                <Text style={globalStyles.label}>Country</Text>
+                                <TouchableOpacity 
+                                    onPress={() => navigation.push('Search', {initialQuery: country})}
+                                    activeOpacity={0.7}
+                                    style={globalStyles.countryPill}
+                                    >
+                                    <CountryFlag isoCode={sight?.isoCode} size={16}/>
+                                    <Text style={globalStyles.countryName}>{sight?.country}</Text>
+                                    <Text style={globalStyles.countryChevron}>›</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
                         
-                        <View style={{ flexDirection: 'column', alignItems: 'baseline'}}>
+                        <View style={globalStyles.section}>
+                            <Text style={globalStyles.label}>
+                                Location description:
+                            </Text>
+                            <Text style={globalStyles.value}>
+                                 {/* style={[
+                                     cardStyles.location, {
+                                         borderBottomColor: "#555555", 
+                                         borderBottomWidth: 1, 
+                                         borderStyle: "solid", 
+                                         paddingBottom: 14,
+                                     }]}> */}
+                                        {sight?.location}
+                            </Text>
+                        </View>
+
+                        {/* // === DESCRIPTION === // */}
+                        <View style={globalStyles.section}>
+
+                            <Text style={globalStyles.sectionTitle}>Description</Text>
+                            <View>
+                                <Text style={globalStyles.text}>{sight?.description}</Text>
+                            </View>
+                        </View>
+
+                        {/* // === CATEGORY === // */}
+                        <View style={globalStyles.section}>
+                            <Text style={globalStyles.sectionTitle}>Category</Text>
+
+                            <View style={globalStyles.category}>
+                                {/* TODO link to all the sights with same category */}
+                                <Text style={[globalStyles.categoryText, {fontStyle:'italic'}]}><Text style={{color: globalColor.turqouise}}>Category:  </Text> {sight?.category}</Text>
+                            </View>
+                        </View>
+
+                        {/* // === BEST TIME === // */}
+                        <View style={globalStyles.section}>
+                            <Text style={globalStyles.sectionTitle}>Best time to visit</Text>
+                            <View style={globalStyles.highlight}>
+                                <Text style={globalStyles.text}>
+                                    around {formatDate(sight?.startDate) }
+                                </Text>
+                            </View>
+                        {/* <View style={{ flexDirection: 'column', alignItems: 'baseline'}}>
                             <Text style={[cardStyles.description, {color: globalColor.turqouise , marginBottom:0}]}>
                                 Best time to visit:
                             </Text>
                             <Text style={[cardStyles.description, {fontStyle: 'italic', marginTop:0}]}>around {formatDate(sight?.startDate) }</Text>
+                        </View> */}
                         </View>
                         
                         
@@ -179,36 +247,26 @@ export default function DetailsSightScreen({route}) {
                                     For edit and delete functionality, create your own sight from home screen - here
                                 </Text>
                             )}
-                        { isOwner && (<View style={{flexDirection: "row", justifyContent: "flex-end", gap: 8}}>
+                        { isOwner && (
+                        <View style={{flexDirection: "row", justifyContent: "flex-end", gap: 8}}>
                             <Button 
                                 title="Edit"
                                 onPress={() => navigation.navigate('FormSight',{
                                     sight: sight,
                                     isEdit: true
                                 })}
-                                style={styles.edit}
+                                style={globalStyles.edit}
                                 />
                             <Button 
                                 title="Delete"
                                 onPress={(handleDeleteSight)}
-                                style={styles.delete}
+                                style={globalStyles.delete}
                                 />
                             {/* <Button title="Rate"></Button> */}
                         </View>)} 
+                    </View>
                 </View>
-            </View>
-        </GestureDetector>
-    </ScreenWrapper>
+            </GestureDetector>
+        </ScreenWrapper>
     );
 }
-
-export const styles = StyleSheet.create({
-    edit: {
-        backgroundColor: "#fbf300",
-        color: "#000"
-    },
-    delete: {
-        backgroundColor: "#ff0000",
-        color: "#ffffff"
-    }
-})
