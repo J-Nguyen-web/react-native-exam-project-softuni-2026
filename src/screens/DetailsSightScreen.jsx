@@ -173,9 +173,9 @@ export default function DetailsSightScreen({route}) {
                         {/* // === Country === // */}
                         <View style={globalStyles.section}>
                             <View style={globalStyles.countryRow}>
-                                <Text style={globalStyles.label}>Country</Text>
+                                <Text style={globalStyles.countryLabel}>Country:</Text>
                                 <TouchableOpacity 
-                                    onPress={() => navigation.push('Search', {initialQuery: country})}
+                                    onPress={() => navigation.push('Search', {initialQuery: sight?.country})}
                                     activeOpacity={0.7}
                                     style={globalStyles.countryPill}
                                     >
@@ -185,48 +185,51 @@ export default function DetailsSightScreen({route}) {
                                 </TouchableOpacity>
                             </View>
                         </View>
-
                         
                         <View style={globalStyles.section}>
                             <Text style={globalStyles.label}>
                                 Location description:
                             </Text>
-                            <Text style={globalStyles.value}>
-                                 {/* style={[
-                                     cardStyles.location, {
-                                         borderBottomColor: "#555555", 
-                                         borderBottomWidth: 1, 
-                                         borderStyle: "solid", 
-                                         paddingBottom: 14,
-                                     }]}> */}
-                                        {sight?.location}
+                            <Text style={globalStyles.contentText}>
+                                {sight?.location}
                             </Text>
                         </View>
+
+                        <Divider />
 
                         {/* // === DESCRIPTION === // */}
                         <View style={globalStyles.section}>
 
-                            <Text style={globalStyles.sectionTitle}>Description</Text>
+                            <Text style={globalStyles.label}>About this Sight:</Text>
                             <View>
-                                <Text style={globalStyles.text}>{sight?.description}</Text>
+                                <Text style={globalStyles.contentText}>{sight?.description}</Text>
                             </View>
                         </View>
+
+                        <Divider />
 
                         {/* // === CATEGORY === // */}
                         <View style={globalStyles.section}>
-                            <Text style={globalStyles.sectionTitle}>Category</Text>
 
-                            <View style={globalStyles.category}>
+                            <View style={[globalStyles.section, {flexDirection: "row"}]}>
                                 {/* TODO link to all the sights with same category */}
-                                <Text style={[globalStyles.categoryText, {fontStyle:'italic'}]}><Text style={{color: globalColor.turqouise}}>Category:  </Text> {sight?.category}</Text>
+                                
+                                    <Text style={globalStyles.label}>
+                                        Category:</Text>
+                                            <Text style={[globalStyles.contentText, {fontStyle:'italic'}]}>
+                                                {sight?.category}
+                                            </Text>                                
+                                   
                             </View>
                         </View>
 
+                        <Divider />
+
                         {/* // === BEST TIME === // */}
                         <View style={globalStyles.section}>
-                            <Text style={globalStyles.sectionTitle}>Best time to visit</Text>
+                            <Text style={globalStyles.label}>Best time to visit</Text>
                             <View style={globalStyles.highlight}>
-                                <Text style={globalStyles.text}>
+                                <Text style={globalStyles.contentText}>
                                     around {formatDate(sight?.startDate) }
                                 </Text>
                             </View>
@@ -238,6 +241,7 @@ export default function DetailsSightScreen({route}) {
                         </View> */}
                         </View>
                         
+                        <Divider />
                         
                         {/* TODO until period of time */}
                         {/* <Text style={cardStyles.description}>{formatDate(sight?.endDate)}</Text> */}
@@ -248,21 +252,20 @@ export default function DetailsSightScreen({route}) {
                                 </Text>
                             )}
                         { isOwner && (
-                        <View style={{flexDirection: "row", justifyContent: "flex-end", gap: 8}}>
+                        <View style={{flexDirection: "row", justifyContent: "center", gap: 8, marginBottom: 8}}>
                             <Button 
                                 title="Edit"
                                 onPress={() => navigation.navigate('FormSight',{
                                     sight: sight,
                                     isEdit: true
                                 })}
-                                style={globalStyles.edit}
+                                style={[globalStyles.edit , {padding: 0}]}
                                 />
                             <Button 
                                 title="Delete"
                                 onPress={(handleDeleteSight)}
                                 style={globalStyles.delete}
                                 />
-                            {/* <Button title="Rate"></Button> */}
                         </View>)} 
                     </View>
                 </View>

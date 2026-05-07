@@ -15,7 +15,8 @@ export const globalColor = {
 const C = {
   background: "#1a2e1a",
   card: "#142214",
-  secondary: "#253825",
+  darkGreen: "#253825",
+  secondary: "#385438",
   foreground: "#f0ece0",
   muted: "#8a9e7a",
   primary: "#c8a84b",
@@ -60,6 +61,11 @@ export const globalStyles = StyleSheet.create({
         color: globalColor.primary,
         marginBottom: 28
     },
+
+    label: { fontSize: 14, fontWeight: 800, color: globalColor.primary,},
+    contentText: { color: C.secondary, fontStyle: 'italic'},
+    countryLabel: { fontSize: 14, fontWeight: 600, color: C.muted , fontStyle: 'italic'},
+
     formCard: {
         backgroundColor: "#fff",
         borderRadius: 26,
@@ -187,7 +193,7 @@ export const globalStyles = StyleSheet.create({
     alignItems: "center",
     gap: 6,
     paddingHorizontal: 8,
-    paddingVertical: 6,
+    paddingVertical: 3,
     borderRadius: 999,
     borderWidth: 1,
     borderColor: "rgba(200,168,75,0.35)",
@@ -222,13 +228,12 @@ export const globalStyles = StyleSheet.create({
     lineHeight: 22,
   },
 
-
-    edit: {
-        backgroundColor: "#fbf300",
-        color: "#000"
-    },
-    delete: {
-        backgroundColor: "#ff0000",
-        color: "#ffffff"
-    }
+  edit: {
+      backgroundColor: "#fbf300",
+      color: "#000"
+  },
+  delete: {
+      backgroundColor: "#ff0000",
+      color: "#ffffff"
+  }
 })

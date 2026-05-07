@@ -41,11 +41,9 @@ export default function Card({
                     <Text style={cardStyles.title}>
                         {title}
                     </Text>
-                    <Text style={cardStyles.rating}>
-                        {typeof ratingData?.average === "number" ? ratingData?.average?.toFixed(1) : "0"}
-                    </Text>
+
                     <Text style={{fontStyle:"italic"}}>
-                        Author: <Text style={{color: globalColor.turqouise}}>{author}</Text>
+                        by: <Text style={{color: globalColor.turqouise}}>{author}</Text>
                     </Text>
                 </View>
 
