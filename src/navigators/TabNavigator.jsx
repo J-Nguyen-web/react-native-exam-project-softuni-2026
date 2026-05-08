@@ -54,7 +54,6 @@ return (
             headerShown: false,
             tabBarActiveTintColor: globalColor.primary,
             tabBarInactiveTintColor: globalColor.roseAsh,
-            // todo decorated sightx
             tabBarIcon: ({focused,color, size}) => (
                 <FontAwesome6 name="user" size={ focused ? size+6 : size-6 } color={color}
                 />

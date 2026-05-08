@@ -129,7 +129,16 @@ export default function DetailsSightScreen({route}) {
         <ScreenWrapper>
             <GestureDetector gesture={swipeBack}>
                 <View style={[cardStyles.style]}>
-                    <Image source={{ uri: sight.photo || sight.titleImage }} style={cardStyles.image} />
+                    { sight.photo || sight.titleImage ? 
+                        (
+                            <Image source={{ uri: sight.photo || sight.titleImage }} style={cardStyles.image} />
+                        ) : (<View style={globalStyles.loadingContainer}>
+                                <ActivityIndicator size="large" color={globalColor.blue} />
+                                <Text style={globalStyles.loadingText}>
+                                    Loading image...
+                                </Text>
+                            </View>
+                        )}
                     
                     {/* // === CONTENT === // */}
                     <View style={globalStyles.content}>
@@ -233,12 +242,6 @@ export default function DetailsSightScreen({route}) {
                                     around {formatDate(sight?.startDate) }
                                 </Text>
                             </View>
-                        {/* <View style={{ flexDirection: 'column', alignItems: 'baseline'}}>
-                            <Text style={[cardStyles.description, {color: globalColor.turqouise , marginBottom:0}]}>
-                                Best time to visit:
-                            </Text>
-                            <Text style={[cardStyles.description, {fontStyle: 'italic', marginTop:0}]}>around {formatDate(sight?.startDate) }</Text>
-                        </View> */}
                         </View>
                         
                         <Divider />

@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Image, Pressable, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { cardStyles } from "./cardStyles.js";
 import { Entypo, Ionicons } from "@expo/vector-icons";
 import { globalColor, globalStyles } from "../globalStyles.js";
@@ -33,8 +33,16 @@ export default function Card({
           ]}
           onPress={() => navigation.navigate('Details', {id: id})}
           >
-          <Image source={{ uri: photo || titleImage }} style={cardStyles.image} resizeMode="cover" />
-          {/* todo loading for photo */}
+          { photo ? 
+            (
+                <Image source={{ uri: photo || titleImage }} style={cardStyles.image} resizeMode="cover" />
+            ) : (<View style={globalStyles.loadingContainer}>
+                    <ActivityIndicator size="large" color={globalColor.blue} />
+                    <Text style={globalStyles.loadingText}>
+                        Loading image...
+                    </Text>
+                </View>
+            )}
 
             <View style={cardStyles.content}>
                 <View style={cardStyles.titleRow}>
