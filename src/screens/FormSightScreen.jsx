@@ -20,10 +20,6 @@ import CountryFlag from "react-native-country-flag";
 
 export default function FormSightScreen( {route, navigation}) {
     
-    // const [title, setTitle] = useState(sight?.title || '');
-    // const [description, setDescription] = useState(sight?.description || '');
-    // const [country, setCountry] = useState(sight?.country || '');
-    // const [location, setLocation] = useState(sight?.location || '');
     const {sight, isEdit,initialPhoto} = route.params;
     const [tempUri, setTempUri] = useState(initialPhoto || sight?.photo || null);
     const [saving, setSaving] = useState(false);
@@ -71,7 +67,6 @@ export default function FormSightScreen( {route, navigation}) {
 
     const onSubmit = async (data) => {
         Keyboard.dismiss();
-        console.log(user)
         if(saving ) return;
 
         if(!tempUri) {
@@ -178,7 +173,7 @@ export default function FormSightScreen( {route, navigation}) {
                             control={control}
                             name="description" 
                             label="Description"
-                            error={errors.description}  
+                            error={errors.description}
                             placeholder="Why is special..."
                             multiline = {true}
                             numberOfLines={3}
@@ -244,28 +239,24 @@ export default function FormSightScreen( {route, navigation}) {
                                         <DateInput value={value} onChange={onChange}/>
                                     )}
                                 /> 
-
-                                {/*    TODO диапазон от време
-                                 <Controller 
+                                <Controller
                                     control={control}
                                     name="endDate"
+                                    error={errors.endDate}
+                                    // проверката дали е по-рано от началната дата е в schema
                                     defaultValue={new Date()}
                                     render={({ field: { onChange, value } }) => (
-                                        <View style={{flex:1, alignItems: "center"}}>
-                                            <Text style={{color: globalColor.primary}}>End</Text>
-                                            <DateTimePicker
-                                                value={value || new Date()}
-                                                mode="date"
-                                                display="compact"
-                                                onChange={(event, date) => {
-                                                    if(date) {
-                                                        onChange(date)
-                                                    }
-                                                }}
-                                            />
+                                        <View>
+                                            <DateInput value={value} onChange={onChange}/>
+                                            {errors.endDate && (
+                                                <Text style={{color: "#ff0000"}}>
+                                                    {errors.endDate.message}
+                                                </Text>
+                                            )}
                                         </View>
+
                                     )}
-                                /> */}
+                                />
                             </View>
                         </View>
                         <Controller
@@ -312,7 +303,6 @@ export default function FormSightScreen( {route, navigation}) {
                         />
             </View>
         </ScreenWrapper>
-            
     );
 }
 

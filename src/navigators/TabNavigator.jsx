@@ -44,7 +44,6 @@ return (
             tabBarActiveTintColor: globalColor.primary,
             tabBarInactiveTintColor: globalColor.roseAsh,
             headerTintColor: globalColor.primary,
-            // todo decorated sightx
             tabBarIcon: ({ focused ,color, size}) => (
                 <MaterialCommunityIcons name="view-dashboard-outline" size={ focused ? size+6 : size } color={color}
                 />

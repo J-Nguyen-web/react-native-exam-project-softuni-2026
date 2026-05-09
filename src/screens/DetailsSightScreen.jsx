@@ -35,7 +35,7 @@ export default function DetailsSightScreen({route}) {
         const loadSight = async () => { 
             const sightData = await sightService.getById(id)
             setSight(sightData)
-            console.log(sight)
+            console.log(sightData)
         };
         loadSight();
 
@@ -125,7 +125,6 @@ export default function DetailsSightScreen({route}) {
     }
 
     return (
-        
         <ScreenWrapper>
             <GestureDetector gesture={swipeBack}>
                 <View style={[cardStyles.style]}>
@@ -239,7 +238,10 @@ export default function DetailsSightScreen({route}) {
                             <Text style={globalStyles.label}>Best time to visit</Text>
                             <View style={globalStyles.highlight}>
                                 <Text style={globalStyles.contentText}>
-                                    around {formatDate(sight?.startDate) }
+                                    from {formatDate(sight?.startDate) } 
+                                </Text>
+                                <Text style={globalStyles.contentText}>
+                                    until {formatDate(sight?.endDate) }
                                 </Text>
                             </View>
                         </View>

@@ -26,5 +26,16 @@ export const sightSchema = yup.object({
         .required("Required field")
         .max(150, "Maximum 150 characters")
         .trim(),
+    
+    startDate: yup
+        .date()
+        .required(),
 
+    endDate: yup
+        .date()
+        .required()
+        .min(
+            yup.ref('startDate'),
+            'End date cannot be earlier than start date'
+        ),
 });
