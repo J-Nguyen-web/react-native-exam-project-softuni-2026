@@ -188,7 +188,7 @@ export const globalStyles = StyleSheet.create({
     letterSpacing: 1.5,
     fontFamily: "monospace",
   },
-  countryPill: {
+  ovalTag: {
     flexDirection: "row",
     alignItems: "center",
     gap: 6,

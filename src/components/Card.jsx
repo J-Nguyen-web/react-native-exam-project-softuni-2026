@@ -67,7 +67,7 @@ export default function Card({
                         <TouchableOpacity 
                             onPress={() => navigation.push('Search', {initialQuery: country})}
                             activeOpacity={0.7}
-                            style={globalStyles.countryPill}
+                            style={globalStyles.ovalTag}
                             > 
                             {isoCode ? (<CountryFlag isoCode={isoCode} size={16}/>) : null} 
                             <Text style={globalStyles.countryName}>{country}</Text> 

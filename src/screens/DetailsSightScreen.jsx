@@ -185,7 +185,7 @@ export default function DetailsSightScreen({route}) {
                                 <TouchableOpacity 
                                     onPress={() => navigation.push('Search', {initialQuery: sight?.country})}
                                     activeOpacity={0.7}
-                                    style={globalStyles.countryPill}
+                                    style={globalStyles.ovalTag}
                                     >
                                     <CountryFlag isoCode={sight?.isoCode} size={16}/>
                                     <Text style={globalStyles.countryName}>{sight?.country}</Text>
@@ -207,7 +207,6 @@ export default function DetailsSightScreen({route}) {
 
                         {/* // === DESCRIPTION === // */}
                         <View style={globalStyles.section}>
-
                             <Text style={globalStyles.label}>About this Sight:</Text>
                             <View>
                                 <Text style={globalStyles.contentText}>{sight?.description}</Text>
@@ -218,16 +217,20 @@ export default function DetailsSightScreen({route}) {
 
                         {/* // === CATEGORY === // */}
                         <View style={globalStyles.section}>
-
-                            <View style={[globalStyles.section, {flexDirection: "row"}]}>
-                                {/* TODO link to all the sights with same category */}
-                                
+                            <View style={globalStyles.countryRow}>
                                     <Text style={globalStyles.label}>
-                                        Category:</Text>
-                                            <Text style={[globalStyles.contentText, {fontStyle:'italic'}]}>
-                                                {sight?.category}
-                                            </Text>                                
-                                   
+                                        Category:
+                                    </Text>
+                                    <TouchableOpacity 
+                                        onPress={() => navigation.push('Search', {initialQuery: sight?.category})}
+                                        activeOpacity={0.7}
+                                        style={globalStyles.ovalTag}
+                                    >
+                                        <Text style={[globalStyles.contentText, {fontStyle:'italic'}]}>
+                                            {sight?.category}
+                                        </Text>
+                                    <Text style={globalStyles.countryChevron}>›</Text>
+                                </TouchableOpacity>     
                             </View>
                         </View>
 
@@ -238,18 +241,21 @@ export default function DetailsSightScreen({route}) {
                             <Text style={globalStyles.label}>Best time to visit</Text>
                             <View style={globalStyles.highlight}>
                                 <Text style={globalStyles.contentText}>
-                                    from {formatDate(sight?.startDate) } 
+                                    <Text style={{color: globalColor.turqouise}}>
+                                        from
+                                    </Text>
+                                    {" "} {formatDate(sight?.startDate)}
                                 </Text>
                                 <Text style={globalStyles.contentText}>
-                                    until {formatDate(sight?.endDate) }
+                                    <Text style={{color: globalColor.turqouise}}>
+                                        until
+                                    </Text>
+                                    {" "} {formatDate(sight?.endDate)}
                                 </Text>
                             </View>
                         </View>
                         
                         <Divider />
-                        
-                        {/* TODO until period of time */}
-                        {/* <Text style={cardStyles.description}>{formatDate(sight?.endDate)}</Text> */}
 
                             { sight?.defaultSight &&   (
                                 <Text style={[globalStyles.subtitle, {color: '#ff0000'}]} onPress={()=>navigation.navigate('Tabs', {screen: 'Home'})}>

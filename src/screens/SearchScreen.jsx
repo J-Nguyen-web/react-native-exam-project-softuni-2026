@@ -39,7 +39,8 @@ export default function SearchScreen() {
         const filtered = sights.filter( sight => 
             sight.title?.toLowerCase().includes(q) ||
             sight.city?.toLowerCase().includes(q) ||
-            sight.country?.toLowerCase().includes(q)
+            sight.country?.toLowerCase().includes(q) ||
+            sight.category?.toLowerCase().includes(q)
         )
         setSearchResult(filtered)
     },[debouncedQuery, sights])
