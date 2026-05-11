@@ -86,7 +86,7 @@ export default function RootNavigator() {
             <Stack.Screen
                 name="Search"
                 component={SearchScreen}
-                options={{ presentation: 'modal'}}
+                options={{ presentation: 'formSheet'}}
             />
         </Stack.Navigator>
     );

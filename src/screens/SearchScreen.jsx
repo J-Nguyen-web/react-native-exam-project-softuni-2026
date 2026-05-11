@@ -2,12 +2,13 @@ import { useEffect, useState } from "react";
 import { FlatList, Text, TextInput, View } from "react-native";
 import { globalColor } from "../globalStyles.js";
 import { useSight } from "../context/useSight.js";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import Card from "../components/Card.jsx";
 
 export default function SearchScreen() {
     
     const route = useRoute();
+    const navigation = useNavigation();
     const initialQuery = route.params?.initialQuery || '';
     const [query, setQuery] = useState(initialQuery);
     const [searchResult, setSearchResult] = useState([]);
@@ -75,7 +76,10 @@ export default function SearchScreen() {
                 <FlatList 
                     data={searchResult || []}
                     keyExtractor={(item, index) => item?.id ? String(item.id) : String(index)}
-                    renderItem={({item, index}) => <Card index={index} {...item} />}
+                    renderItem={({item, index}) => <Card 
+                                                        index={index} {...item}  
+                                                        onPress={() => setQuery(item.country)}/>}
+                                                        //IN EVERY SCREEN YOU CAN PUT DIFFERENT BEHAVIOUS ON PRESS FOR THE CARD COMPONENT
                     scrollEventThrottle={20}
                     keyboardShouldPersistTaps="handled"
                 />

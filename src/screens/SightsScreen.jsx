@@ -31,6 +31,10 @@ export default function SightScreen() {
         setRefreshing(false)
     }
 
+    function onTagPress (searchData) {
+        navigation.replace('Search', {initialQuery: searchData})
+    }
+
     const onScrollEndDrag = (event) => {
         const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent
 
@@ -86,17 +90,20 @@ export default function SightScreen() {
             ): ( <FlatList 
                 data={sights || []}
                 keyExtractor={(item, index) => item?.id ? String(item.id) : String(index)}
-                renderItem={({item, index}) => <Card index={index} {...item} />}
+                renderItem={({item, index}) => <Card 
+                                                    index={index} {...item} 
+                                                    onPress={() => navigation.navigate('Search', {initialQuery: item.country})} />}
+                                                    //IN EVERY SCREEN YOU CAN PUT DIFFERENT BEHAVIOUS ON PRESS FOR THE CARD COMPONENT  
                 refreshing={refreshing}
                 onRefresh={refreshHandler}
                 onScrollEndDrag={onScrollEndDrag}
                 scrollEventThrottle={20}
                 ListFooterComponent={
                     <View style={{ padding: 25, alignItems: 'center'}}>
-                        <Text style={globalStyles.loadingContainer}>
+                        <Text style={globalStyles.loadingText}>
                             That are all sights...
                         </Text>
-                        <Text style={globalStyles.subtitle}>
+                        <Text style={[globalStyles.subtitle, {color: "#ff0000"}]}>
                             Hold up to create more by yourself ^_^
                         </Text>
                     </View>

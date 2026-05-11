@@ -20,6 +20,7 @@ export default function Card({
   isoCode,
   location,
   author,
+  onPress
 }) {
 
   const navigation = useNavigation();
@@ -55,17 +56,25 @@ export default function Card({
                     </Text>
                 </View>
 
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View style={{flex: 1, flexDirection: 'column', justifyContent: 'space-between'}}>
                     {/* предаване на стойност към новия screen (чрез useRoute) в който initialQuery e името на ключа за стойност 
                     push вместо navigate осигурява fresh screen everytime когато се натиска различна стойност за търсене*/}
-                    <Pressable 
-                    // всеки път като се натисне отваря нов search прозорец и се стакват - must fix
-                        onPress={() => navigation.push('Search', {initialQuery: country})}
-                        style={{flex: 1, flexDirection: "row", alignItems: 'center', gap: 8}}
+
+                    <View>
+                        <StarsRating value={typeof ratingData?.average === "number" ? ratingData?.average?.toFixed(1) : "0"}/>
+                    </View>
+
+                    <View style={{
+                            flex: 1,
+                            flexWrap: "wrap",
+                            flexDirection: "row",
+                            alignItems: 'center',
+                            gap: 8}}
                     >
                         <Entypo name="location" size={18} color="#555555" />
                         <TouchableOpacity 
-                            onPress={() => navigation.push('Search', {initialQuery: country})}
+                    // всеки път се отваря нов search и се стакват с push or navigate - replace замества предxoдното
+                            onPress={onPress}
                             activeOpacity={0.7}
                             style={globalStyles.ovalTag}
                             > 
@@ -74,10 +83,6 @@ export default function Card({
                             <Text style={globalStyles.countryChevron}>›</Text>
                         </TouchableOpacity>
                         {/* {location} whole location will be shown on details */}
-                    </Pressable>
-
-                    <View>
-                        <StarsRating value={typeof ratingData?.average === "number" ? ratingData?.average?.toFixed(1) : "0"}/>
                     </View>
                 </View>
 
