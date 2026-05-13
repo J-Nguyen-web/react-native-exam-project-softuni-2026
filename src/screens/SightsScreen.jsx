@@ -9,13 +9,14 @@ import { useNavigation } from "@react-navigation/native";
 import Camera from "../components/Camera.jsx";
 
 export default function SightScreen() {
+    const [refreshing, setRefreshing] = useState(false);
+    const [photo, setPhoto] = useState(null)
+    const [showCamera, setShowCamera] = useState(false)
+    
     const navigation = useNavigation();
     const {sights, loading, reloadSights} = useSight();
     // const [sights, setSights] = useState([]);
 
-    const [refreshing, setRefreshing] = useState(false);
-    const [photo, setPhoto] = useState(null)
-    const [showCamera, setShowCamera] = useState(false)
     
     useEffect(() => {
         if(photo) {

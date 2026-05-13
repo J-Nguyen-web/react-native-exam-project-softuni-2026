@@ -15,11 +15,14 @@ import * as ratingService from "../services/ratingService.js"
 import CountryFlag from "react-native-country-flag";
 import { sightService } from "../services/index.js";
 import { Feather } from "@expo/vector-icons";
+import commentService from "../services/commentService.js";
 
 export default function DetailsSightScreen({route}) {
     
     const [sight, setSight] = useState(null);
     const [userRating, setUserRating] = useState(null);
+    const [comment,setComment] = useState('')
+    const [comments,setComments] = useState([])
 
     const { id: id } = route.params;
     const navigation = useNavigation();
@@ -39,6 +42,13 @@ export default function DetailsSightScreen({route}) {
         };
         loadSight();
 
+        const loadComments = async() => {
+            const result = await commentService.getBySightId(id);
+
+            setComments();
+        }
+        loadComments();
+
         async function loadUserRating() {
             try {
                 const rating = await ratingService.getUserRating(sight?.id, user?.id)
@@ -47,8 +57,8 @@ export default function DetailsSightScreen({route}) {
                 setUserRating(null)
             }
         }
-
         loadUserRating();
+        
     },[id]);
 
     useFocusEffect(
