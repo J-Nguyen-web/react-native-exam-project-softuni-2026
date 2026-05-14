@@ -25,10 +25,10 @@ export default function DetailsSightScreen({route}) {
     const [comments,setComments] = useState([])
 
     const { id: id } = route.params;
-    const navigation = useNavigation();
-    const {user} = useAuth();
+    const { user } = useAuth();
     const { loading, getSightById, deleteSight } = useSight();
     const { ratingsMap, loadRatings } = useRating();
+    const navigation = useNavigation();
 
     const sightRating = sight?.id ? ratingsMap?.[sight?.id] : null;
 
@@ -81,6 +81,28 @@ export default function DetailsSightScreen({route}) {
             </View>
         )
     }
+
+    const addCommentHandler = async()=> {
+        if(!comment.trim()) return;
+
+        const newComment = {
+            text: comment,
+            sightId: id,
+
+            ownerId: user.uid, // firebase id
+            username: user.username,
+            // avatar: user.photoUrl || null // todo users photo 
+        };
+
+        await commentService.create(newComment),
+
+        setComment('');
+
+        const updateComments = 
+        await commentService.getBySightId(id);
+
+        setComments(updateComments)
+    };
 
     const swipeBack = Gesture.Pan()
             .activeOffsetX(50)
