@@ -6,7 +6,7 @@ import { useSight } from "../context/useSight.js";
 import { useAuth } from "../context/useAuth.js";
 import { formatDate } from "../util/formatDate.js";
 import { globalColor, globalStyles } from "../globalStyles.js";
-import { GestureDetector, Gesture, Directions } from "react-native-gesture-handler";
+import { GestureDetector, Gesture, Directions, TextInput } from "react-native-gesture-handler";
 import { useRating } from "../context/useRating.js";
 import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import Button from "../components/Button.jsx";
@@ -312,6 +312,42 @@ export default function DetailsSightScreen({route}) {
                         </View>)} 
                     </View>
                 </View>
+
+                <View style={globalStyles.commentSection}>
+                    <Text style={globalStyles.commentTitle}>
+                        Comments
+                    </Text>
+
+                    <View style={globalStyles.commentInput}>
+                        <TextInput
+                            value={comment}
+                            onChangeText={setComment}
+                            placeholder="Your comment..."
+                            style={globalStyles.input}
+                            />
+
+                            <TouchableOpacity onPress={addCommentHandler}>
+                                <Text>Post</Text>
+                            </TouchableOpacity>
+                    </View>
+                    
+                    {comments.map(item => (
+
+                        <View
+                            key={item.id}
+                            style={globalStyles.commentCard}
+                        >
+                            <Text style={globalStyles.commentText}>
+                                {item.ownerUsername}
+                            </Text>
+
+                            <Text style={globalStyles.commentText}>
+                                {item.text}
+                            </Text>
+                        </View>
+                    ))}
+                </View>
+
             </GestureDetector>
         </ScreenWrapper>
     );
