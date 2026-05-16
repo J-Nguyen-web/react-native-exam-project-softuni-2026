@@ -229,6 +229,49 @@ export const globalStyles = StyleSheet.create({
     lineHeight: 22,
   },
 
+  commentSection: {
+    marginTop: 20
+  },
+
+  commentTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 8
+  },
+  
+  commentInputContainer: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 20
+  },
+
+  commentInput: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#cac8c8',
+    borderRadius: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+  },
+
+  commentCard: {
+    padding: 14,
+    borderRadius: 14,
+    backgroundColor: '#2e2c2c'
+  },
+
+  commentUser: {
+    fontWeight: 'bold',
+    marginBottom: 3,
+    color: '#ffffff'
+  },
+
+  commentText: {
+    color: 'white'
+  },
+
+
+  // BUTTONS
   edit: {
       backgroundColor: "#fbf300",
       color: "#000"
@@ -238,3 +281,4 @@ export const globalStyles = StyleSheet.create({
       color: "#ffffff"
   }
 })
+

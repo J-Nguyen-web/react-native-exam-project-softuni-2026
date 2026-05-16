@@ -318,12 +318,12 @@ export default function DetailsSightScreen({route}) {
                         Comments
                     </Text>
 
-                    <View style={globalStyles.commentInput}>
+                    <View style={globalStyles.commentInputContainer}>
                         <TextInput
                             value={comment}
                             onChangeText={setComment}
                             placeholder="Your comment..."
-                            style={globalStyles.input}
+                            style={globalStyles.commentInput}
                             />
 
                             <TouchableOpacity onPress={addCommentHandler}>
