@@ -6,6 +6,7 @@ export const globalColor = {
     roseAsh: "#c4b0cf",
     blue: "#0077b6",
     turqouise: "#01b9a9",
+    mint: "#d5f3f7",
     placeholder: "#f2e3f0",
     gradientPrimo: "#ffffff",
     gradientSecundo: "#ddd6fe",
@@ -126,7 +127,7 @@ export const globalStyles = StyleSheet.create({
   // Content
   content: {
     paddingHorizontal: 20,
-    paddingTop: 4,
+    paddingTop: 6,
     gap: 20,
   },
   section: { gap: 10 },
@@ -143,7 +144,7 @@ export const globalStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    marginTop: 2,
+    marginTop: 3,
   },
   authorText: { fontSize: 14, color: C.muted, flexShrink: 1 },
   authorName: { color: C.foreground, fontWeight: "600" },
@@ -153,9 +154,9 @@ export const globalStyles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 8,
-    marginTop: 2,
+    marginTop: 3,
   },
-  starsRow: { flexDirection: "row", gap: 2 },
+  starsRow: { flexDirection: "row", gap: 3 },
   starWrapper: { position: "relative", width: 20, height: 20 },
   star: { fontSize: 18, position: "absolute" },
   starFillOverlay: {
@@ -167,7 +168,7 @@ export const globalStyles = StyleSheet.create({
   },
   ratingNumber: {
     fontFamily: "monospace",
-    fontSize: 13,
+    fontSize: 14,
     color: C.primary,
     fontWeight: "600",
   },
@@ -229,48 +230,6 @@ export const globalStyles = StyleSheet.create({
     lineHeight: 22,
   },
 
-  commentSection: {
-    marginTop: 20
-  },
-
-  commentTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 8
-  },
-  
-  commentInputContainer: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 20
-  },
-
-  commentInput: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: '#cac8c8',
-    borderRadius: 8,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-  },
-
-  commentCard: {
-    padding: 14,
-    borderRadius: 14,
-    backgroundColor: '#2e2c2c'
-  },
-
-  commentUser: {
-    fontWeight: 'bold',
-    marginBottom: 3,
-    color: '#ffffff'
-  },
-
-  commentText: {
-    color: 'white'
-  },
-
-
   // BUTTONS
   edit: {
       backgroundColor: "#fbf300",
@@ -279,6 +238,6 @@ export const globalStyles = StyleSheet.create({
   delete: {
       backgroundColor: "#ff0000",
       color: "#ffffff"
-  }
+  },
 })
 

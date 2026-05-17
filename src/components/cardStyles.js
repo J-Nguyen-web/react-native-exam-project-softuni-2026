@@ -5,8 +5,8 @@ export const cardStyles = StyleSheet.create({
   style: {
     backgroundColor: "#d5f3f7",
     borderRadius: 22,
-    borderWidth: 2,
-    borderColor: "#01b9a9",
+    borderWidth: 1,
+    borderColor: globalColor.turqouise,
     marginHorizontal: 14,
     marginBottom: 14,
     overflow: "hidden",

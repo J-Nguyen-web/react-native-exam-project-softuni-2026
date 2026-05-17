@@ -38,14 +38,13 @@ export default function DetailsSightScreen({route}) {
         const loadSight = async () => { 
             const sightData = await sightService.getById(id)
             setSight(sightData)
-            console.log(sightData)
         };
         loadSight();
 
         const loadComments = async() => {
             const result = await commentService.getBySightId(id);
 
-            setComments();
+            setComments(result);
         }
         loadComments();
 
@@ -83,25 +82,31 @@ export default function DetailsSightScreen({route}) {
     }
 
     const addCommentHandler = async()=> {
-        if(!comment.trim()) return;
+        console.log(user.id)
+        try {
+            
+            if(!comment.trim()) return;
 
-        const newComment = {
-            text: comment,
-            sightId: id,
+            const newComment = {
+                text: comment,
+                sightId: id,
 
-            ownerId: user.uid, // firebase id
-            username: user.username,
-            // avatar: user.photoUrl || null // todo users photo 
-        };
+                ownerId: user.id, // firebase id
+                username: user.username,
+                // avatar: user.photoUrl || null // todo users photo 
+            };
 
-        await commentService.create(newComment),
+            await commentService.create(newComment)
 
-        setComment('');
+            setComment('');
 
-        const updateComments = 
-        await commentService.getBySightId(id);
+            const updateComments = 
+            await commentService.getBySightId(id);
 
-        setComments(updateComments)
+            setComments(updateComments)
+        } catch (error) {
+            console.log(error)
+        }
     };
 
     const swipeBack = Gesture.Pan()
@@ -159,6 +164,7 @@ export default function DetailsSightScreen({route}) {
     return (
         <ScreenWrapper>
             <GestureDetector gesture={swipeBack}>
+                <View>
                 <View style={[cardStyles.style]}>
                     { sight.photo || sight.titleImage ? 
                         (
@@ -313,21 +319,21 @@ export default function DetailsSightScreen({route}) {
                     </View>
                 </View>
 
-                <View style={globalStyles.commentSection}>
-                    <Text style={globalStyles.commentTitle}>
+                <View style={styles.commentSection}>
+                    <Text style={styles.commentTitle}>
                         Comments
                     </Text>
 
-                    <View style={globalStyles.commentInputContainer}>
+                    <View style={styles.commentInputContainer}>
                         <TextInput
                             value={comment}
                             onChangeText={setComment}
                             placeholder="Your comment..."
-                            style={globalStyles.commentInput}
+                            style={styles.commentInput}
                             />
 
-                            <TouchableOpacity onPress={addCommentHandler}>
-                                <Text>Post</Text>
+                            <TouchableOpacity style={styles.commentButton} onPress={addCommentHandler}>
+                                <Text style={styles.commentButtonText}>Post</Text>
                             </TouchableOpacity>
                     </View>
                     
@@ -335,20 +341,154 @@ export default function DetailsSightScreen({route}) {
 
                         <View
                             key={item.id}
-                            style={globalStyles.commentCard}
-                        >
-                            <Text style={globalStyles.commentText}>
-                                {item.ownerUsername}
-                            </Text>
+                            style={styles.commentCard}
+                        >   <View style={styles.commentHeader}>
+                                <View style={styles.commentAvatar}>
+                                    <Text style={styles.commentText}>
+                                        {item.ownerUsername}
+                                    </Text>
+                                </View>
+                                
+                                <Text style={styles.commentUsername}>
+                                    {item.username}
+                                </Text>
+                            </View>
 
-                            <Text style={globalStyles.commentText}>
+                            <Text style={styles.commentText}>
                                 {item.text}
                             </Text>
+
                         </View>
                     ))}
                 </View>
-
+                </View>
             </GestureDetector>
         </ScreenWrapper>
     );
 }
+
+const styles = StyleSheet.create({
+
+  commentSection: {
+    marginTop: 28
+  },
+
+  commentTitle: {
+    fontSize: 22,
+    fontWeight:"800",
+    color: globalColor.primary,
+    marginBottom: 16
+  },
+  
+  commentInputContainer: {
+    flexDirection: 'row',
+    alignItems: "center",
+    gap: 8,
+    marginBottom: 18,
+  },
+
+  commentInput: {
+    flex: 1,
+    backgroundColor: 'white',
+
+    borderWidth: 1.5,
+    borderColor: globalColor.primary,
+    borderRadius: 18,
+
+    shadowColor: 'black',
+    shadowOpacity: 0.25,
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowRadius: 3,
+
+    elevation: 6,
+
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+
+    fontSize: 14,
+    color: globalColor.primary,
+  },
+  
+  commentCard: {
+    backgroundColor: "#ffffffff",
+    borderRadius: 22,
+    borderWidth: 1,
+    borderColor: globalColor.turqouise,
+    overflow: "hidden",
+    marginBottom: 14,
+    shadowColor: "#000",
+    shadowOpacity: 0.25,
+    shadowOffset: {
+      width: 0,
+      height: 6
+    },
+    shadowRadius: 11,
+
+    elevation: 3,
+  },
+  
+  commentHeader: {
+    flexDirection: "row",
+    alignItems: "baseline",
+    backgroundColor: globalColor.mint,
+    overflow: "hidden",
+    borderBottomRightRadius: 18,
+    paddingHorizontal: 8,
+  },
+  
+  commentAvatar: {
+    width: 25,
+    height: 25,
+    borderRadius: 999,
+    backgroundColor: globalColor.gradientSecundo,
+
+    justifyContent: "center",
+    alignItems: "center",
+
+    marginHorizontal: 8,
+    marginVertical: 3,
+  },
+
+  commentAvatarText: {
+    color: globalColor.primary,
+    fontWeight: "800",
+  },
+
+  commentUsername: {
+    fontSize: 14,
+    fontWeight: "700",
+    color: globalColor.primary,
+  },
+
+  commentText: {
+    color: '#555',
+    lineHeight: 22,
+    fontSize:14,
+
+    marginHorizontal: 18,
+    marginVertical: 3,
+  },
+
+  commentButton: {
+    backgroundColor: globalColor.turqouise,
+    borderRadius: 16,
+    paddingHorizontal: 18,
+    paddingVertical: 14,
+    shadowColor: 'black',
+    shadowOpacity: 0.25,
+    shadowOffset: {
+      width: 0,
+      height: 6
+    },
+    shadowRadius: 3,
+
+    elevation: 6,
+  },
+  commentButtonText: {
+    color: "#fff",
+    fontWeight:"700",
+  },
+})
