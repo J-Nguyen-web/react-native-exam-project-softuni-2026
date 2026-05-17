@@ -54,7 +54,6 @@ export function AuthProvider({ children}) {
         // const loadUser = async () => {
         //     try {
         //         const user = await SecureStore.getItemAsync('user');
-        //         console.log('user  ',user)
         //             if(user) {
         //                 setUser(JSON.parse(user));
         //             }

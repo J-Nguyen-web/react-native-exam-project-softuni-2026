@@ -17,7 +17,6 @@ export default function ProfileScreen() {
 
     const pickImageHandler = async () => {
         const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        console.log(user)
         if(status !== "granted") {
             Alert.alert(
                 "Permission required",
