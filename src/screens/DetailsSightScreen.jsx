@@ -41,12 +41,15 @@ export default function DetailsSightScreen({route}) {
         };
         loadSight();
 
-        const loadComments = async() => {
-            const result = await commentService.getBySightId(id);
+        // const loadComments = async() => { // manual loading of comments, no needed bcoz we use unsubscribe listener
+        //     const result = await commentService.getBySightId(id);
+        //     setComments(result);} loadComments();
 
-            setComments(result);
-        }
-        loadComments();
+        // зачистваща функция, която стопира слушането на промени при влизане в тази секция, по този начин, няма да се стартира отново
+        // и отново всеки път щом се отвори даден екран и да се натрупват процеси на eventListeners
+        const unsubscribe = commentService.subscribeToComments(id, setComments); 
+        // setComments е се приема като callback от commentService и се зарежда с коментарите от там
+        return () => unsubscribe()
 
         async function loadUserRating() {
             try {
@@ -82,28 +85,23 @@ export default function DetailsSightScreen({route}) {
     }
 
     const addCommentHandler = async()=> {
-        console.log(user.id)
         try {
-            
             if(!comment.trim()) return;
 
             const newComment = {
                 text: comment,
                 sightId: id,
-
                 ownerId: user.id, // firebase id
                 username: user.username,
                 // avatar: user.photoUrl || null // todo users photo 
             };
 
             await commentService.create(newComment)
-
             setComment('');
 
-            const updateComments = 
-            await commentService.getBySightId(id);
+            // const updateComments = await commentService.getBySightId(id); // manual update, no longer needed bcoz we use onSnapshot
+            // setComments(updateComments)
 
-            setComments(updateComments)
         } catch (error) {
             console.log(error)
         }

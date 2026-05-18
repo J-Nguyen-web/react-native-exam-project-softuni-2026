@@ -5,6 +5,7 @@ import {
     where,
     orderBy,
     getDocs,
+    onSnapshot, // for real time updates when somebody send a comment
     serverTimestamp
 } from 'firebase/firestore';
 
@@ -21,22 +22,32 @@ const create = async(commentData) => {
     return result;
     };
 
-    const getBySightId = async(sightId) => {
+    // const getBySightId = async(sightId) => { // manual reload after updateconst queryData = query(commentsRef,where('sightId', '==', sightId),orderBy('createdAt', 'desc'));
+        // const result = await getDocs(queryData);
+        // return result.docs.map(doc => ({ // the result from firebase is not plain JS thats why result got .docs which we map
+        //     id: doc.id,                  // using the id of the data
+        //     ...doc.data()                // and spreading it into JS object that react can use
+        // }));
+
+    const subscribeToComments = async(sightId, callback) => {
         const queryData = query(
             commentsRef,
             where('sightId', '==', sightId),
             orderBy('createdAt', 'desc')
         );
 
-        const result = await getDocs(queryData);
-
-        return result.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }));
+        return onSnapshot(queryData, snapshot => {
+            const comments = snapshot.docs.map(doc => ({  
+                id: doc.id, 
+                ...doc.data()
+            }));
+            
+            callback(comments)
+        });
     }
 
     export default {
         create,
-        getBySightId
+        subscribeToComments,
+        getBySightId,
 }
