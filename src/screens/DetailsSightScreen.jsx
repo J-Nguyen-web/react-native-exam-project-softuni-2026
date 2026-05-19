@@ -8,14 +8,15 @@ import { formatDate } from "../util/formatDate.js";
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { GestureDetector, Gesture, Directions, TextInput } from "react-native-gesture-handler";
 import { useRating } from "../context/useRating.js";
+import { sightService } from "../services/index.js";
+import { Feather } from "@expo/vector-icons";
 import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import Button from "../components/Button.jsx";
 import StarsRating from "../components/StarsRating.jsx";
 import * as ratingService from "../services/ratingService.js"
 import CountryFlag from "react-native-country-flag";
-import { sightService } from "../services/index.js";
-import { Feather } from "@expo/vector-icons";
 import commentService from "../services/commentService.js";
+import filter from "../util/profanityFilter.js";
 
 export default function DetailsSightScreen({route}) {
     
@@ -87,6 +88,15 @@ export default function DetailsSightScreen({route}) {
     const addCommentHandler = async()=> {
         try {
             if(!comment.trim()) return;
+
+            if(filter.isProfane(comment)) {
+                Alert.alert(
+                    'Invalid Comment',
+                    'Please avoid offensive language.'
+                )
+                
+                return;
+            }
 
             const newComment = {
                 text: comment,
