@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, } from "react-native";
 import { cardStyles } from "../components/cardStyles.js";
 import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -16,7 +16,11 @@ import StarsRating from "../components/StarsRating.jsx";
 import * as ratingService from "../services/ratingService.js"
 import CountryFlag from "react-native-country-flag";
 import commentService from "../services/commentService.js";
-import filter from "../util/profanityFilter.js";
+// import filter from "../util/profanityFilter.js";
+import { LinearGradient } from "expo-linear-gradient";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { FlatList } from "react-native";
+import CommentCard from "../components/CommentCard.jsx";
 
 export default function DetailsSightScreen({route}) {
     
@@ -89,14 +93,14 @@ export default function DetailsSightScreen({route}) {
         try {
             if(!comment.trim()) return;
 
-            if(filter.isProfane(comment)) {
-                Alert.alert(
-                    'Invalid Comment',
-                    'Please avoid offensive language.'
-                )
+            // if(filter.isProfane(comment)) {
+            //     Alert.alert(
+            //         'Invalid Comment',
+            //         'Please avoid offensive language.'
+            //     )
                 
-                return;
-            }
+            //     return;
+            // }
 
             const newComment = {
                 text: comment,
@@ -170,208 +174,197 @@ export default function DetailsSightScreen({route}) {
     }
 
     return (
-        <ScreenWrapper>
+        <LinearGradient>
+            <SafeAreaView>
             <GestureDetector gesture={swipeBack}>
-                <View>
-                <View style={[cardStyles.style]}>
-                    { sight.photo || sight.titleImage ? 
-                        (
-                            <Image source={{ uri: sight.photo || sight.titleImage }} style={cardStyles.image} />
-                        ) : (<View style={globalStyles.loadingContainer}>
-                                <ActivityIndicator size="large" color={globalColor.blue} />
-                                <Text style={globalStyles.loadingText}>
-                                    Loading image...
-                                </Text>
-                            </View>
-                        )}
-                    
-                    {/* // === CONTENT === // */}
-                    <View style={globalStyles.content}>
+                <FlatList
+                    item={comments}
+                    renderItem={({item, index}) => <CommentCard index={index} {...item} />}
+                    contentContainerStyle={{ contentContainerStyle:140 }}
+                    keyboardShouldPersistTaps="handled"
 
-                        {/* // === TITLE === // */}
-                        <View style={globalStyles.section}>
-                            <Text style={cardStyles.title}>{sight?.title}</Text>
-                            
-                            <View style={globalStyles.authorRow}>
-                                {/* <Feather name="user" size={18} color={globalColor.turqouise} style={globalStyles.authorAvatar}/> */}
-                                <Text style={globalStyles.authorText}>
-                                    by:{"  "} 
-                                    <Text style={[globalStyles.authorName,{color: globalColor.turqouise}]}>
-                                        {sight.author}
-                                    </Text>
-                                </Text>
-                            </View>
-                        </View>
-
-                    <Divider />
-
-                        {/* // === RATING === // */}
-                        <View style={globalStyles.section}>
-                            <Text style={globalStyles.ratingCount}>Rating - {sightRating ? sightRating?.average.toFixed(1) : 'No rating yet'}</Text>
-                            <View>{sightRating ? <StarsRating value={sightRating?.average || 0} readonly/> : null}</View>
-                            {!isOwner && (
-                                <View style={globalStyles.section}>
-                                    <Text style={globalStyles.label}>Your rating</Text>
-                                    <View style={globalStyles.ratingBox}>
-                                        <Text style={globalStyles.ratingValue}>
-                                            {sightRating ? sightRating.average.toFixed(1) :"-"}
+                    ListHeaderComponent={(
+                        <>
+                        <View style={[cardStyles.style]}>
+                            { sight.photo || sight.titleImage ? 
+                                (
+                                    <Image source={{ uri: sight.photo || sight.titleImage }} style={cardStyles.image} />
+                                ) : (<View style={globalStyles.loadingContainer}>
+                                        <ActivityIndicator size="large" color={globalColor.blue} />
+                                        <Text style={globalStyles.loadingText}>
+                                            Loading image...
                                         </Text>
-                                        <StarsRating value={userRating?.rating || 0} onChange={handleRating}/>
+                                    </View>
+                                )}
+                            
+                            {/* // === CONTENT === // */}
+                            <View style={globalStyles.content}>
+
+                                {/* // === TITLE === // */}
+                                <View style={globalStyles.section}>
+                                    <Text style={cardStyles.title}>{sight?.title}</Text>
+                                    
+                                    <View style={globalStyles.authorRow}>
+                                        {/* <Feather name="user" size={18} color={globalColor.turqouise} style={globalStyles.authorAvatar}/> */}
+                                        <Text style={globalStyles.authorText}>
+                                            by:{"  "} 
+                                            <Text style={[globalStyles.authorName,{color: globalColor.turqouise}]}>
+                                                {sight.author}
+                                            </Text>
+                                        </Text>
                                     </View>
                                 </View>
-                            )}
-                        </View>
 
-                    <Divider />
+                            <Divider />
 
-                        {/* // === Country === // */}
-                        <View style={globalStyles.section}>
-                            <View style={globalStyles.countryRow}>
-                                <Text style={globalStyles.countryLabel}>Country:</Text>
-                                <TouchableOpacity 
-                                    onPress={() => navigation.push('Search', {initialQuery: sight?.country})}
-                                    activeOpacity={0.7}
-                                    style={globalStyles.ovalTag}
-                                    >
-                                    <CountryFlag isoCode={sight?.isoCode} size={16}/>
-                                    <Text style={globalStyles.countryName}>{sight?.country}</Text>
-                                    <Text style={globalStyles.countryChevron}>›</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                        
-                        <View style={globalStyles.section}>
-                            <Text style={globalStyles.label}>
-                                Location description:
-                            </Text>
-                            <Text style={globalStyles.contentText}>
-                                {sight?.location}
-                            </Text>
-                        </View>
+                                {/* // === RATING === // */}
+                                <View style={globalStyles.section}>
+                                    <Text style={globalStyles.ratingCount}>Rating - {sightRating ? sightRating?.average.toFixed(1) : 'No rating yet'}</Text>
+                                    <View>{sightRating ? <StarsRating value={sightRating?.average || 0} readonly/> : null}</View>
+                                    {!isOwner && (
+                                        <View style={globalStyles.section}>
+                                            <Text style={globalStyles.label}>Your rating</Text>
+                                            <View style={globalStyles.ratingBox}>
+                                                <Text style={globalStyles.ratingValue}>
+                                                    {sightRating ? sightRating.average.toFixed(1) :"-"}
+                                                </Text>
+                                                <StarsRating value={userRating?.rating || 0} onChange={handleRating}/>
+                                            </View>
+                                        </View>
+                                    )}
+                                </View>
 
-                        <Divider />
+                            <Divider />
 
-                        {/* // === DESCRIPTION === // */}
-                        <View style={globalStyles.section}>
-                            <Text style={globalStyles.label}>About this Sight:</Text>
-                            <View>
-                                <Text style={globalStyles.contentText}>{sight?.description}</Text>
-                            </View>
-                        </View>
-
-                        <Divider />
-
-                        {/* // === CATEGORY === // */}
-                        <View style={globalStyles.section}>
-                            <View style={globalStyles.countryRow}>
-                                    <Text style={globalStyles.label}>
-                                        Category:
-                                    </Text>
-                                    <TouchableOpacity 
-                                        onPress={() => navigation.push('Search', {initialQuery: sight?.category})}
-                                        activeOpacity={0.7}
-                                        style={globalStyles.ovalTag}
-                                    >
-                                        <Text style={[globalStyles.contentText, {fontStyle:'italic'}]}>
-                                            {sight?.category}
-                                        </Text>
-                                    <Text style={globalStyles.countryChevron}>›</Text>
-                                </TouchableOpacity>     
-                            </View>
-                        </View>
-
-                        <Divider />
-
-                        {/* // === BEST TIME === // */}
-                        <View style={globalStyles.section}>
-                            <Text style={globalStyles.label}>Best time to visit</Text>
-                            <View style={globalStyles.highlight}>
-                                <Text style={globalStyles.contentText}>
-                                    <Text style={{color: globalColor.turqouise}}>
-                                        from
-                                    </Text>
-                                    {" "} {formatDate(sight?.startDate)}
-                                </Text>
-                                <Text style={globalStyles.contentText}>
-                                    <Text style={{color: globalColor.turqouise}}>
-                                        until
-                                    </Text>
-                                    {" "} {formatDate(sight?.endDate)}
-                                </Text>
-                            </View>
-                        </View>
-                        
-                        <Divider />
-
-                            { sight?.defaultSight &&   (
-                                <Text style={[globalStyles.subtitle, {color: '#ff0000'}]} onPress={()=>navigation.navigate('Tabs', {screen: 'Home'})}>
-                                    For edit and delete functionality, create your own sight from home screen - here
-                                </Text>
-                            )}
-                        { isOwner && (
-                        <View style={{flexDirection: "row", justifyContent: "center", gap: 8, marginBottom: 8}}>
-                            <Button 
-                                title="Edit"
-                                onPress={() => navigation.navigate('FormSight',{
-                                    sight: sight,
-                                    isEdit: true
-                                })}
-                                style={[globalStyles.edit , {padding: 0}]}
-                                />
-                            <Button 
-                                title="Delete"
-                                onPress={(handleDeleteSight)}
-                                style={globalStyles.delete}
-                                />
-                        </View>)} 
-                    </View>
-                </View>
-
-                <View style={styles.commentSection}>
-                    <Text style={styles.commentTitle}>
-                        Comments
-                    </Text>
-
-                    <View style={styles.commentInputContainer}>
-                        <TextInput
-                            value={comment}
-                            onChangeText={setComment}
-                            placeholder="Your comment..."
-                            style={styles.commentInput}
-                            />
-
-                            <TouchableOpacity style={styles.commentButton} onPress={addCommentHandler}>
-                                <Text style={styles.commentButtonText}>Post</Text>
-                            </TouchableOpacity>
-                    </View>
-                    
-                    {comments.map(item => (
-
-                        <View
-                            key={item.id}
-                            style={styles.commentCard}
-                        >   <View style={styles.commentHeader}>
-                                <View style={styles.commentAvatar}>
-                                    <Text style={styles.commentText}>
-                                        {item.ownerUsername}
-                                    </Text>
+                                {/* // === Country === // */}
+                                <View style={globalStyles.section}>
+                                    <View style={globalStyles.countryRow}>
+                                        <Text style={globalStyles.countryLabel}>Country:</Text>
+                                        <TouchableOpacity 
+                                            onPress={() => navigation.push('Search', {initialQuery: sight?.country})}
+                                            activeOpacity={0.7}
+                                            style={globalStyles.ovalTag}
+                                            >
+                                            <CountryFlag isoCode={sight?.isoCode} size={16}/>
+                                            <Text style={globalStyles.countryName}>{sight?.country}</Text>
+                                            <Text style={globalStyles.countryChevron}>›</Text>
+                                        </TouchableOpacity>
+                                    </View>
                                 </View>
                                 
-                                <Text style={styles.commentUsername}>
-                                    {item.username}
-                                </Text>
-                            </View>
+                                <View style={globalStyles.section}>
+                                    <Text style={globalStyles.label}>
+                                        Location description:
+                                    </Text>
+                                    <Text style={globalStyles.contentText}>
+                                        {sight?.location}
+                                    </Text>
+                                </View>
 
-                            <Text style={styles.commentText}>
-                                {item.text}
+                                <Divider />
+
+                                {/* // === DESCRIPTION === // */}
+                                <View style={globalStyles.section}>
+                                    <Text style={globalStyles.label}>About this Sight:</Text>
+                                    <View>
+                                        <Text style={globalStyles.contentText}>{sight?.description}</Text>
+                                    </View>
+                                </View>
+
+                                <Divider />
+
+                                {/* // === CATEGORY === // */}
+                                <View style={globalStyles.section}>
+                                    <View style={globalStyles.countryRow}>
+                                            <Text style={globalStyles.label}>
+                                                Category:
+                                            </Text>
+                                            <TouchableOpacity 
+                                                onPress={() => navigation.push('Search', {initialQuery: sight?.category})}
+                                                activeOpacity={0.7}
+                                                style={globalStyles.ovalTag}
+                                            >
+                                                <Text style={[globalStyles.contentText, {fontStyle:'italic'}]}>
+                                                    {sight?.category}
+                                                </Text>
+                                            <Text style={globalStyles.countryChevron}>›</Text>
+                                        </TouchableOpacity>     
+                                    </View>
+                                </View>
+
+                                <Divider />
+
+                                {/* // === BEST TIME === // */}
+                                <View style={globalStyles.section}>
+                                    <Text style={globalStyles.label}>Best time to visit</Text>
+                                    <View style={globalStyles.highlight}>
+                                        <Text style={globalStyles.contentText}>
+                                            <Text style={{color: globalColor.turqouise}}>
+                                                from
+                                            </Text>
+                                            {" "} {formatDate(sight?.startDate)}
+                                        </Text>
+                                        <Text style={globalStyles.contentText}>
+                                            <Text style={{color: globalColor.turqouise}}>
+                                                until
+                                            </Text>
+                                            {" "} {formatDate(sight?.endDate)}
+                                        </Text>
+                                    </View>
+                                </View>
+                                
+                                <Divider />
+
+                                    { sight?.defaultSight &&   (
+                                        <Text style={[globalStyles.subtitle, {color: '#ff0000'}]} onPress={()=>navigation.navigate('Tabs', {screen: 'Home'})}>
+                                            For edit and delete functionality, create your own sight from home screen - here
+                                        </Text>
+                                    )}
+                                { isOwner && (
+                                <View style={{flexDirection: "row", justifyContent: "center", gap: 8, marginBottom: 8}}>
+                                    <Button 
+                                        title="Edit"
+                                        onPress={() => navigation.navigate('FormSight',{
+                                            sight: sight,
+                                            isEdit: true
+                                        })}
+                                        style={[globalStyles.edit , {padding: 0}]}
+                                        />
+                                    <Button 
+                                        title="Delete"
+                                        onPress={(handleDeleteSight)}
+                                        style={globalStyles.delete}
+                                        />
+                                </View>)} 
+                            </View>
+                        </View>
+
+                        <View style={styles.commentSection}>
+                            <Text style={styles.commentTitle}>
+                                Comments
                             </Text>
 
+                            <View style={styles.commentInputContainer}>
+                                <TextInput
+                                    value={comment}
+                                    onChangeText={setComment}
+                                    placeholder="Your comment..."
+                                    style={styles.commentInput}
+                                />
+
+                                    <TouchableOpacity style={styles.commentButton} onPress={addCommentHandler}>
+                                        <Text style={styles.commentButtonText}>Post</Text>
+                                    </TouchableOpacity>
+                            </View>
                         </View>
-                    ))}
-                </View>
-                </View>
+                        
+                       
+                        </>
+                    )}
+                />
             </GestureDetector>
-        </ScreenWrapper>
+        </SafeAreaView>
+        </LinearGradient>
     );
 }
 

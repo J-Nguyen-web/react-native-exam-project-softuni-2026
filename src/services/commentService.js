@@ -49,5 +49,5 @@ const create = async(commentData) => {
     export default {
         create,
         subscribeToComments,
-        getBySightId,
+        // getBySightId,
 }

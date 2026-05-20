@@ -26,7 +26,7 @@ export default function HomeScreen() {
                         <ImageBackground
                             source={require("../../assets/film-strip.jpg")}
                             style={styles.placeholder}
-                            imageStyle={{borderRacdius: 20}}
+                            imageStyle={{borderRadius: 20}}
                         >
                             <View>
                                 <Text style={styles.placeholderText}>Your photo will appear here</Text>
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
         marginBottom: 18
     },
     photoCard: {
-        background: "#fff",
+        backgroundColor: "#fff",
         borderRadius: 30,
         padding: 20,
         shadowColor: "#000",
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
 
     placeholder: {
         height: 200,
-        backgroundColor: "transperant",
+        backgroundColor: "transparent",
         borderRadius: 20,
         justifyContent: "center",
         alignItems: "center",
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     },
 
     publishButton: {
-        background: "#50bdf0",
+        backgroundColor: "#50bdf0",
         paddingVertical: 16,
         borderRadius: 22,
         alignItems: "center",
@@ -142,23 +142,5 @@ const styles = StyleSheet.create({
         alignItems: "center",
         padding: 30,
         backgroundColor: "#ffffff",
-    },
-
-    imagePreview: { 
-        width: "100%", 
-        height: 220, 
-        borderRadius: 20, 
-        marginBottom: 8,
-    
-        shadowColor: "#000",
-        shadowOpacity: 0.08,
-        shadowOffset: {width: 0, height: 6},
-        shadowRadius: 11,
-        borderColor: "#000"
-    },
-
-    formContainer: {
-        marginTop: 16,
-        width: "100%",
     },
 })
