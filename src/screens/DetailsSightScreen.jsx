@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, } from "react-native";
+import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput } from "react-native";
 import { cardStyles } from "../components/cardStyles.js";
 import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -6,7 +6,7 @@ import { useSight } from "../context/useSight.js";
 import { useAuth } from "../context/useAuth.js";
 import { formatDate } from "../util/formatDate.js";
 import { globalColor, globalStyles } from "../globalStyles.js";
-import { GestureDetector, Gesture, Directions, TextInput } from "react-native-gesture-handler";
+import { GestureDetector, Gesture, Directions,  } from "react-native-gesture-handler";
 import { useRating } from "../context/useRating.js";
 import { sightService } from "../services/index.js";
 import { Feather } from "@expo/vector-icons";
@@ -121,6 +121,15 @@ export default function DetailsSightScreen({route}) {
         }
     };
 
+    const handleOnEditComment = async() => {
+        alert('PRESSED')
+        // TODO - edit comment
+    }
+
+    const handleOnDeleteComment = async() => {
+        // TODO - delete comment
+    }
+
     const swipeBack = Gesture.Pan()
             .activeOffsetX(50)
             .activeOffsetY([-20,20])
@@ -146,6 +155,8 @@ export default function DetailsSightScreen({route}) {
         setUserRating(updated)
         loadRatings();
     }
+
+        // TODO - edit sight vie firebase
 
     async function handleDeleteSight() {
         try {
@@ -174,13 +185,24 @@ export default function DetailsSightScreen({route}) {
     }
 
     return (
-        <LinearGradient>
-            <SafeAreaView>
+        <LinearGradient 
+            colors={[globalColor.gradientPrimo, 
+            globalColor.gradientSecundo]} 
+            style={[globalStyles.gradient]}
+        >
+            <SafeAreaView style={{flex:1}}>
             <GestureDetector gesture={swipeBack}>
                 <FlatList
-                    item={comments}
-                    renderItem={({item, index}) => <CommentCard index={index} {...item} />}
-                    contentContainerStyle={{ contentContainerStyle:140 }}
+                    data={comments}
+                    renderItem={({item, index}) =>
+                                 <CommentCard 
+                                    index={index} 
+                                    item={item}
+                                    onEdit={() => handleOnEditComment(item)}
+                                    onDelete={() => handleOnDeleteComment(item.id)}
+                                     />
+                                }
+                    contentContainerStyle={{ paddingBottom: 140 }}
                     keyboardShouldPersistTaps="handled"
 
                     ListHeaderComponent={(
@@ -351,14 +373,13 @@ export default function DetailsSightScreen({route}) {
                                     placeholder="Your comment..."
                                     style={styles.commentInput}
                                 />
-
-                                    <TouchableOpacity style={styles.commentButton} onPress={addCommentHandler}>
-                                        <Text style={styles.commentButtonText}>Post</Text>
-                                    </TouchableOpacity>
+                                <TouchableOpacity style={styles.commentButton} onPress={addCommentHandler}>
+                                    <Text style={styles.commentButtonText}>
+                                        Post
+                                    </Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
-                        
-                       
                         </>
                     )}
                 />
@@ -371,7 +392,9 @@ export default function DetailsSightScreen({route}) {
 const styles = StyleSheet.create({
 
   commentSection: {
-    marginTop: 28
+    marginTop: 28,
+    marginHorizontal: 14, 
+    marginBottom: 14,
   },
 
   commentTitle: {

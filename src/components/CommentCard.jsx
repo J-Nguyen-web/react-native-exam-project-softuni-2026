@@ -1,21 +1,41 @@
-import { StyleSheet, Text, View } from "react-native"
+import { Pressable, StyleSheet, Text, View } from "react-native"
 import { globalColor } from "../globalStyles.js"
+import { Feather, MaterialCommunityIcons } from "@expo/vector-icons"
 
-export default function  CommentCard({item}) {
+export default function  CommentCard({item, onEdit, onDelete}) {
 
     return(
-        <View
-            style={styles.commentCard}
-        >   <View style={styles.commentHeader}>
-                <View style={styles.commentAvatar}>
-                    <Text style={styles.commentText}>
-                        {item.ownerUsername}
+        <View style={styles.commentCard} >   
+            <View style={styles.commentHeader}>
+                <View style={styles.userInfo}>
+                    <View style={styles.commentAvatar}>
+
+                    </View>
+                    <Text style={styles.commentUsername}>
+                        {item.username}
                     </Text>
                 </View>
-                
-                <Text style={styles.commentUsername}>
-                    {item.username}
-                </Text>
+
+                <View style={styles.commentOptions}>
+                    <Pressable
+                        onPress={onEdit}
+                        hitSlop={8}
+                        style={ ({pressed}) =>[ styles.commentIcons,
+                            pressed && styles.pressedIcon]}
+                    >
+                        <Feather name="edit" size={16} color="black" />
+                    </Pressable>
+
+                    <Pressable
+                        onPress={onDelete}
+                        hitSlop={8}
+                        style={styles.commentIcons}
+                        style={ ({pressed}) =>[ styles.commentIcons,
+                            pressed && styles.pressedIcon]}
+                    >
+                        <MaterialCommunityIcons name="delete-forever-outline" size={18} color="#c33b3b" />
+                    </Pressable>
+                </View>
             </View>
 
             <Text style={styles.commentText}>
@@ -79,6 +99,8 @@ const styles = StyleSheet.create({
     borderColor: globalColor.turqouise,
     overflow: "hidden",
     marginBottom: 14,
+    marginHorizontal: 14, 
+    marginBottom: 14,
     shadowColor: "#000",
     shadowOpacity: 0.25,
     shadowOffset: {
@@ -92,7 +114,8 @@ const styles = StyleSheet.create({
   
   commentHeader: {
     flexDirection: "row",
-    alignItems: "baseline",
+    alignItems: 'flex-start',
+    justifyContent: "space-between",
     backgroundColor: globalColor.mint,
     overflow: "hidden",
     borderBottomRightRadius: 18,
@@ -100,6 +123,7 @@ const styles = StyleSheet.create({
   },
   
   commentAvatar: {
+    flexDirection: "row",
     width: 25,
     height: 25,
     borderRadius: 999,
@@ -117,6 +141,12 @@ const styles = StyleSheet.create({
     fontWeight: "800",
   },
 
+  userInfo: {
+    flexDirection: 'row',
+    alignItems: "center",
+    justifyContent: 'space-between'
+  },
+
   commentUsername: {
     fontSize: 14,
     fontWeight: "700",
@@ -124,12 +154,29 @@ const styles = StyleSheet.create({
   },
 
   commentText: {
-    color: '#555',
+    color: '#272626',
     lineHeight: 22,
-    fontSize:14,
+    fontSize: 14,
+    fontWeight: 600,
 
     marginHorizontal: 18,
-    marginVertical: 3,
+    marginVertical: 6,
+  },
+
+  commentOptions: {
+    flexDirection: 'row',
+    gap: 18,
+    paddingTop: 3
+  },
+
+  commentIcons: {
+    padding: 3,
+    fontWeight: 100
+  },
+
+  pressedIcon: {
+    opacity: 0.7,
+    transform: [{ scale: 0.88}],
   },
 
   commentButton: {

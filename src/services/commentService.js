@@ -29,7 +29,7 @@ const create = async(commentData) => {
         //     ...doc.data()                // and spreading it into JS object that react can use
         // }));
 
-    const subscribeToComments = async(sightId, callback) => {
+    const subscribeToComments = (sightId, callback) => { // if its async returns object as promise and not doing the function
         const queryData = query(
             commentsRef,
             where('sightId', '==', sightId),
