@@ -6,7 +6,10 @@ import {
     orderBy,
     getDocs,
     onSnapshot, // for real time updates when somebody send a comment
-    serverTimestamp
+    serverTimestamp,
+    updateDoc,
+    deleteDoc,
+    doc
 } from 'firebase/firestore';
 
 import { db } from '../firebaseConfig.js';
@@ -20,7 +23,17 @@ const create = async(commentData) => {
     });
 
     return result;
-    };
+};
+
+const update = async(commentId, commentContent) => {
+    const commentRef = doc(db, 'comments', commentId);
+
+    await updateDoc(commentRef, {text: commentContent});
+};
+
+const remove = async(commentId) => {
+    return await deleteDoc(doc(db, 'comments', commentId))
+}
 
     // const getBySightId = async(sightId) => { // manual reload after updateconst queryData = query(commentsRef,where('sightId', '==', sightId),orderBy('createdAt', 'desc'));
         // const result = await getDocs(queryData);
@@ -48,6 +61,8 @@ const create = async(commentData) => {
 
     export default {
         create,
+        update,
+        remove,
         subscribeToComments,
         // getBySightId,
 }

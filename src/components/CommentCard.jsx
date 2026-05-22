@@ -1,8 +1,18 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { globalColor } from "../globalStyles.js"
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons"
+import { TextInput } from "react-native"
 
-export default function  CommentCard({item, onEdit, onDelete}) {
+export default function  CommentCard({
+  item,
+  isEditing,
+  editedComment,
+  setEditedComment,
+  onEdit,
+  onSave,
+  onCancel,
+  onDelete
+}) {
 
     return(
         <View style={styles.commentCard} >   
@@ -38,10 +48,56 @@ export default function  CommentCard({item, onEdit, onDelete}) {
                 </View>
             </View>
 
-            <Text style={styles.commentText}>
-                {item.text}
-            </Text>
+            {
+                isEditing ? (
+                    <TextInput
+                        value={editedComment}
+                        onChangeText={setEditedComment}
+                        multiline
+                        style={styles.commentInput}
+                    />
+                ) : (
+                    <Text style={styles.commentText}>
+                        {item.text}
+                    </Text>                    
+                )
+            }
+            {
+                isEditing ? (
+                    <View style={styles.commentOptions}>
+                        <Pressable
+                            onPress={onSave}
+                            hitSlop={8}
+                            style={ ({pressed}) =>[ styles.commentIcons,
+                                // TODO STYLE FOR BUTTONS
+                            pressed && styles.pressedIcon]}
+                        >
+                            <Feather name="check" size={16} color="green" />
+                        </Pressable>
 
+                        <Pressable
+                            onPress={onCancel}
+                            hitSlop={8}
+                            style={ ({pressed}) =>[ styles.commentIcons,
+                            pressed && styles.pressedIcon]}
+                        >
+                            <Feather name="x" size={16} color="green" />
+                        </Pressable>
+
+
+                    </View>
+                ) : (
+                    <Pressable
+                        onPress={onEdit}
+                        hitSlop={8}
+                        style={styles.commentIcons}
+                        style={ ({pressed}) =>[ styles.commentIcons,
+                            pressed && styles.pressedIcon]}
+                    >
+                        <Feather name="edit-2" size={16} color="green" />
+                    </Pressable>                    
+                )
+            }
         </View>            
     )
 

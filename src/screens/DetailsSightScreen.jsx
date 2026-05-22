@@ -28,6 +28,8 @@ export default function DetailsSightScreen({route}) {
     const [userRating, setUserRating] = useState(null);
     const [comment,setComment] = useState('')
     const [comments,setComments] = useState([])
+    const [editedCommentId, setEditedCommentId] = useState(null);
+    const [editedComment, setEditedComment] = useState('')
 
     const { id: id } = route.params;
     const { user } = useAuth();
@@ -46,16 +48,6 @@ export default function DetailsSightScreen({route}) {
         };
         loadSight();
 
-        // const loadComments = async() => { // manual loading of comments, no needed bcoz we use unsubscribe listener
-        //     const result = await commentService.getBySightId(id);
-        //     setComments(result);} loadComments();
-
-        // зачистваща функция, която стопира слушането на промени при влизане в тази секция, по този начин, няма да се стартира отново
-        // и отново всеки път щом се отвори даден екран и да се натрупват процеси на eventListeners
-        const unsubscribe = commentService.subscribeToComments(id, setComments); 
-        // setComments е се приема като callback от commentService и се зарежда с коментарите от там
-        return () => unsubscribe()
-
         async function loadUserRating() {
             try {
                 const rating = await ratingService.getUserRating(sight?.id, user?.id)
@@ -65,6 +57,16 @@ export default function DetailsSightScreen({route}) {
             }
         }
         loadUserRating();
+
+        // const loadComments = async() => { // manual loading of comments, no needed bcoz we use unsubscribe listener
+        //     const result = await commentService.getBySightId(id);
+        //     setComments(result);} loadComments();
+
+        // зачистваща функция, която стопира слушането на промени при влизане в тази секция, по този начин, няма да се стартира отново
+        // и отново всеки път щом се отвори даден екран и да се натрупват процеси на eventListeners
+        const unsubscribe = commentService.subscribeToComments(id, setComments); 
+        // setComments е се приема като callback от commentService и се зарежда с коментарите от там
+        return () => unsubscribe()
         
     },[id]);
 
@@ -121,13 +123,26 @@ export default function DetailsSightScreen({route}) {
         }
     };
 
-    const handleOnEditComment = async() => {
-        alert('PRESSED')
-        // TODO - edit comment
+    const handleOnEditComment = async(item) => {
+        setEditedCommentId(item.id)
+        setEditedComment(item.text)
     }
 
-    const handleOnDeleteComment = async() => {
-        // TODO - delete comment
+    const handleSaveEdit = async(editedCommentId) => {
+        
+        try {
+                    await commentService.update(editedCommentId, editedComment)
+
+        setEditedCommentId(null);
+        setEditedComment('');
+        } catch (error) {
+            console.log(error)
+        }
+
+        }
+
+    const handleOnDeleteComment = async(item) => {
+        await commentService.remove(item.id)
     }
 
     const swipeBack = Gesture.Pan()
@@ -156,7 +171,7 @@ export default function DetailsSightScreen({route}) {
         loadRatings();
     }
 
-        // TODO - edit sight vie firebase
+        // TODO - edit sight via firebase
 
     async function handleDeleteSight() {
         try {
@@ -198,7 +213,15 @@ export default function DetailsSightScreen({route}) {
                                  <CommentCard 
                                     index={index} 
                                     item={item}
+                                    isEditing={editedCommentId === item.id}
+                                    editedComment={editedComment}
+                                    setEditedComment={setEditedComment}
                                     onEdit={() => handleOnEditComment(item)}
+                                    onSave={() => handleSaveEdit(item.id)}
+                                    onCancel={() => {
+                                        setEditedComment('');
+                                        setEditedCommentId(null);
+                                    }}
                                     onDelete={() => handleOnDeleteComment(item.id)}
                                      />
                                 }
