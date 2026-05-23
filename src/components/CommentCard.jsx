@@ -1,7 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import { globalColor } from "../globalStyles.js"
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons"
-import { TextInput } from "react-native"
+import { TextInput, } from "react-native"
+import { useEffect, useRef } from "react"
 
 export default function  CommentCard({
   item,
@@ -13,6 +14,15 @@ export default function  CommentCard({
   onCancel,
   onDelete
 }) {
+
+    const inputRef = useRef(null); // useRef запазва референция към тази const като в началото е null
+
+    useEffect(()=> {
+        if(isEditing) {
+            inputRef.current?.focus(); 
+            // ако е isEditing и е current-(задава се в TextInput ref={inputRef}), pointer-а се слага вътре
+        }
+    },[isEditing]);
 
     return(
         <View style={styles.commentCard} >   
@@ -51,6 +61,7 @@ export default function  CommentCard({
             {
                 isEditing ? (
                     <TextInput
+                        ref={inputRef}
                         value={editedComment}
                         onChangeText={setEditedComment}
                         multiline
@@ -63,39 +74,27 @@ export default function  CommentCard({
                 )
             }
             {
-                isEditing ? (
-                    <View style={styles.commentOptions}>
+                isEditing && (
+                    <View style={styles.commentButtons}>
                         <Pressable
                             onPress={onSave}
                             hitSlop={8}
-                            style={ ({pressed}) =>[ styles.commentIcons,
+                            style={ ({pressed}) =>[ styles.saveButton,
                                 // TODO STYLE FOR BUTTONS
                             pressed && styles.pressedIcon]}
                         >
-                            <Feather name="check" size={16} color="green" />
+                            <Feather name="check" size={16} color="white" />
                         </Pressable>
 
                         <Pressable
                             onPress={onCancel}
                             hitSlop={8}
-                            style={ ({pressed}) =>[ styles.commentIcons,
+                            style={ ({pressed}) =>[ styles.dismissButton,
                             pressed && styles.pressedIcon]}
                         >
                             <Feather name="x" size={16} color="green" />
                         </Pressable>
-
-
                     </View>
-                ) : (
-                    <Pressable
-                        onPress={onEdit}
-                        hitSlop={8}
-                        style={styles.commentIcons}
-                        style={ ({pressed}) =>[ styles.commentIcons,
-                            pressed && styles.pressedIcon]}
-                    >
-                        <Feather name="edit-2" size={16} color="green" />
-                    </Pressable>                    
                 )
             }
         </View>            
@@ -104,49 +103,6 @@ export default function  CommentCard({
 }
 
 const styles = StyleSheet.create({
-
-  commentSection: {
-    marginTop: 28
-  },
-
-  commentTitle: {
-    fontSize: 22,
-    fontWeight:"800",
-    color: globalColor.primary,
-    marginBottom: 16
-  },
-  
-  commentInputContainer: {
-    flexDirection: 'row',
-    alignItems: "center",
-    gap: 8,
-    marginBottom: 18,
-  },
-
-  commentInput: {
-    flex: 1,
-    backgroundColor: 'white',
-
-    borderWidth: 1.5,
-    borderColor: globalColor.primary,
-    borderRadius: 18,
-
-    shadowColor: 'black',
-    shadowOpacity: 0.25,
-    shadowOffset: {
-      width: 0,
-      height: 6,
-    },
-    shadowRadius: 3,
-
-    elevation: 6,
-
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-
-    fontSize: 14,
-    color: globalColor.primary,
-  },
   
   commentCard: {
     backgroundColor: "#ffffffff",
@@ -209,6 +165,31 @@ const styles = StyleSheet.create({
     color: globalColor.primary,
   },
 
+    commentInput: {
+    flex: 1,
+    backgroundColor: 'white',
+
+    borderWidth: 1.5,
+    borderColor: globalColor.primary,
+    borderRadius: 18,
+
+    shadowColor: 'black',
+    shadowOpacity: 0.25,
+    shadowOffset: {
+      width: 0,
+      height: 6,
+    },
+    shadowRadius: 3,
+
+    elevation: 6,
+
+    paddingHorizontal: 16,
+    paddingVertical: 14,
+
+    fontSize: 14,
+    color: globalColor.primary,
+  },
+
   commentText: {
     color: '#272626',
     lineHeight: 22,
@@ -235,11 +216,27 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.88}],
   },
 
-  commentButton: {
+  dismissButton: {
+    backgroundColor: '#f0efef',
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderWidth: 1,
+    borderColor: globalColor.turqouise,
+    borderBottomRightRadius: 18,
+  },
+  saveButton: {
     backgroundColor: globalColor.turqouise,
-    borderRadius: 16,
     paddingHorizontal: 18,
-    paddingVertical: 14,
+    paddingVertical: 8,
+    borderBottomLeftRadius: 18,
+  },
+
+  commentButtons: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    gap: 14,
+    paddingHorizontal: 16,
+    paddingBottom: 8,
     shadowColor: 'black',
     shadowOpacity: 0.25,
     shadowOffset: {

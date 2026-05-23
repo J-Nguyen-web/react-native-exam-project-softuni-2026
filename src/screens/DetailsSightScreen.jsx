@@ -396,8 +396,8 @@ export default function DetailsSightScreen({route}) {
                                     placeholder="Your comment..."
                                     style={styles.commentInput}
                                 />
-                                <TouchableOpacity style={styles.commentButton} onPress={addCommentHandler}>
-                                    <Text style={styles.commentButtonText}>
+                                <TouchableOpacity style={styles.postButton} onPress={addCommentHandler}>
+                                    <Text style={styles.postButtonText}>
                                         Post
                                     </Text>
                                 </TouchableOpacity>
@@ -458,57 +458,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: globalColor.primary,
   },
-  
-  commentCard: {
-    backgroundColor: "#ffffffff",
-    borderRadius: 22,
-    borderWidth: 1,
-    borderColor: globalColor.turqouise,
-    overflow: "hidden",
-    marginBottom: 14,
-    shadowColor: "#000",
-    shadowOpacity: 0.25,
-    shadowOffset: {
-      width: 0,
-      height: 6
-    },
-    shadowRadius: 11,
-
-    elevation: 3,
-  },
-  
-  commentHeader: {
-    flexDirection: "row",
-    alignItems: "baseline",
-    backgroundColor: globalColor.mint,
-    overflow: "hidden",
-    borderBottomRightRadius: 18,
-    paddingHorizontal: 8,
-  },
-  
-  commentAvatar: {
-    width: 25,
-    height: 25,
-    borderRadius: 999,
-    backgroundColor: globalColor.gradientSecundo,
-
-    justifyContent: "center",
-    alignItems: "center",
-
-    marginHorizontal: 8,
-    marginVertical: 3,
-  },
-
-  commentAvatarText: {
-    color: globalColor.primary,
-    fontWeight: "800",
-  },
-
-  commentUsername: {
-    fontSize: 14,
-    fontWeight: "700",
-    color: globalColor.primary,
-  },
 
   commentText: {
     color: '#555',
@@ -519,7 +468,7 @@ const styles = StyleSheet.create({
     marginVertical: 3,
   },
 
-  commentButton: {
+  postButton: {
     backgroundColor: globalColor.turqouise,
     borderRadius: 16,
     paddingHorizontal: 18,
@@ -534,7 +483,7 @@ const styles = StyleSheet.create({
 
     elevation: 6,
   },
-  commentButtonText: {
+  postButtonText: {
     color: "#fff",
     fontWeight:"700",
   },
