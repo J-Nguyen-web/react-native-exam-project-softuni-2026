@@ -1,4 +1,4 @@
-import { collection, addDoc, getDocs, getDoc, doc } from "firebase/firestore";
+import { collection, addDoc, getDocs, getDoc, doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
 import api from "./api.js";
 
@@ -26,21 +26,34 @@ export async function create(sight) {
 
 export async function getById(sightId){
 
-    const sight = await getDoc(doc(db, 'sights', sightId))
-    return { id: sight.id, ...sight.data()}; // result съдържа мета данни и ни праща само id като разчита че sight който сме пратили е при нас, за да спести трафик
+    const sight = await getDoc(doc(db, 'sights', sightId));
+
+    return { 
+        id: sight.id, 
+        ...sight.data(),
+        // конвертиране на firebase тип датата(timeStamp) към JS type за да може да се визуализира
+        startDate: sight.data().startDate?.toDate(),
+        endDate: sight.data().endtDate?.toDate(),
+        }; 
+    // result съдържа мета данни и ни праща само id като разчита че sight който сме пратили е при нас, за да спести трафик
     // if(!id){ throw new Error('No entry with such id!') }
     
     // const sightById = await api.get(`/sights/${id}`);
     // return sightById.data;
 }
 
-export async function update(id, updatedSight) {
-    if (!id) throw new Error('No entry with such id!');
-    const response = await api.put(`/sights/${id}`, updatedSight);
-    return response.data;
+export async function update(sightId, updatedSight) {
+
+    const sight = doc(db, 'sights', sightId)
+
+    await updateDoc(sight,updatedSight);
+    // if (!id) throw new Error('No entry with such id!');
+    // const response = await api.put(`/sights/${id}`, updatedSight);
+    // return response.data;
 }
 
-export async function deleteSight(id) {
-    if (!id) throw new Error('No entry with such id!');
-    return await api.delete(`/sights/${id}`)
+export async function deleteSight(sightId) {
+    return await deleteDoc(doc(db, 'sights' , sightId));
+    // if (!id) throw new Error('No entry with such id!');
+    // return await api.delete(`/sights/${id}`)
 }
