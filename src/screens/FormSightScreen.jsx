@@ -40,8 +40,11 @@ export default function FormSightScreen( {route, navigation}) {
         lat: sight?.lat || null,
         lng: sight?.lng || null,
         liked: sight?.liked || false,
-        startDate: sight?.startDate ? new Date(sight.startDate) : new Date(),
-        endDate: sight?.endDate ? new Date(sight.endDate) : new Date(),
+        startDate: sight?.startDate || new Date(),
+        endDate: sight?.endDate || new Date(),
+        // JS type date
+        // startDate: sight?.startDate ? new Date(sight.startDate) : new Date(),
+        // endDate: sight?.endDate ? new Date(sight.endDate) : new Date(),
         ownerId: user.id,
         author: user.username,
     });
@@ -132,8 +135,8 @@ export default function FormSightScreen( {route, navigation}) {
         street: result.street,
         region: result.region,
         isoCode: result.isoCode,
-        latitude: result.latitude,
-        longitude: result.longitude, 
+        lat: result.latitude,
+        lng: result.longitude, 
     })
         // setCoords({latitude: Number(result.latitude) , longitude: Number(result.longitude) })
         setValue('location', result.address, {shouldDirty: true});
@@ -234,6 +237,7 @@ export default function FormSightScreen( {route, navigation}) {
                                 <Controller
                                     control={control}
                                     name="startDate"
+                                    error={errors.startDate}
                                     defaultValue={new Date()}
                                     render={({ field: { onChange, value } }) => (
                                         <DateInput value={value} onChange={onChange}/>

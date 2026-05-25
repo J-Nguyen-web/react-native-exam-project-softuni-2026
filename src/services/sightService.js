@@ -33,7 +33,7 @@ export async function getById(sightId){
         ...sight.data(),
         // конвертиране на firebase тип датата(timeStamp) към JS type за да може да се визуализира
         startDate: sight.data().startDate?.toDate(),
-        endDate: sight.data().endtDate?.toDate(),
+        endDate: sight.data().endDate?.toDate(),
         }; 
     // result съдържа мета данни и ни праща само id като разчита че sight който сме пратили е при нас, за да спести трафик
     // if(!id){ throw new Error('No entry with such id!') }
@@ -44,9 +44,14 @@ export async function getById(sightId){
 
 export async function update(sightId, updatedSight) {
 
-    const sight = doc(db, 'sights', sightId)
+    const sightRef = doc(db, 'sights', sightId)
 
-    await updateDoc(sight,updatedSight);
+    await updateDoc(sightRef,updatedSight);
+
+    return {
+        id: sightId,
+        ...updatedSight,
+    }
     // if (!id) throw new Error('No entry with such id!');
     // const response = await api.put(`/sights/${id}`, updatedSight);
     // return response.data;

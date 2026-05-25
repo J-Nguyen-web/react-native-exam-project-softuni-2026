@@ -11,7 +11,7 @@ export default function DateInput({ value, onChange }) {
     return (
         <View>
             <TouchableOpacity onPress={toglePick} style={{ padding: 8, borderWidth: 1, borderRadius: 6, borderStyle: 'solid', borderColor: globalColor.turqouise}}>
-                <Text>{value ? value.toLocaleDateString() : "Select date"}</Text>
+                <Text>{value instanceof Date ? value?.toLocaleDateString?.() : "Select date"}</Text>
             </TouchableOpacity>
 
             {show && (
