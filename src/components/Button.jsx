@@ -9,6 +9,7 @@ const Button = ({
     disabled = false,
     loading = false,
     style,
+    icon,
 }) => {
     const buttonStyle = [
         styles.button,
@@ -34,7 +35,7 @@ const Button = ({
             activeOpacity={0.8}
         >
         {loading && <ActivityIndicator color={variant === 'primary' ? '#fff' : '#000'} size='small' /> }
-        {!loading && title && <Text style={textStyles}>{title}</Text>}
+        {icon || null}{!loading && title && <Text style={textStyles}>{title}</Text>}
         </TouchableOpacity>
     )
 }

@@ -1,3 +1,4 @@
+import { MaterialIcons } from "@expo/vector-icons";
 import { launchCameraAsync, useCameraPermissions } from "expo-image-picker";
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
@@ -32,11 +33,12 @@ export default function Camera({
                     }
             }}
     return (
-        <View>        
+        <View>
             <TouchableOpacity
                 style={styles.cameraButton}
                 onPress={takePhotoHandler}
             >
+                <MaterialIcons name="photo-camera" size={23} color="white" />
                 <Text style={styles.cameraText}>{retake ? "Retake photo" : "Take photo"}</Text>
             </TouchableOpacity>
         </View>
@@ -62,6 +64,9 @@ const styles = StyleSheet.create({
     },
 
     cameraButton: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        gap: 8,
         backgroundColor: "#7d3d94",
         paddingVertical: 14,
         borderRadius:22,

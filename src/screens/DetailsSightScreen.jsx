@@ -9,7 +9,7 @@ import { globalColor, globalStyles } from "../globalStyles.js";
 import { GestureDetector, Gesture, Directions,  } from "react-native-gesture-handler";
 import { useRating } from "../context/useRating.js";
 import { sightService } from "../services/index.js";
-import { Feather } from "@expo/vector-icons";
+import { AntDesign, Feather, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import Button from "../components/Button.jsx";
 import StarsRating from "../components/StarsRating.jsx";
@@ -374,11 +374,13 @@ export default function DetailsSightScreen({route}) {
                                             isEdit: true
                                         })}
                                         style={[globalStyles.edit , {padding: 0}]}
+                                        icon = {<AntDesign name="edit" size={20} color="black" />   }
                                         />
                                     <Button 
                                         title="Delete"
                                         onPress={(handleDeleteSight)}
                                         style={globalStyles.delete}
+                                        icon={<MaterialCommunityIcons name="delete-sweep" size={20} color="white" />}
                                         />
                                 </View>)} 
                             </View>

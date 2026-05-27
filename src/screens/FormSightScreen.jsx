@@ -5,7 +5,7 @@ import { useAuth } from "../context/useAuth.js";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { useFormSight } from "../validators/useFormSight.js";
 import { globalColor, globalStyles } from "../globalStyles.js";
-import { Feather, FontAwesome, FontAwesome6, MaterialIcons } from "@expo/vector-icons";
+import { Feather, FontAwesome, FontAwesome6, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { Picker } from "@react-native-picker/picker";
 import { Controller } from "react-hook-form";
 import { getCurrentLocation } from "../services/locationService.js";
@@ -227,7 +227,11 @@ export default function FormSightScreen( {route, navigation}) {
                         )}
 
                         {/* <MaterialIcons name="my-location" size={20} color={globalColor.primary} onPress={handleCurrentLocation} style={{marginLeft:8}} /> */}
-                        <Button title="Use curent location" onPress={handleCurrentLocation} />
+                        <Button 
+                            title="Use curent location" 
+                            onPress={handleCurrentLocation} 
+                            icon={<MaterialIcons name="my-location" size={20} color="whitex"/>}
+                            />
                         <View style={[globalStyles.subtitle, {flexDirection: 'column',alignItems:"center",}]}>
                             <Text style={[globalStyles.subtitle, {fontSize: 18 }]}>
                                 Best time to visit:
@@ -304,6 +308,7 @@ export default function FormSightScreen( {route, navigation}) {
                             loading={saving}
                             disabled={saving}
                             style={styles.submitButton}
+                            icon = {!isEdit ? <MaterialCommunityIcons name="upload" size={20} color="white" /> : <MaterialCommunityIcons name="text-box-edit-outline" size={20} color="white" />}
                         />
             </View>
         </ScreenWrapper>
