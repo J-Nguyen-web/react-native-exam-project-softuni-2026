@@ -34,6 +34,10 @@ export const cardStyles = StyleSheet.create({
   },
 
   content: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: 50,
     padding: 16,
     backgroundColor: "#ffffff",
     borderBottomLeftRadius: 20,
@@ -47,12 +51,26 @@ export const cardStyles = StyleSheet.create({
     alignItems: "center",
   },
 
+titleColumn: {
+    flex: 1,
+    flexShrink: 1,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    alignItems: 'flex-start',
+  },
+
+  authorColumn: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignSelf: 'stretch', // дори да е разтегнат parent-a от друг елемент, space-between не го поставя в дъното и е нужен strech
+    alignItems: 'flex-end',
+  },
+
   title: {
     fontSize: 20,
     fontWeight: "800",
     // color: "#0077b6",
     color: globalColor.primary,
-    flex: 1,
   },
 
   ratingStar: {

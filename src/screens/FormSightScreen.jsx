@@ -230,7 +230,7 @@ export default function FormSightScreen( {route, navigation}) {
                         <Button 
                             title="Use curent location" 
                             onPress={handleCurrentLocation} 
-                            icon={<MaterialIcons name="my-location" size={20} color="whitex"/>}
+                            icon={<MaterialIcons name="my-location" size={20} color="white"/>}
                             />
                         <View style={[globalStyles.subtitle, {flexDirection: 'column',alignItems:"center",}]}>
                             <Text style={[globalStyles.subtitle, {fontSize: 18 }]}>
