@@ -23,9 +23,25 @@ export default function Card({
   onPress
 }) {
 
-  const navigation = useNavigation();
-  const { ratingsMap } = useRating();
-  const ratingData = ratingsMap?.[id] ?? null;
+    const navigation = useNavigation();
+    const { ratingsMap } = useRating();
+    const ratingData = ratingsMap?.[id] ?? null;
+
+    const handleHeartButton = async()=> {
+        if (!user) return;
+
+        const likeRef = doc(db, 'users', user.id, 'favorites', id);
+
+        await setDoc(likeRef, {
+            createdAt: new Date()
+        })
+    }
+
+    const handleUnheartButton = async ()=> {
+        const likeRef = doc(db,'users', user.id, 'favorites', id)
+
+        await deleteDoc(likeRef)
+    }
 
     return (
         <Pressable style={({pressed}) => [
@@ -47,7 +63,7 @@ export default function Card({
 
             <View style={cardStyles.content}>
                 <View style={cardStyles.titleColumn}>
-                    <Text 
+                    <Text
                         style={cardStyles.title}
                         ellipsizeMode="tail"
                         numberOfLines={3}
@@ -87,10 +103,9 @@ export default function Card({
                     <Text style={{fontStyle:"italic"}}>
                         by: <Text style={{color: globalColor.turqouise}}>{author}</Text>
                     </Text>
-                    <View>
-                        
-                    <MaterialIcons name="favorite-border" size={28} color="black" />
-                    </View>
+                    <Pressable onPress={handleHeartButton}>
+                        <MaterialIcons name="favorite-border" size={28} color="black" />
+                    </Pressable>
                 </View>
             </View>
         </Pressable>

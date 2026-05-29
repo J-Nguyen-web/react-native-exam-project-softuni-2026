@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput } from "react-native";
+import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View, TextInput, Pressable } from "react-native";
 import { cardStyles } from "../components/cardStyles.js";
 import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
@@ -21,11 +21,13 @@ import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList } from "react-native";
 import CommentCard from "../components/CommentCard.jsx";
+import { deleteDoc, setDoc } from "firebase/firestore";
 
 export default function DetailsSightScreen({route}) {
     
     const [sight, setSight] = useState(null);
     const [userRating, setUserRating] = useState(null);
+    const [isLiked, setIsLiked] = useState(null)
     const [comment,setComment] = useState('')
     const [comments,setComments] = useState([])
     const [editedCommentId, setEditedCommentId] = useState(null);
@@ -57,6 +59,14 @@ export default function DetailsSightScreen({route}) {
             }
         }
         loadUserRating();
+        
+        async function checkIfLiked(params) {
+            const likeRef = doc(db, 'users', user.id, 'favorites', id)
+            
+            const snapshot = await getDoc(likeRef);
+            
+            setIsLiked(snapshot.exists())
+        }
 
         // const loadComments = async() => { // manual loading of comments, no needed bcoz we use unsubscribe listener
         //     const result = await commentService.getBySightId(id);
@@ -91,6 +101,22 @@ export default function DetailsSightScreen({route}) {
         )
     }
 
+    const handleHeartButton = async()=> {
+        if (!user) return;
+
+        const likeRef = doc(db, 'users', user.id, 'favorites', id);
+
+        await setDoc(likeRef, {
+            createdAt: new Date()
+        })
+    }
+
+    const handleUnheartButton = async ()=> {
+        const likeRef = doc(db,'users', user.id, 'favorites', id)
+
+        await deleteDoc(likeRef)
+    }
+
     const addCommentHandler = async()=> {
         try {
             if(!comment.trim()) return;
@@ -123,6 +149,7 @@ export default function DetailsSightScreen({route}) {
         }
     };
 
+    // TODO comment created date
     const handleOnEditComment = async(item) => {
         setEditedCommentId(item.id)
         setEditedComment(item.text)
@@ -247,16 +274,24 @@ export default function DetailsSightScreen({route}) {
 
                                 {/* // === TITLE === // */}
                                 <View style={globalStyles.section}>
-                                    <Text style={cardStyles.title}>{sight?.title}</Text>
-                                    
-                                    <View style={globalStyles.authorRow}>
-                                        {/* <Feather name="user" size={18} color={globalColor.turqouise} style={globalStyles.authorAvatar}/> */}
-                                        <Text style={globalStyles.authorText}>
-                                            by:{"  "} 
-                                            <Text style={[globalStyles.authorName,{color: globalColor.turqouise}]}>
-                                                {sight.author}
+                                    <View style={cardStyles.titleColumn}>
+                                        <Text style={cardStyles.title}>{sight?.title}</Text>
+                                        
+                                      
+                                    </View>
+                                    <View style={cardStyles.authorColumn}>
+                                        <View style={globalStyles.authorRow}>
+                                            {/* <Feather name="user" size={18} color={globalColor.turqouise} style={globalStyles.authorAvatar}/> */}
+                                            <Text style={globalStyles.authorText}>
+                                                by:{"  "} 
+                                                <Text style={[globalStyles.authorName,{color: globalColor.turqouise}]}>
+                                                    {sight.author}
+                                                </Text>
                                             </Text>
-                                        </Text>
+                                        </View>
+                                        <Pressable onPress={handleHeartButton}>
+                                            <MaterialIcons name="favorite-border" size={28} color="black"/>
+                                        </Pressable>
                                     </View>
                                 </View>
 
