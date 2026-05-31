@@ -131,6 +131,13 @@ export const globalStyles = StyleSheet.create({
     gap: 20,
   },
   section: { gap: 10 },
+  
+  titleSection: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    gap: 10
+ },
 
   // Title
   title: {
@@ -191,6 +198,7 @@ export const globalStyles = StyleSheet.create({
   },
   ovalTag: {
     flexDirection: "row",
+    flexShrink: 1,
     alignItems: "center",
     gap: 6,
     paddingHorizontal: 14,
@@ -204,6 +212,7 @@ export const globalStyles = StyleSheet.create({
   countryFlag: { fontSize: 16 },
   countryName: {
     fontSize: 14,
+    flexShrink: 1,
     color: C.primary,
     fontWeight: "600",
     fontFamily: "monospace",

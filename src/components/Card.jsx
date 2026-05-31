@@ -1,9 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
 import { ActivityIndicator, Image, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { cardStyles } from "./cardStyles.js";
-import { Entypo, Fontisto, Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Entypo, Fontisto, Ionicons, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { useRating } from "../context/useRating.js"
+import { useLike } from "../context/LikesProvider.jsx";
+import { useAuth } from "../context/useAuth.js";
+import { useEffect } from "react";
+import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig.js";
 import CountryFlag from "react-native-country-flag";
 import StarsRating from "./StarsRating.jsx";
 
@@ -24,23 +29,70 @@ export default function Card({
 }) {
 
     const navigation = useNavigation();
+    const { user } = useAuth();
     const { ratingsMap } = useRating();
     const ratingData = ratingsMap?.[id] ?? null;
+    const { likesMap, setLikesMap } = useLike();
+    const isLiked = !!likesMap[id]; // подобно на Boolean(likesMap[id]), ако е undefined, да върне false, а не error
+
+    useEffect(() => {
+        const loadLikes = async() => {
+        const snapshot = await getDocs(
+            collection(db, "users", user.id, "favorites")
+        )
+
+        const map = {};
+        
+        snapshot.forEach((doc) => {
+            map[doc.id] = true;
+        });
+        setLikesMap(map)
+    }
+    loadLikes();
+
+        async function checkIfLiked(params) {
+            const likeRef = doc(db, 'users', user.id, 'favorites', id)
+            
+            const snapshot = await getDoc(likeRef);
+            
+            setIsLiked(snapshot.exists())
+        }
+        checkIfLiked();
+    })
 
     const handleHeartButton = async()=> {
         if (!user) return;
 
-        const likeRef = doc(db, 'users', user.id, 'favorites', id);
+        try {
+            
+            const likeRef = doc(db, 'users', user.id, 'favorites', id);
 
-        await setDoc(likeRef, {
-            createdAt: new Date()
-        })
+            await setDoc(likeRef, {
+                createdAt: new Date()
+            });
+            
+            setLikesMap((previous) => ({
+                ...previous,
+                [id]: true,
+            }));            
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleUnheartButton = async ()=> {
-        const likeRef = doc(db,'users', user.id, 'favorites', id)
+        try {
+            const likeRef = doc(db,'users', user.id, 'favorites', id)
 
-        await deleteDoc(likeRef)
+            await deleteDoc(likeRef);
+            
+            setLikesMap((previous) => {
+                const { [id]: removed, ...rest } = previous; // създаване на остатъка rest като копие на previous без removed[id]
+                return rest     // връщане на rest което ще замени оригинала previous
+            });            
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     return (
@@ -103,9 +155,22 @@ export default function Card({
                     <Text style={{fontStyle:"italic"}}>
                         by: <Text style={{color: globalColor.turqouise}}>{author}</Text>
                     </Text>
-                    <Pressable onPress={handleHeartButton}>
-                        <MaterialIcons name="favorite-border" size={28} color="black" />
-                    </Pressable>
+                    { isLiked ? (
+                        <Pressable style={{padding:20}} onPress={(event)=> {
+                            event.stopPropagation() // за да няма conflict между Preasuble тук и за самата card
+                            handleUnheartButton()
+                        }}>
+                            <MaterialCommunityIcons name="cards-heart" size={29} color="#d45151" />
+                        </Pressable>                        
+                    ): (
+                        <Pressable style={{padding:20}}  onPress={(event)=> {
+                            event.stopPropagation()
+                            handleHeartButton()
+                        }}>
+                            <MaterialCommunityIcons name="cards-heart-outline" size={29} color="#898888" />
+                        </Pressable>                          
+                    )}
+
                 </View>
             </View>
         </Pressable>

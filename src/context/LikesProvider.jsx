@@ -13,7 +13,7 @@ export function LikeProvider({ children }) {
     };
 
     return (
-        <LikeContext.Provider value={{ likesMap, toggleLike}}>
+        <LikeContext.Provider value={{ likesMap, toggleLike, setLikesMap}}>
             {children}
         </LikeContext.Provider>
     );

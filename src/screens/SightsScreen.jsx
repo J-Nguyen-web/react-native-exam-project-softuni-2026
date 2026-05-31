@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Card from "../components/Card.jsx";
 import { useSight } from "../context/useSight.js";
 import { LinearGradient } from "expo-linear-gradient";
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import Camera from "../components/Camera.jsx";
+import Card from "../components/Card.jsx";
 
 export default function SightScreen() {
     const [refreshing, setRefreshing] = useState(false);
-    const [photo, setPhoto] = useState(null)
-    const [showCamera, setShowCamera] = useState(false)
-    
-    const navigation = useNavigation();
+    const [photo, setPhoto] = useState(null);
+    const [showCamera, setShowCamera] = useState(false);
     const {sights, loading, reloadSights} = useSight();
+    const navigation = useNavigation();
     // const [sights, setSights] = useState([]);
 
     
@@ -40,8 +39,6 @@ export default function SightScreen() {
         const {layoutMeasurement, contentOffset, contentSize} = event.nativeEvent
 
         const holdUpDistance = contentSize.height - (layoutMeasurement.height + contentOffset.y);
-
-        
 
         if (holdUpDistance < -80) {
             setShowCamera(true)
