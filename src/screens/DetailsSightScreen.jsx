@@ -4,30 +4,31 @@ import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { useSight } from "../context/useSight.js";
 import { useAuth } from "../context/useAuth.js";
+import { useLike } from "../context/LikesProvider.jsx"; 
 import { formatDate } from "../util/formatDate.js";
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { GestureDetector, Gesture, Directions,  } from "react-native-gesture-handler";
 import { useRating } from "../context/useRating.js";
 import { sightService } from "../services/index.js";
 import { AntDesign, Feather, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
-import ScreenWrapper from "../components/ScreenWrapper.jsx";
-import Button from "../components/Button.jsx";
-import StarsRating from "../components/StarsRating.jsx";
-import * as ratingService from "../services/ratingService.js"
-import CountryFlag from "react-native-country-flag";
-import commentService from "../services/commentService.js";
-// import filter from "../util/profanityFilter.js";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList } from "react-native";
+import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
+import ScreenWrapper from "../components/ScreenWrapper.jsx";
+import Button from "../components/Button.jsx";
+import StarsRating from "../components/StarsRating.jsx";
+import CountryFlag from "react-native-country-flag";
+import commentService from "../services/commentService.js";
+import * as ratingService from "../services/ratingService.js"
 import CommentCard from "../components/CommentCard.jsx";
-import { deleteDoc, setDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig.js";
+// import filter from "../util/profanityFilter.js";
 
 export default function DetailsSightScreen({route}) {
     
     const [sight, setSight] = useState(null);
     const [userRating, setUserRating] = useState(null);
-    const [isLiked, setIsLiked] = useState(null)
     const [comment,setComment] = useState('')
     const [comments,setComments] = useState([])
     const [editedCommentId, setEditedCommentId] = useState(null);
@@ -35,8 +36,11 @@ export default function DetailsSightScreen({route}) {
 
     const { id: id } = route.params;
     const { user } = useAuth();
+    const { likesMap, setLikesMap } = useLike();
     const { loading, getSightById, deleteSight } = useSight();
     const { ratingsMap, loadRatings } = useRating();
+    const isLiked = !!likesMap[id]; // подобно на Boolean(likesMap[id]), ако е undefined, да върне false, а не error
+
     const navigation = useNavigation();
 
     const sightRating = sight?.id ? ratingsMap?.[sight?.id] : null;
@@ -59,6 +63,20 @@ export default function DetailsSightScreen({route}) {
             }
         }
         loadUserRating();
+
+        const loadLikes = async() => {
+            const snapshot = await getDocs(
+                collection(db, "users", user.id, "favorites")
+            )
+
+            const map = {};
+            
+            snapshot.forEach((doc) => {
+                map[doc.id] = true;
+            });
+            setLikesMap(map)
+        }
+        loadLikes();
         
         async function checkIfLiked(params) {
             const likeRef = doc(db, 'users', user.id, 'favorites', id)
@@ -67,6 +85,7 @@ export default function DetailsSightScreen({route}) {
             
             setIsLiked(snapshot.exists())
         }
+        checkIfLiked();
 
         // const loadComments = async() => { // manual loading of comments, no needed bcoz we use unsubscribe listener
         //     const result = await commentService.getBySightId(id);
@@ -78,7 +97,7 @@ export default function DetailsSightScreen({route}) {
         // setComments е се приема като callback от commentService и се зарежда с коментарите от там
         return () => unsubscribe()
         
-    },[id]);
+    },[user, id]);
 
     useFocusEffect(
         useCallback(() => {
@@ -104,17 +123,37 @@ export default function DetailsSightScreen({route}) {
     const handleHeartButton = async()=> {
         if (!user) return;
 
-        const likeRef = doc(db, 'users', user.id, 'favorites', id);
+        try {
+            const likeRef = doc(db, 'users', user.id, 'favorites', id);
 
-        await setDoc(likeRef, {
-            createdAt: new Date()
-        })
+            await setDoc(likeRef, {
+                createdAt: new Date()
+            });
+            
+            setLikesMap((previous) => ({
+                ...previous,
+                [id]: true,
+            }));            
+        } catch (error) {
+            console.log(error)
+        }
+
     }
 
     const handleUnheartButton = async ()=> {
         const likeRef = doc(db,'users', user.id, 'favorites', id)
 
-        await deleteDoc(likeRef)
+        try {
+            await deleteDoc(likeRef);
+            
+            setLikesMap((previous) => {
+                const copy = {...previous}; // създаване на копие (лоша практика е директно да се работи над оригинала)
+                delete copy[id]; // изтриване на Like-a в копието
+                return copy;    // пращане на копието което ще замени оригинала
+            });            
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const addCommentHandler = async()=> {
@@ -273,13 +312,11 @@ export default function DetailsSightScreen({route}) {
                             <View style={globalStyles.content}>
 
                                 {/* // === TITLE === // */}
-                                <View style={globalStyles.section}>
+                                <View style={globalStyles.titleSection}>
                                     <View style={cardStyles.titleColumn}>
                                         <Text style={cardStyles.title}>{sight?.title}</Text>
-                                        
-                                      
                                     </View>
-                                    <View style={cardStyles.authorColumn}>
+                                    <View style={[cardStyles.authorColumn, {gap: 20, alignItems: 'center'}]}>
                                         <View style={globalStyles.authorRow}>
                                             {/* <Feather name="user" size={18} color={globalColor.turqouise} style={globalStyles.authorAvatar}/> */}
                                             <Text style={globalStyles.authorText}>
@@ -289,9 +326,15 @@ export default function DetailsSightScreen({route}) {
                                                 </Text>
                                             </Text>
                                         </View>
-                                        <Pressable onPress={handleHeartButton}>
-                                            <MaterialIcons name="favorite-border" size={28} color="black"/>
-                                        </Pressable>
+                                            { isLiked ? (
+                                                <Pressable onPress={handleUnheartButton}>
+                                                    <MaterialCommunityIcons name="cards-heart" size={29} color="#d45151" />
+                                                </Pressable>                        
+                                            ): (
+                                                <Pressable onPress={handleHeartButton}>
+                                                    <MaterialCommunityIcons name="cards-heart-outline" size={29} color="#898888" />
+                                                </Pressable>                          
+                                            )}
                                     </View>
                                 </View>
 
