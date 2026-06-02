@@ -43,6 +43,10 @@ export default function ProfileScreen() {
     }
     
 // TODO RESET PASSWORD INVITE BY GOOGLE PROFILE
+// My favorites
+// My Comments
+// My rated sights
+
     return (
         <ScreenWrapper>
             <View style={styles.container}>

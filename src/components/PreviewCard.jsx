@@ -12,7 +12,6 @@ export default function PreviewCard() {
             </View>
             <View>
                 <Text>dynamic - Recent or Most Liked</Text>
-                {/* TODO Dynamic title */}
             </View>
         </Pressable>
     );

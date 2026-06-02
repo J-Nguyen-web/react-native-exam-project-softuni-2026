@@ -303,7 +303,6 @@ export default function FormSightScreen( {route, navigation}) {
                             
                         <Button
                             title={!isEdit ? 'Upload Sight' : 'Update sight'}
-                            //todo icon
                             onPress={handleSubmit(onSubmit, onError)}
                             loading={saving}
                             disabled={saving}

@@ -3,6 +3,8 @@ import { globalColor } from "../globalStyles.js"
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons"
 import { TextInput, } from "react-native"
 import { useEffect, useRef } from "react"
+import { formatDate } from "../util/formatDate.js"
+import { formatTimeAgo } from "../util/formatTimeAgo.js"
 
 export default function  CommentCard({
   item,
@@ -37,6 +39,9 @@ export default function  CommentCard({
                 </View>
 
                 <View style={styles.commentOptions}>
+                    <Text>
+                        {formatTimeAgo(item.createdAt)}
+                    </Text>
                     <Pressable
                         onPress={onEdit}
                         hitSlop={8}
@@ -80,7 +85,6 @@ export default function  CommentCard({
                             onPress={onSave}
                             hitSlop={8}
                             style={ ({pressed}) =>[ styles.saveButton,
-                                // TODO STYLE FOR BUTTONS
                             pressed && styles.pressedIcon]}
                         >
                             <Feather name="check" size={16} color="white" />
@@ -202,7 +206,8 @@ const styles = StyleSheet.create({
 
   commentOptions: {
     flexDirection: 'row',
-    gap: 18,
+    alignItems: 'center',
+    gap: 8,
     paddingTop: 3
   },
 

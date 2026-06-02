@@ -188,24 +188,26 @@ export default function DetailsSightScreen({route}) {
         }
     };
 
-    // TODO comment created date
     const handleOnEditComment = async(item) => {
-        setEditedCommentId(item.id)
-        setEditedComment(item.text)
+        try {
+            setEditedCommentId(item.id)
+            setEditedComment(item.text)            
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     const handleSaveEdit = async(editedCommentId) => {
         
         try {
-                    await commentService.update(editedCommentId, editedComment)
+            await commentService.update(editedCommentId, editedComment)
 
-        setEditedCommentId(null);
-        setEditedComment('');
+            setEditedCommentId(null);
+            setEditedComment('');
         } catch (error) {
             console.log(error)
         }
-
-        }
+    }
 
     const handleOnDeleteComment = async(item) => {
         await commentService.remove(item.id)
@@ -236,8 +238,6 @@ export default function DetailsSightScreen({route}) {
         setUserRating(updated)
         loadRatings();
     }
-
-        // TODO - edit sight via firebase
 
     async function handleDeleteSight() {
         try {

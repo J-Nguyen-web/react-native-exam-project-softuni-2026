@@ -1,7 +1,7 @@
 export function formatDate(date) {
     if(!date) return '';
 
-    let jsDate;
+    let jsDate; // transformed date will be stored here
 
     if (date instanceof Date ) { // check if its JS type Date
         jsDate = date;
@@ -12,7 +12,14 @@ export function formatDate(date) {
     } else {
         jsDate = new Date(date); // last-resort parser
     }
-    return jsDate.toLocaleDateString(); // convert the converted jsDate to text visual date
+    
+    // JS formatDate
+    const options = {
+        day: "2-digit",
+        month: "long",
+        year: "numeric"
+    }
+    return jsDate.toLocaleDateString("en-GB", options) // convert the converted jsDate to text visual date
 
     // firebase formatDate
     // const jsDate = 
@@ -20,12 +27,5 @@ export function formatDate(date) {
 
     //     return jsDate.toLocaleDateString();
 
-    // JS formatDate
-    // const storedDate = new Date(date)
-    // const options = {
-    //     day: "2-digit",
-    //     month: "long",
-    //     //without year: "numeric"
-    // }
-    // return storedDate.toLocaleDateString("en-GB", options)
+
 }
