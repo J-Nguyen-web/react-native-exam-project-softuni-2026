@@ -5,17 +5,44 @@ import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import Card from "../components/Card.jsx";
 import { useAuth } from "../context/useAuth.js";
 import { useSight } from "../context/useSight.js";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
 import { GestureDetector, Gesture, Directions } from "react-native-gesture-handler";
+import { collection, getDoc, getDocs } from "firebase/firestore";
+import { db } from "../firebaseConfig.js";
 
 export default function MySightsScreen() {
-    const { sights, reloadSights } = useSight();
-    const navigation = useNavigation();
-    const {user} = useAuth();
 
-    const mySights = sights.filter(sight => sight.ownerId === user.id)
+    const navigation = useNavigation();
+    const route = useRoute();
+    const { type, title } = route.params;
+    const { sights, reloadSights } = useSight();
+    const { user } = useAuth();
+
+
+    const [ favoriteSightsId, setFavoriteSightsId ] = useState()
+
+    let filteredSights =
+        type === 'created'
+        ? filteredSights = sights.filter(sight => sight.ownerId === user.id)        
+        : filteredSights = sights.filter( sight => favoriteSightsId?.includes(sight.id) )
+
+    useEffect(()=> {
+        async function loadUserFavorites() {
+            
+            try {
+                const favoriteRef = await collection(db, 'users', user.id, 'favorites');
+                const snap = await getDocs(favoriteRef);
+                setFavoriteSightsId (snap.docs.map(doc => doc.id))
+            } catch (error) {
+                console.log(error)
+            }
+
+        }
+        loadUserFavorites();
+
+    },[])
 
     useFocusEffect(
         useCallback(()=> {
@@ -45,9 +72,9 @@ export default function MySightsScreen() {
                             Explore and manage your sights
                         </Text>
 
-                        { mySights.length > 0 ? (
+                        { filteredSights.length > 0 ? (
                         <FlatList
-                            data={mySights}
+                            data={filteredSights}
                             keyExtractor={(item) => item.id.toString()}
                             renderItem={({index, item}) => <Card index={index} {...item}/>}
                             contentContainerStyle={{paddingHorizontal: 20, paddingBottom: 20}}

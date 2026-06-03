@@ -85,9 +85,16 @@ export default function ProfileScreen() {
 
                 <TouchableOpacity 
                     style={styles.mySightsButton} 
-                    onPress={() => navigation.navigate("MySights")}
+                    onPress={() => navigation.navigate("MySights",{ type: 'created', title: 'My Sights'})}
                 >
                     <Text style={styles.mySightsText}>My Sights</Text>
+                </TouchableOpacity>
+
+                 <TouchableOpacity 
+                    style={styles.mySightsButton} 
+                    onPress={() => navigation.navigate("MySights",{ type: 'favorite', title: 'Favorite'})}
+                >
+                    <Text style={styles.mySightsText}>My Favorite</Text>
                 </TouchableOpacity>
                 
                 <View style={{paddingTop: 50}}>
