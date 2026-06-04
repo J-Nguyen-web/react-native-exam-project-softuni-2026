@@ -11,6 +11,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { GestureDetector, Gesture, Directions } from "react-native-gesture-handler";
 import { collection, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
+import { getAllRatings, getUserRating } from "../services/ratingService.js";
 
 export default function MySightsScreen() {
 
@@ -20,25 +21,40 @@ export default function MySightsScreen() {
     const { sights, reloadSights } = useSight();
     const { user } = useAuth();
 
+    const [ favoriteSightsId, setFavoriteSightsId ] = useState();
+    const [userRatedSightsId, setUserRatedSightsId] = useState()
 
-    const [ favoriteSightsId, setFavoriteSightsId ] = useState()
+    const filters = {
+        created: sight => sight.ownerId === user.id,
+        favorite: sight => favoriteSightsId?.includes(sight.id),
+        rated: sight => userRatedSightsId?.includes(sight.id),
+    };
 
-    let filteredSights =
-        type === 'created'
-        ? filteredSights = sights.filter(sight => sight.ownerId === user.id)        
-        : filteredSights = sights.filter( sight => favoriteSightsId?.includes(sight.id) )
+    const filteredSights = sights.filter(filters[type])
 
     useEffect(()=> {
+        async function loadRatedSights() {
+            // const ratings = await getAllRatings();
+            // const userRated = ratings.filter( ratedSights => ratedSights.userId === user.id)
+            // const userRatedSights = userRated.map( rated => rated.sightId)
+            // const ratedSights = sights.filter( sight => userRatedSights.includes(sight.id))
+
+            // all lines in one
+            const ratedSightsId = (await getAllRatings()).filter(rates => rates.userId === user.id).map( rate => rate.sightId);
+            console.log(ratedSightsId)
+            setUserRatedSights(ratedSightsId)
+        }
+        loadRatedSights();
+
         async function loadUserFavorites() {
-            
             try {
                 const favoriteRef = await collection(db, 'users', user.id, 'favorites');
                 const snap = await getDocs(favoriteRef);
                 setFavoriteSightsId (snap.docs.map(doc => doc.id))
+                console.log(favoriteSightsId)
             } catch (error) {
                 console.log(error)
             }
-
         }
         loadUserFavorites();
 

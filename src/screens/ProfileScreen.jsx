@@ -43,7 +43,7 @@ export default function ProfileScreen() {
     }
     
 // TODO RESET PASSWORD INVITE BY GOOGLE PROFILE
-// My favorites
+
 // My Comments
 // My rated sights
 
@@ -95,6 +95,13 @@ export default function ProfileScreen() {
                     onPress={() => navigation.navigate("MySights",{ type: 'favorite', title: 'Favorite'})}
                 >
                     <Text style={styles.mySightsText}>My Favorite</Text>
+                </TouchableOpacity>
+
+                 <TouchableOpacity 
+                    style={styles.mySightsButton} 
+                    onPress={() => navigation.navigate("MySights",{ type: 'rated', title: 'My Rated Sights'})}
+                >
+                    <Text style={styles.mySightsText}>My Rated Sights</Text>
                 </TouchableOpacity>
                 
                 <View style={{paddingTop: 50}}>
