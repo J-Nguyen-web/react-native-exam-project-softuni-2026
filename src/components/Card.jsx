@@ -28,11 +28,11 @@ export default function Card({
   onPress
 }) {
 
-    const navigation = useNavigation();
     const { user } = useAuth();
     const { ratingsMap } = useRating();
-    const ratingData = ratingsMap?.[id] ?? null;
     const { likesMap, setLikesMap } = useLike();
+    const navigation = useNavigation();
+    const ratingData = ratingsMap?.[id] ?? null;
     const isLiked = !!likesMap[id]; // подобно на Boolean(likesMap[id]), ако е undefined, да върне false, а не error
 
     useEffect(() => {
