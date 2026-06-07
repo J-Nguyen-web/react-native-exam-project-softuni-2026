@@ -43,14 +43,10 @@ export default function MySightsScreen() {
                 // all lines in one
                 const ratedSightsId = (await getAllRatings()).filter(rates => rates.userId === user.id).map( rate => rate.sightId);
                 setUserRatedSightsId(ratedSightsId)
-const ratings = await getAllRatings();
-
-console.log(ratings);
-console.log("current user", user.id);
+                const ratings = await getAllRatings();
             } catch (error) {
                 console.log(error)
             }
-            
         }
         loadRatedSights();
 
@@ -65,8 +61,6 @@ console.log("current user", user.id);
             }
         }
         loadUserFavorites();
-        
-
     },[])
 
     useFocusEffect(
@@ -85,7 +79,6 @@ console.log("current user", user.id);
             })
 
     return (
-        
         <LinearGradient colors={[globalColor.gradientPrimo, globalColor.gradientSecundo]} style={{flex:1 }}>
             <GestureDetector gesture={swipeBack}>
                 <View style={{flex:1}}>

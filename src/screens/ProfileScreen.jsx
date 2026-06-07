@@ -45,7 +45,6 @@ export default function ProfileScreen() {
 // TODO RESET PASSWORD INVITE BY GOOGLE PROFILE
 
 // My Comments
-// My rated sights
 
     return (
         <ScreenWrapper>
@@ -83,27 +82,53 @@ export default function ProfileScreen() {
                             </TouchableOpacity>
                 )}
 
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>My Activity</Text>
+
                 <TouchableOpacity 
-                    style={styles.mySightsButton} 
+                    style={styles.menuItem} 
                     onPress={() => navigation.navigate("MySights",{ type: 'created', title: 'My Sights'})}
                 >
-                    <Text style={styles.mySightsText}>My Sights</Text>
+                <View style={styles.menuLeft}>
+                    <Entypo name="image" size={22} color={globalColor.primary} />
+                    <Text  style={styles.menuText}>My Sights</Text>
+                </View>
+                <Entypo name="chevron-right" size={20} color="#aaa"/>
                 </TouchableOpacity>
 
                  <TouchableOpacity 
-                    style={styles.mySightsButton} 
+                    style={styles.menuItem} 
                     onPress={() => navigation.navigate("MySights",{ type: 'favorite', title: 'Favorite'})}
                 >
-                    <Text style={styles.mySightsText}>My Favorite</Text>
+                    <View style={styles.menuLeft}>
+                        <Entypo name="heart" size={22} color="#ff6b81" />
+                        <Text style={styles.menuText}>My Favorite</Text>
+                    </View>
+                <Entypo name="chevron-right" size={20} color="#aaa"/>
                 </TouchableOpacity>
 
                  <TouchableOpacity 
-                    style={styles.mySightsButton} 
+                    style={styles.menuItem} 
                     onPress={() => navigation.navigate("MySights",{ type: 'rated', title: 'My Rated Sights'})}
                 >
-                    <Text style={styles.mySightsText}>My Rated Sights</Text>
+                    <View style={styles.menuLeft}>
+                        <Entypo name="star" size={22} color="#f9b600" />
+                        <Text style={styles.menuText}>My Rated Sights</Text>
+                    </View>
+                <Entypo name="chevron-right" size={20} color="#aaa"/>
                 </TouchableOpacity>
-                
+
+                 <TouchableOpacity 
+                    style={styles.menuItem} 
+                    onPress={() => navigation.navigate("MySights",{ type: 'rated', title: 'My Rated Sights'})}
+                >
+                    <View style={styles.menuLeft}>
+                        <Entypo name="chat" size={22} color="#4f9dfd" />
+                        <Text style={styles.menuText}>My Comments</Text>
+                    </View>
+                    <Entypo name="chevron-right" size={20} color="#aaa"/>
+                </TouchableOpacity>
+                </View>                
                 <View style={{paddingTop: 50}}>
                     <LogoutButton />
                 </View>
@@ -198,5 +223,49 @@ const styles = StyleSheet.create({
         color: "#fff",
         fontWeight: "700",
         fontSize: 16,
+    },
+    section: {
+        width: "100%",
+        marginTop: 20,
+    },
+
+    sectionTitle: {
+        fontSize: 18,
+        fontWeight: "700",
+        color: globalColor.primary,
+        marginBottom: 14,
+        marginLeft: 6,
+    },
+
+    menuItem: {
+        backgroundColor: '#f8ecec',
+        flexDirection: "row",
+        alignItems: 'center',
+        justifyContent: "space-between",
+        paddingHorizontal: 18,
+        paddingVertical: 18,
+        borderRadius: 20,
+        marginBottom: 14,
+
+        shadowColor: "#000",
+        shadowOpacity: 0.08,
+        shadowOffset: {
+            width: 0,
+            height: 6,
+        },
+        shadowRadius: 9,
+        elevation: 3,
+    },
+
+    menuLeft: {
+        flexDirection: "row",
+        alignItems: "center",
+    },
+    
+    menuText: {
+        fontSize: 16,
+        fontWeight: "600",
+        marginLeft: 14,
+        color: "#333",
     },
 })
