@@ -21,11 +21,14 @@ export default function ProfileNavigator() {
             <Stack.Screen 
                 name="MySights" 
                 component={MySightsScreen} 
-                options={{
-                    title: 'My Sights',
+                options={({ route }) => ({
+                    title: route.params?.title || "My Sights",
+                    // подаване на променлива чрез route от screen-a извикващ този screen
+
                     headerTitleStyle: {fontWeight: 'bold', fontSize: 20},
                     headerTintColor: globalColor.primary
-                }}
+                })}
+                
             />
         </Stack.Navigator>
     );

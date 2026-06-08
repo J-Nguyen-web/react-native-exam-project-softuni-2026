@@ -83,9 +83,6 @@ export default function MySightsScreen() {
             <GestureDetector gesture={swipeBack}>
                 <View style={{flex:1}}>
                     <SafeAreaView style={{flex:1}}>
-                        {/* <Text style={globalStyles.title}>
-                            My Sights
-                        </Text> */}
                         <Text style={globalStyles.subtitle}>
                             Explore and manage your sights
                         </Text>
