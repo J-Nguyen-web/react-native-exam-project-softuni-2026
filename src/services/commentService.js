@@ -14,7 +14,16 @@ import {
 
 import { db } from '../firebaseConfig.js';
 
-const commentsRef = collection(db, 'comments');
+const getAllComments = async() => {
+        const commentsRef = collection(db, 'comments');
+
+        const snapshot = await getDoc(commentsRef);
+
+        return snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data(),
+        }))
+}
 
 const create = async(commentData) => {
     const result = await addDoc(commentsRef, {
@@ -60,6 +69,7 @@ const remove = async(commentId) => {
     }
 
     export default {
+        getAllComments,
         create,
         update,
         remove,

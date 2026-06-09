@@ -12,6 +12,7 @@ import { GestureDetector, Gesture, Directions } from "react-native-gesture-handl
 import { collection, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
 import { getAllRatings, getUserRating } from "../services/ratingService.js";
+import { useComment } from "../context/useComment.js";
 
 export default function MySightsScreen() {
 
@@ -19,15 +20,17 @@ export default function MySightsScreen() {
     const route = useRoute();
     const { type, title } = route.params;
     const { sights, reloadSights } = useSight();
+    const { comments } = useComment();
     const { user } = useAuth();
 
     const [ favoriteSightsId, setFavoriteSightsId ] = useState([]);
-    const [userRatedSightsId, setUserRatedSightsId] = useState([])
+    const [userRatedSightsId, setUserRatedSightsId] = useState([]);
 
     const filters = {
         created: sight => sight.ownerId === user.id,
         favorite: sight => favoriteSightsId?.includes(sight.id),
         rated: sight => userRatedSightsId?.includes(sight.id),
+        comments: null
     };
 
     const filteredSights = sights.filter(filters[type])
