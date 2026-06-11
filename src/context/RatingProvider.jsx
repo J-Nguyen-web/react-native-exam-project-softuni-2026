@@ -6,6 +6,15 @@ export const RatingContext = createContext();
 export function RatingProvider({children}) {
     const [ratingsMap, setRatingsMap] = useState({});
 
+    const getAllRatings = async() => {
+        try {
+            const allRatings = await ratingService.getAllRatings();
+            return allRatings;
+        } catch (error) {
+            console.error('Error get rating data info',error)
+        }
+    }
+
     const loadRatings = async () => {
         try {
             const allRatings = await ratingService.getAllRatings();
@@ -57,7 +66,7 @@ export function RatingProvider({children}) {
             await loadRatings();
             return updatedRating;
         } catch (error) {
-            console.error('Error update rating',error)
+            console.error('Error update rating',error);
         }
     }
     
@@ -83,6 +92,7 @@ export function RatingProvider({children}) {
     },[]);
 
     const contextValue = {
+        getAllRatings,
         createRating,
         updateRating,
         getUserRating,

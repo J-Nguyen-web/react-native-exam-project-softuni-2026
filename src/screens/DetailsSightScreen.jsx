@@ -2,43 +2,68 @@ import { ActivityIndicator, Alert, Image, ScrollView, StyleSheet, Text, Touchabl
 import { cardStyles } from "../components/cardStyles.js";
 import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { useSight } from "../context/useSight.js";
 import { useAuth } from "../context/useAuth.js";
-import { useLike } from "../context/LikesProvider.jsx"; 
+import { useLike } from "../context/LikesProvider.jsx";
+import { useComment } from "../context/useComment.js";
+import { useRating } from "../context/useRating.js";
+import { useSight } from "../context/useSight.js";
 import { formatDate } from "../util/formatDate.js";
 import { globalColor, globalStyles } from "../globalStyles.js";
 import { GestureDetector, Gesture, Directions,  } from "react-native-gesture-handler";
-import { useRating } from "../context/useRating.js";
 import { sightService } from "../services/index.js";
 import { AntDesign, Feather, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList } from "react-native";
 import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
+import { db } from "../firebaseConfig.js";
 import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import Button from "../components/Button.jsx";
 import StarsRating from "../components/StarsRating.jsx";
 import CountryFlag from "react-native-country-flag";
 import commentService from "../services/commentService.js";
-import * as ratingService from "../services/ratingService.js"
 import CommentCard from "../components/CommentCard.jsx";
-import { db } from "../firebaseConfig.js";
+import * as ratingService from "../services/ratingService.js"
 // import filter from "../util/profanityFilter.js";
 
 export default function DetailsSightScreen({route}) {
     
-    const [sight, setSight] = useState(null);
-    const [userRating, setUserRating] = useState(null);
-    const [comment,setComment] = useState('')
-    const [comments,setComments] = useState([])
-    const [editedCommentId, setEditedCommentId] = useState(null);
-    const [editedComment, setEditedComment] = useState('')
+    const {
+        createSight,
+        getSightById,
+        updateSight,
+        reloadSights,
+        deleteSight,
+    } = useSight();
 
+    const { 
+        comments,
+        loadComments,
+        createComment,
+        updateComment,
+        subscribeToComments,
+        removeComment,
+    } = useComment();
+
+    const {         
+        createRating,
+        updateRating,
+        getUserRating,
+        getSightRating 
+    } = useRating();
+    
+    const [sight, setSight] = useState(null);    
     const { id: id } = route.params;
     const { user } = useAuth();
     const { likesMap, setLikesMap } = useLike();
-    const { loading, getSightById, deleteSight } = useSight();
     const { ratingsMap, loadRatings } = useRating();
+
+    const [ userRating, setUserRating ] = useState(null);
+    const [ comment,setComment ] = useState('')
+    const [ comments,setComments ] = useState([])
+    const [ editedCommentId, setEditedCommentId ] = useState(null);
+    const [ editedComment, setEditedComment ] = useState('')
+
     const isLiked = !!likesMap[id]; // подобно на Boolean(likesMap[id]), ако е undefined, да върне false, а не error
 
     const navigation = useNavigation();
@@ -49,14 +74,14 @@ export default function DetailsSightScreen({route}) {
 
     useEffect(() => {
         const loadSight = async () => { 
-            const sightData = await sightService.getById(id)
+            const sightData = await getSightById(id)
             setSight(sightData)
         };
         loadSight();
 
         async function loadUserRating() {
             try {
-                const rating = await ratingService.getUserRating(sight?.id, user?.id)
+                const rating = await getUserRating(sight?.id, user?.id)
                 setUserRating(rating || null)
             } catch (error) {
                 setUserRating(null)
@@ -93,7 +118,7 @@ export default function DetailsSightScreen({route}) {
 
         // зачистваща функция, която стопира слушането на промени при влизане в тази секция, по този начин, няма да се стартира отново
         // и отново всеки път щом се отвори даден екран и да се натрупват процеси на eventListeners
-        const unsubscribe = commentService.subscribeToComments(id, setComments); 
+        const unsubscribe = subscribeToComments(id, setComments);
         // setComments е се приема като callback от commentService и се зарежда с коментарите от там
         return () => unsubscribe()
         
@@ -177,7 +202,7 @@ export default function DetailsSightScreen({route}) {
                 // avatar: user.photoUrl || null // todo users photo 
             };
 
-            await commentService.create(newComment)
+            await createComment(newComment)
             setComment('');
 
             // const updateComments = await commentService.getBySightId(id); // manual update, no longer needed bcoz we use onSnapshot
@@ -200,7 +225,7 @@ export default function DetailsSightScreen({route}) {
     const handleSaveEdit = async(editedCommentId) => {
         
         try {
-            await commentService.update(editedCommentId, editedComment)
+            await updateComment(editedCommentId, editedComment)
 
             setEditedCommentId(null);
             setEditedComment('');
@@ -210,7 +235,7 @@ export default function DetailsSightScreen({route}) {
     }
 
     const handleOnDeleteComment = async(item) => {
-        await commentService.remove(item.id)
+        await removeComment(item.id)
     }
 
     const swipeBack = Gesture.Pan()
@@ -226,9 +251,9 @@ export default function DetailsSightScreen({route}) {
         let updated;
 
         if(userRating && userRating.id){
-            updated = await ratingService.updateRating (userRating.id, {...userRating, rating: value})
+            updated = await updateRating (userRating.id, {...userRating, rating: value})
         } else {
-            updated = await ratingService.createRating({
+            updated = await createRating({
                 sightId: sight.id,
                 userId: user.id,
                 rating: value

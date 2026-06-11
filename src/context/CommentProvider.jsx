@@ -52,6 +52,14 @@ export function CommentProvider({ children }){
             setLoading(false)
         }
     }
+
+    async function subscribeToComments(params) {
+        try {
+            commentService.subscribeToComments(id, setComments);
+        } catch (error) {
+            console.error('Error subscribing to comment', error)            
+        }
+    }
     
     async function removeComment(commentId) {
         try {
@@ -65,13 +73,13 @@ export function CommentProvider({ children }){
         }
     }
 
-
     const contextValue = {
         comments,
         loading,
         loadComments,
         createComment,
         updateComment,
+        subscribeToComments,
         removeComment,
     }
 
