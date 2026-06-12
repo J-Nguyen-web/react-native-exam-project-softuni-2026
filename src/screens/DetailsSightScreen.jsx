@@ -36,7 +36,7 @@ export default function DetailsSightScreen({route}) {
         deleteSight,
     } = useSight();
 
-    const { 
+    const {
         comments,
         loadComments,
         createComment,
@@ -51,16 +51,22 @@ export default function DetailsSightScreen({route}) {
         getUserRating,
         getSightRating 
     } = useRating();
+
+    const {
+        likesMap,
+        setLikesMap,
+        likeSight,
+        unlikeSight,
+    } = useLike();
     
     const [sight, setSight] = useState(null);    
     const { id: id } = route.params;
     const { user } = useAuth();
-    const { likesMap, setLikesMap } = useLike();
     const { ratingsMap, loadRatings } = useRating();
 
     const [ userRating, setUserRating ] = useState(null);
-    const [ comment,setComment ] = useState('')
-    const [ comments,setComments ] = useState([])
+    const [ comment, setComment ] = useState('')
+    // const [ comments, setComments ] = useState([]);
     const [ editedCommentId, setEditedCommentId ] = useState(null);
     const [ editedComment, setEditedComment ] = useState('')
 
@@ -118,9 +124,9 @@ export default function DetailsSightScreen({route}) {
 
         // зачистваща функция, която стопира слушането на промени при влизане в тази секция, по този начин, няма да се стартира отново
         // и отново всеки път щом се отвори даден екран и да се натрупват процеси на eventListeners
-        const unsubscribe = subscribeToComments(id, setComments);
+        const unsubscribe = subscribeToComments(id);
         // setComments е се приема като callback от commentService и се зарежда с коментарите от там
-        return () => unsubscribe()
+        return () => { unsubscribe?.() }
         
     },[user, id]);
 
@@ -145,40 +151,13 @@ export default function DetailsSightScreen({route}) {
         )
     }
 
-    const handleHeartButton = async()=> {
+    const handleHeartButton = async(id)=> {
         if (!user) return;
-
-        try {
-            const likeRef = doc(db, 'users', user.id, 'favorites', id);
-
-            await setDoc(likeRef, {
-                createdAt: new Date()
-            });
-            
-            setLikesMap((previous) => ({
-                ...previous,
-                [id]: true,
-            }));            
-        } catch (error) {
-            console.log(error)
-        }
-
+        await likeSight(id);
     }
 
-    const handleUnheartButton = async ()=> {
-        const likeRef = doc(db,'users', user.id, 'favorites', id)
-
-        try {
-            await deleteDoc(likeRef);
-            
-            setLikesMap((previous) => {
-                const copy = {...previous}; // създаване на копие (лоша практика е директно да се работи над оригинала)
-                delete copy[id]; // изтриване на Like-a в копието
-                return copy;    // пращане на копието което ще замени оригинала
-            });            
-        } catch (error) {
-            console.log(error)
-        }
+    const handleUnheartButton = async (id)=> {
+        await unlikeSight(id)
     }
 
     const addCommentHandler = async()=> {

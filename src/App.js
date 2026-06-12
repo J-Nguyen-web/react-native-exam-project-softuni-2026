@@ -8,6 +8,7 @@ import { enableScreens } from "react-native-screens";
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { RatingProvider } from './context/RatingProvider.jsx';
 import { LikeProvider } from './context/LikesProvider.jsx';
+import { CommentProvider } from './context/CommentProvider.jsx';
 
 enableScreens();
 
@@ -16,22 +17,24 @@ export default function App() {
         <GestureHandlerRootView>
             <AuthProvider>
                 <LikeProvider>
-                    <SightProvider>
-                        <RatingProvider>
-                            <NavigationContainer>
-                        {/* за да работят всички навигатори всички се обвиват в него*/}
-                            
-                                <StatusBar style="auto" />
-                                    <SafeAreaProvider>
-                                        {/* <SafeAreaView> bugged for now - its depricated - use SafeAreaView from react-native-safe-area-context*/}
-                                                                        
-                                            <RootNavigator />
+                    <CommentProvider>
+                        <SightProvider>
+                            <RatingProvider>
+                                <NavigationContainer>
+                            {/* за да работят всички навигатори всички се обвиват в него*/}
+                                
+                                    <StatusBar style="auto" />
+                                        <SafeAreaProvider>
+                                            {/* <SafeAreaView> bugged for now - its depricated - use SafeAreaView from react-native-safe-area-context*/}
                                                                             
-                                        {/* </SafeAreaView> */}
-                                    </SafeAreaProvider>
-                            </NavigationContainer>
-                        </RatingProvider>
-                    </SightProvider>
+                                                <RootNavigator />
+                                                                                
+                                            {/* </SafeAreaView> */}
+                                        </SafeAreaProvider>
+                                </NavigationContainer>
+                            </RatingProvider>
+                        </SightProvider>
+                    </CommentProvider>
                 </LikeProvider>
             </AuthProvider>
         </GestureHandlerRootView>

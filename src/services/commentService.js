@@ -13,9 +13,9 @@ import {
 } from 'firebase/firestore';
 
 import { db } from '../firebaseConfig.js';
+const commentsRef = collection(db, 'comments');
 
 const getAllComments = async() => {
-        const commentsRef = collection(db, 'comments');
 
         const snapshot = await getDoc(commentsRef);
 
@@ -35,8 +35,6 @@ const create = async(commentData) => {
 };
 
 const update = async(commentId, commentContent) => {
-    const commentRef = doc(db, 'comments', commentId);
-
     await updateDoc(commentRef, {text: commentContent});
 };
 
@@ -52,6 +50,7 @@ const remove = async(commentId) => {
         // }));
 
     const subscribeToComments = (sightId, callback) => { // if its async returns object as promise and not doing the function
+        
         const queryData = query(
             commentsRef,
             where('sightId', '==', sightId),

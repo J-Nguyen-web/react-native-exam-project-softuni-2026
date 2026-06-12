@@ -70,9 +70,9 @@ export function RatingProvider({children}) {
         }
     }
     
-    const getUserRating = async(userId) => {
+    const getUserRating = async(sightId, userId) => {
         try {
-            const userRating = await ratingService
+            const userRating = await ratingService.getUserRating(sightId, userId)
         } catch (error) {
             console.error('Error getting the rating of the user',error)
         }
@@ -92,6 +92,8 @@ export function RatingProvider({children}) {
     },[]);
 
     const contextValue = {
+        ratingsMap,
+        loadRatings,
         getAllRatings,
         createRating,
         updateRating,

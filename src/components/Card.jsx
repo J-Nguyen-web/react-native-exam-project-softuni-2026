@@ -60,39 +60,13 @@ export default function Card({
         checkIfLiked();
     })
 
-    const handleHeartButton = async()=> {
+    const handleHeartButton = async(id)=> {
         if (!user) return;
-
-        try {
-            
-            const likeRef = doc(db, 'users', user.id, 'favorites', id);
-
-            await setDoc(likeRef, {
-                createdAt: new Date()
-            });
-            
-            setLikesMap((previous) => ({
-                ...previous,
-                [id]: true,
-            }));            
-        } catch (error) {
-            console.log(error)
-        }
+        await likeSight(id);
     }
 
-    const handleUnheartButton = async ()=> {
-        try {
-            const likeRef = doc(db,'users', user.id, 'favorites', id)
-
-            await deleteDoc(likeRef);
-            
-            setLikesMap((previous) => {
-                const { [id]: removed, ...rest } = previous; // създаване на остатъка rest като копие на previous без removed[id]
-                return rest     // връщане на rest което ще замени оригинала previous
-            });            
-        } catch (error) {
-            console.log(error)
-        }
+    const handleUnheartButton = async (id)=> {
+        await unlikeSight(id)
     }
 
     return (

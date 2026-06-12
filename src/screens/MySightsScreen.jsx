@@ -11,20 +11,21 @@ import { LinearGradient } from "expo-linear-gradient";
 import { GestureDetector, Gesture, Directions } from "react-native-gesture-handler";
 import { collection, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
-import { getAllRatings, getUserRating } from "../services/ratingService.js";
 import { useComment } from "../context/useComment.js";
+import { useRating } from "../context/useRating.js";
 
 export default function MySightsScreen() {
 
     const navigation = useNavigation();
     const route = useRoute();
     const { type, title } = route.params;
-    const { sights, reloadSights } = useSight();
-    const { comments } = useComment();
     const { user } = useAuth();
+    const { comments } = useComment();
+    const { sights, reloadSights } = useSight();
+    const { getAllRatings, getUserRating } = useRating();
 
     const [ favoriteSightsId, setFavoriteSightsId ] = useState([]);
-    const [userRatedSightsId, setUserRatedSightsId] = useState([]);
+    const [ userRatedSightsId, setUserRatedSightsId ] = useState([]);
 
     const filters = {
         created: sight => sight.ownerId === user.id,

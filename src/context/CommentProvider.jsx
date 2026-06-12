@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import commentService from "../services/commentService.js";
 import { collection, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
@@ -22,10 +22,10 @@ export function CommentProvider({ children }){
     }
 
     async function createComment(commentData) {
+        setLoading(true);
+
         try {
-            setLoading(true);
             const newComment = await commentService.create(commentData)
-            setComments(commentList => [...commentList, newComment])
             return newComment;
         } catch (error) {
             console.error('Error create comment', error)
@@ -41,7 +41,7 @@ export function CommentProvider({ children }){
             setComments( previous => 
                 previous.map( comment => 
                     comment.id === commentId 
-                    ? {...comment, updateData}  
+                    ? {...comment, ...updateData}  
                     : comment
                 )
             )
@@ -53,9 +53,9 @@ export function CommentProvider({ children }){
         }
     }
 
-    async function subscribeToComments(params) {
+    function subscribeToComments(sightId) {
         try {
-            commentService.subscribeToComments(id, setComments);
+            return commentService.subscribeToComments(sightId, setComments);
         } catch (error) {
             console.error('Error subscribing to comment', error)            
         }
@@ -65,7 +65,7 @@ export function CommentProvider({ children }){
         try {
             setLoading(true);
             await commentService.remove(commentId)
-            setComments((commentsList) => commentsList.filter(comment => comment.id !== commentId))
+            // setComments((commentsList) => commentsList.filter(comment => comment.id !== commentId)) // snapshot will refresh it
         } catch (error) {
             console.error('Error remove comment', error)
         } finally {
@@ -89,3 +89,5 @@ export function CommentProvider({ children }){
         </CommentContext.Provider>
     )
 }
+
+export const useComment = () => useContext(CommentContext)
