@@ -13,7 +13,7 @@ import CountryFlag from "react-native-country-flag";
 import StarsRating from "./StarsRating.jsx";
 
 export default function Card({
-  id,
+  SightId,
   title,
   titleImage,
   photo,
@@ -32,8 +32,8 @@ export default function Card({
     const { ratingsMap } = useRating();
     const { likesMap, setLikesMap } = useLike();
     const navigation = useNavigation();
-    const ratingData = ratingsMap?.[id] ?? null;
-    const isLiked = !!likesMap[id]; // подобно на Boolean(likesMap[id]), ако е undefined, да върне false, а не error
+    const ratingData = ratingsMap?.[SightId] ?? null;
+    const isLiked = !!likesMap[SightId]; // подобно на Boolean(likesMap[id]), ако е undefined, да върне false, а не error
 
     useEffect(() => {
         const loadLikes = async() => {
@@ -51,7 +51,7 @@ export default function Card({
     loadLikes();
 
         async function checkIfLiked(params) {
-            const likeRef = doc(db, 'users', user.id, 'favorites', id)
+            const likeRef = doc(db, 'users', user.id, 'favorites', SightId)
             
             const snapshot = await getDoc(likeRef);
             
@@ -60,13 +60,13 @@ export default function Card({
         checkIfLiked();
     })
 
-    const handleHeartButton = async(id)=> {
+    const handleHeartButton = async()=> {
         if (!user) return;
-        await likeSight(id);
+        await likeSight(SightId);
     }
 
-    const handleUnheartButton = async (id)=> {
-        await unlikeSight(id)
+    const handleUnheartButton = async ()=> {
+        await unlikeSight(SightId)
     }
 
     return (

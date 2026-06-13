@@ -60,7 +60,7 @@ export default function DetailsSightScreen({route}) {
     } = useLike();
     
     const [sight, setSight] = useState(null);    
-    const { id: id } = route.params;
+    const { id: SightId } = route.params;
     const { user } = useAuth();
     const { ratingsMap, loadRatings } = useRating();
 
@@ -70,7 +70,7 @@ export default function DetailsSightScreen({route}) {
     const [ editedCommentId, setEditedCommentId ] = useState(null);
     const [ editedComment, setEditedComment ] = useState('')
 
-    const isLiked = !!likesMap[id]; // подобно на Boolean(likesMap[id]), ако е undefined, да върне false, а не error
+    const isLiked = !!likesMap[SightId]; // подобно на Boolean(likesMap[id]), ако е undefined, да върне false, а не error
 
     const navigation = useNavigation();
 
@@ -79,8 +79,12 @@ export default function DetailsSightScreen({route}) {
     let isOwner = sight?.ownerId === user?.id
 
     useEffect(() => {
+        
+        if(!sight?.id || !user?.id) return; 
+    // зареждат се по-бавно и може да са undefined, след return може при повторен рендер да са вече заредени
+
         const loadSight = async () => { 
-            const sightData = await getSightById(id)
+            const sightData = await getSightById(SightId)
             setSight(sightData)
         };
         loadSight();
@@ -110,7 +114,7 @@ export default function DetailsSightScreen({route}) {
         loadLikes();
         
         async function checkIfLiked(params) {
-            const likeRef = doc(db, 'users', user.id, 'favorites', id)
+            const likeRef = doc(db, 'users', user.id, 'favorites', SightId)
             
             const snapshot = await getDoc(likeRef);
             
@@ -124,20 +128,20 @@ export default function DetailsSightScreen({route}) {
 
         // зачистваща функция, която стопира слушането на промени при влизане в тази секция, по този начин, няма да се стартира отново
         // и отново всеки път щом се отвори даден екран и да се натрупват процеси на eventListeners
-        const unsubscribe = subscribeToComments(id);
+        const unsubscribe = subscribeToComments(SightId);
         // setComments е се приема като callback от commentService и се зарежда с коментарите от там
         return () => { unsubscribe?.() }
         
-    },[user, id]);
+    },[user, SightId]);
 
     useFocusEffect(
         useCallback(() => {
-            getSightById(id)
+            getSightById(SightId)
             .then (res => { setSight(res); })
             .catch(err => {
             console.error('Error fetching sight', err)
         })
-        },[id])
+        },[SightId])
     )
 
     if(!sight) {
@@ -151,13 +155,14 @@ export default function DetailsSightScreen({route}) {
         )
     }
 
-    const handleHeartButton = async(id)=> {
+    const handleHeartButton = async()=> {
         if (!user) return;
-        await likeSight(id);
+        await likeSight(SightId);
     }
 
-    const handleUnheartButton = async (id)=> {
-        await unlikeSight(id)
+    const handleUnheartButton = async ()=> {
+        if (!user) return;
+        await unlikeSight(SightId)
     }
 
     const addCommentHandler = async()=> {
@@ -175,7 +180,7 @@ export default function DetailsSightScreen({route}) {
 
             const newComment = {
                 text: comment,
-                sightId: id,
+                sightId: SightId,
                 ownerId: user.id, // firebase id
                 username: user.username,
                 // avatar: user.photoUrl || null // todo users photo 
@@ -254,7 +259,7 @@ export default function DetailsSightScreen({route}) {
                         text: "Delete",
                         style: "destructive",
                         onPress: async () =>{
-                            await deleteSight(id);
+                            await deleteSight(SightId);
                             navigation.goBack();
                         }
                     }

@@ -19,7 +19,7 @@ export function LikeProvider({ children }) {
     };
 
     const likeSight = async(sightId) => {
-        alert('like')
+        
         try {
             const likeRef = doc(db, 'users', user.id, 'favorites', sightId);
 
