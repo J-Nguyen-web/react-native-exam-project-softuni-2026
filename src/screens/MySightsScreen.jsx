@@ -26,12 +26,13 @@ export default function MySightsScreen() {
 
     const [ favoriteSightsId, setFavoriteSightsId ] = useState([]);
     const [ userRatedSightsId, setUserRatedSightsId ] = useState([]);
+    const [ userComments, setUserComments ] = useState([]);
 
     const filters = {
         created: sight => sight.ownerId === user.id,
         favorite: sight => favoriteSightsId?.includes(sight.id),
         rated: sight => userRatedSightsId?.includes(sight.id),
-        comments: null
+        commented: sight =>  userComments?.includes(sight.id)
     };
 
     const filteredSights = sights.filter(filters[type])
@@ -59,13 +60,22 @@ export default function MySightsScreen() {
                 const favoriteRef = await collection(db, 'users', user.id, 'favorites');
                 const snap = await getDocs(favoriteRef);
                 setFavoriteSightsId (snap.docs.map(doc => doc.id))
-                console.log(favoriteSightsId)
             } catch (error) {
                 console.log(error)
             }
         }
         loadUserFavorites();
-    },[])
+
+        async function loadUserComments() {
+            try {
+                const userCreatedComments = comments.filter(comment => comment?.ownerId === user.id);
+                setUserComments(userCreatedComments.map(comment => comment?.sightId))
+            } catch (error) {
+                console.log(error)                
+            }
+        }
+        loadUserComments();
+    },[comments, user])
 
     useFocusEffect(
         useCallback(()=> {
@@ -112,6 +122,5 @@ export default function MySightsScreen() {
                 </View> 
             </GestureDetector>
         </LinearGradient>
-           
     );
 }

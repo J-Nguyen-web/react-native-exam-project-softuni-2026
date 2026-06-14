@@ -9,7 +9,8 @@ import {
     serverTimestamp,
     updateDoc,
     deleteDoc,
-    doc
+    doc,
+    getDoc
 } from 'firebase/firestore';
 
 import { db } from '../firebaseConfig.js';
@@ -17,7 +18,7 @@ const commentsRef = collection(db, 'comments');
 
 const getAllComments = async() => {
 
-        const snapshot = await getDoc(commentsRef);
+        const snapshot = await getDocs(commentsRef);
 
         return snapshot.docs.map(doc => ({
             id: doc.id,

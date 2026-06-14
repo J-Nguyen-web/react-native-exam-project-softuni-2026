@@ -120,7 +120,7 @@ export default function ProfileScreen() {
 
                  <TouchableOpacity 
                     style={styles.menuItem} 
-                    onPress={() => navigation.navigate("MySights",{ type: 'comments', title: 'My comments'})}
+                    onPress={() => navigation.navigate("MySights",{ type: 'commented', title: 'My comments'})}
                 >
                     <View style={styles.menuLeft}>
                         <Entypo name="chat" size={22} color="#4f9dfd" />

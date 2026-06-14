@@ -3,9 +3,7 @@ import commentService from "../services/commentService.js";
 import { collection, getDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
 
-export const CommentContext = createContext({
-
-});
+export const CommentContext = createContext();
 
 export function CommentProvider({ children }){
 
@@ -17,8 +15,13 @@ export function CommentProvider({ children }){
     },[]);
 
     async function loadComments() {
-        const commentsData = await commentService.getAllComments();
-        setComments(commentsData);            
+        try {
+            const commentsData = await commentService.getAllComments();
+            setComments(commentsData);             
+        } catch (error) {
+            console.error('Error get all comments', error)            
+        }
+           
     }
 
     async function createComment(commentData) {

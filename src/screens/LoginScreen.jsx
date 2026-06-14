@@ -33,7 +33,7 @@ export default function LoginScreen() {
 
     return (
         <ScreenWrapper>                     
-            <Text style={globalStyles.title}>Log in</Text>
+            {/* <Text style={globalStyles.title}>Log in</Text> */}
             <Text style={globalStyles.subtitle}>Join us and share yhour story.</Text>
 
             <View style={globalStyles.formCard}>
