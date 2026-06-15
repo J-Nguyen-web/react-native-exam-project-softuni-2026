@@ -61,7 +61,7 @@ export async function updateRating(rateId, updatedRating) {
     // const res = await api.put(`${endpoint}/${rateId}`, updatedRating);
     // return res.data;
 
-    const ratingRef = getDoc(db, 'ratings', rateId);
+    const ratingRef = doc(db, 'ratings', rateId);
 
     await updateDoc(ratingRef, updatedRating)
 

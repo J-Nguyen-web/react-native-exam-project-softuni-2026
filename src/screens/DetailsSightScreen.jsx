@@ -15,7 +15,7 @@ import { AntDesign, Feather, MaterialCommunityIcons, MaterialIcons } from "@expo
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FlatList } from "react-native";
-import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs,getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
 import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import Button from "../components/Button.jsx";
@@ -35,6 +35,7 @@ export default function DetailsSightScreen({route}) {
         reloadSights,
         deleteSight,
     } = useSight();
+    
 
     const {
         comments,
@@ -44,6 +45,7 @@ export default function DetailsSightScreen({route}) {
         subscribeToComments,
         removeComment,
     } = useComment();
+    
 
     const {         
         createRating,
@@ -51,6 +53,7 @@ export default function DetailsSightScreen({route}) {
         getUserRating,
         getSightRating 
     } = useRating();
+    
 
     const {
         likesMap,
@@ -60,7 +63,7 @@ export default function DetailsSightScreen({route}) {
     } = useLike();
     
     const [sight, setSight] = useState(null);    
-    const { id: SightId } = route.params;
+    const sightId  = route?.params?.id;
     const { user } = useAuth();
     const { ratingsMap, loadRatings } = useRating();
 
@@ -70,28 +73,28 @@ export default function DetailsSightScreen({route}) {
     const [ editedCommentId, setEditedCommentId ] = useState(null);
     const [ editedComment, setEditedComment ] = useState('')
 
-    const isLiked = !!likesMap[SightId]; // подобно на Boolean(likesMap[id]), ако е undefined, да върне false, а не error
+    const isLiked = !!likesMap[sightId]; // подобно на Boolean(likesMap[id]), ако е undefined, да върне false, а не error
 
     const navigation = useNavigation();
 
-    const sightRating = sight?.id ? ratingsMap?.[sight?.id] : null;
+    const sightRating = sightId ? ratingsMap?.[sightId] : null;
 
     let isOwner = sight?.ownerId === user?.id
 
     useEffect(() => {
         
-        if(!sight?.id || !user?.id) return; 
+        if(!user?.id) return;
     // зареждат се по-бавно и може да са undefined, след return може при повторен рендер да са вече заредени
 
         const loadSight = async () => { 
-            const sightData = await getSightById(SightId)
+            const sightData = await getSightById(sightId)
             setSight(sightData)
         };
         loadSight();
 
         async function loadUserRating() {
             try {
-                const rating = await getUserRating(sight?.id, user?.id)
+                const rating = await getUserRating(sightId, user?.id)
                 setUserRating(rating || null)
             } catch (error) {
                 setUserRating(null)
@@ -101,7 +104,7 @@ export default function DetailsSightScreen({route}) {
 
         const loadLikes = async() => {
             const snapshot = await getDocs(
-                collection(db, "users", user.id, "favorites")
+                collection(db, "users", user?.id, "favorites")
             )
 
             const map = {};
@@ -113,14 +116,14 @@ export default function DetailsSightScreen({route}) {
         }
         loadLikes();
         
-        async function checkIfLiked(params) {
-            const likeRef = doc(db, 'users', user.id, 'favorites', SightId)
+        // async function checkIfLiked(params) {
+        //     const likeRef = doc(db, 'users', user.id, 'favorites', sightId)
             
-            const snapshot = await getDoc(likeRef);
+        //     const snapshot = await getDoc(likeRef);
             
-            setIsLiked(snapshot.exists())
-        }
-        checkIfLiked();
+        //     setIsLiked(snapshot.exists())
+        // }
+        // checkIfLiked();
 
         // const loadComments = async() => { // manual loading of comments, no needed bcoz we use unsubscribe listener
         //     const result = await commentService.getBySightId(id);
@@ -128,20 +131,20 @@ export default function DetailsSightScreen({route}) {
 
         // зачистваща функция, която стопира слушането на промени при влизане в тази секция, по този начин, няма да се стартира отново
         // и отново всеки път щом се отвори даден екран и да се натрупват процеси на eventListeners
-        const unsubscribe = subscribeToComments(SightId);
+        const unsubscribe = subscribeToComments(sightId);
         // setComments е се приема като callback от commentService и се зарежда с коментарите от там
         return () => { unsubscribe?.() }
         
-    },[user, SightId]);
+    },[user, sightId]);
 
     useFocusEffect(
         useCallback(() => {
-            getSightById(SightId)
+            getSightById(sightId)
             .then (res => { setSight(res); })
             .catch(err => {
             console.error('Error fetching sight', err)
         })
-        },[SightId])
+        },[sightId])
     )
 
     if(!sight) {
@@ -157,12 +160,12 @@ export default function DetailsSightScreen({route}) {
 
     const handleHeartButton = async()=> {
         if (!user) return;
-        await likeSight(SightId);
+        await likeSight(sightId);
     }
 
     const handleUnheartButton = async ()=> {
         if (!user) return;
-        await unlikeSight(SightId)
+        await unlikeSight(sightId)
     }
 
     const addCommentHandler = async()=> {
@@ -180,8 +183,8 @@ export default function DetailsSightScreen({route}) {
 
             const newComment = {
                 text: comment,
-                sightId: SightId,
-                ownerId: user.id, // firebase id
+                sightId: sightId,
+                ownerId: user?.id, // firebase id
                 username: user.username,
                 // avatar: user.photoUrl || null // todo users photo 
             };
@@ -199,7 +202,7 @@ export default function DetailsSightScreen({route}) {
 
     const handleOnEditComment = async(item) => {
         try {
-            setEditedCommentId(item.id)
+            setEditedCommentId(item?.id)
             setEditedComment(item.text)            
         } catch (error) {
             console.log(error)
@@ -219,7 +222,7 @@ export default function DetailsSightScreen({route}) {
     }
 
     const handleOnDeleteComment = async(item) => {
-        await removeComment(item.id)
+        await removeComment(item?.id)
     }
 
     const swipeBack = Gesture.Pan()
@@ -234,12 +237,12 @@ export default function DetailsSightScreen({route}) {
     async function handleRating(value) {
         let updated;
 
-        if(userRating && userRating.id){
-            updated = await updateRating (userRating.id, {...userRating, rating: value})
+        if(userRating && userRating?.id){
+            updated = await updateRating (userRating?.id, {...userRating, rating: value})
         } else {
             updated = await createRating({
-                sightId: sight.id,
-                userId: user.id,
+                sightId: sightId,
+                userId: user?.id,
                 rating: value
             })
         }
@@ -259,7 +262,7 @@ export default function DetailsSightScreen({route}) {
                         text: "Delete",
                         style: "destructive",
                         onPress: async () =>{
-                            await deleteSight(SightId);
+                            await deleteSight(sightId);
                             navigation.goBack();
                         }
                     }
@@ -288,16 +291,16 @@ export default function DetailsSightScreen({route}) {
                                  <CommentCard 
                                     index={index} 
                                     item={item}
-                                    isEditing={editedCommentId === item.id}
+                                    isEditing={editedCommentId === item?.id}
                                     editedComment={editedComment}
                                     setEditedComment={setEditedComment}
                                     onEdit={() => handleOnEditComment(item)}
-                                    onSave={() => handleSaveEdit(item.id)}
+                                    onSave={() => handleSaveEdit(item?.id)}
                                     onCancel={() => {
                                         setEditedComment('');
                                         setEditedCommentId(null);
                                     }}
-                                    onDelete={() => handleOnDeleteComment(item.id)}
+                                    onDelete={() => handleOnDeleteComment(item)}
                                      />
                                 }
                     contentContainerStyle={{ paddingBottom: 140 }}

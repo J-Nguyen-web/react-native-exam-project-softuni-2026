@@ -18,6 +18,8 @@ const commentsRef = collection(db, 'comments');
 
 const getAllComments = async() => {
 
+        const commentsRef = collection(db, 'comments');
+
         const snapshot = await getDocs(commentsRef);
 
         return snapshot.docs.map(doc => ({
@@ -36,7 +38,9 @@ const create = async(commentData) => {
 };
 
 const update = async(commentId, commentContent) => {
-    await updateDoc(commentRef, {text: commentContent});
+    const commentsRef = doc(db, 'comments', commentId);
+
+    await updateDoc(commentsRef, {text: commentContent});
 };
 
 const remove = async(commentId) => {

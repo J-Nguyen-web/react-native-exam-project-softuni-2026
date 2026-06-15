@@ -13,6 +13,7 @@ import { collection, getDoc, getDocs } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
 import { useComment } from "../context/useComment.js";
 import { useRating } from "../context/useRating.js";
+import CommentCard from "../components/CommentCard.jsx";
 
 export default function MySightsScreen() {
 
@@ -102,12 +103,46 @@ export default function MySightsScreen() {
                         </Text>
 
                         { filteredSights.length > 0 ? (
+                        <>
                         <FlatList
                             data={filteredSights}
                             keyExtractor={(item) => item.id.toString()}
-                            renderItem={({index, item}) => <Card index={index} {...item}/>}
+                            renderItem={({index, item}) => {
+                                const sightComments = comments.filter( comment => comment.sightId === item.id);
+
+                                return (
+                                    <>
+                                        <Card index={index} {...item}/>
+                                        { type === 'commented' && (
+                                                <FlatList
+                                                    data={comments}
+                                                    renderItem={({item, index}) =>
+                                                        <CommentCard 
+                                                            index={index} 
+                                                            item={item}
+                                                            // isEditing={editedCommentId === item.id}
+                                                            // editedComment={editedComment}
+                                                            // setEditedComment={setEditedComment}
+                                                            // onEdit={() => handleOnEditComment(item)}
+                                                            // onSave={() => handleSaveEdit(item.id)}
+                                                            // onCancel={() => {
+                                                            //     setEditedComment('');
+                                                            //     setEditedCommentId(null);
+                                                            // }}
+                                                            // onDelete={() => handleOnDeleteComment(item.id)}
+                                                            />
+                                                    }
+                                                    contentContainerStyle={{ paddingBottom: 140 }}
+                                                    keyboardShouldPersistTaps="handled"
+                                                />
+                                            )
+                                        }
+                                    </>                                    
+                                )
+                            }}                            
                             contentContainerStyle={{paddingHorizontal: 20, paddingBottom: 20}}
                         />
+                        </>
                         ) : (
                             <TouchableOpacity onPress={()=>navigation.navigate('HomeNavigator', {screen: 'Home'})}>
                                 <Text style={globalStyles.subtitle}>

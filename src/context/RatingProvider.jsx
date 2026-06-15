@@ -72,9 +72,10 @@ export function RatingProvider({children}) {
     
     const getUserRating = async(sightId, userId) => {
         try {
-            const userRating = await ratingService.getUserRating(sightId, userId)
+            return await ratingService.getUserRating(sightId, userId)
         } catch (error) {
-            console.error('Error getting the rating of the user',error)
+            console.error('Error getting the rating of the user',error);
+            return null;
         }
     }
     
