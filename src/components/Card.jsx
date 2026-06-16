@@ -7,13 +7,13 @@ import { useRating } from "../context/useRating.js"
 import { useLike } from "../context/LikesProvider.jsx";
 import { useAuth } from "../context/useAuth.js";
 import { useEffect } from "react";
-import { collection, deleteDoc, doc, getDocs, setDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
 import CountryFlag from "react-native-country-flag";
 import StarsRating from "./StarsRating.jsx";
 
 export default function Card({
-  sightId,
+  id,
   title,
   titleImage,
   photo,
@@ -32,10 +32,12 @@ export default function Card({
     const { ratingsMap } = useRating();
     const { likesMap, setLikesMap } = useLike();
     const navigation = useNavigation();
-    const ratingData = ratingsMap?.[sightId] ?? null;
-    const isLiked = !!likesMap[sightId]; // подобно на Boolean(likesMap[id]), ако е undefined, да върне false, а не error
+    const ratingData = ratingsMap?.[id] ?? null;
+    const isLiked = !!likesMap[id]; // подобно на Boolean(likesMap[id]), ако е undefined, да върне false, а не error
 
     useEffect(() => {
+
+        if(!user?.id || !id) return
         const loadLikes = async() => {
         const snapshot = await getDocs(
             collection(db, "users", user.id, "favorites")
@@ -51,22 +53,22 @@ export default function Card({
     loadLikes();
 
         async function checkIfLiked(params) {
-            const likeRef = doc(db, 'users', user.id, 'favorites', sightId)
+            const likeRef = doc(db, 'users', user.id, 'favorites', id)
             
             const snapshot = await getDoc(likeRef);
             
             setIsLiked(snapshot.exists())
         }
         checkIfLiked();
-    })
+    },[user, id])
 
     const handleHeartButton = async()=> {
         if (!user) return;
-        await likeSight(sightId);
+        await likeSight(id);
     }
 
     const handleUnheartButton = async ()=> {
-        await unlikeSight(sightId)
+        await unlikeSight(id)
     }
 
     return (
