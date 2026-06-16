@@ -55,14 +55,13 @@ const remove = async(commentId) => {
         // }));
 
     const subscribeToComments = (sightId, callback) => { // if its async returns object as promise and not doing the function
-        
         const queryData = query(
             commentsRef,
             where('sightId', '==', sightId),
             orderBy('createdAt', 'desc')
         );
 
-        return onSnapshot(queryData, snapshot => {
+        return onSnapshot(queryData, snapshot => { 
             const comments = snapshot.docs.map(doc => ({  
                 id: doc.id, 
                 ...doc.data()

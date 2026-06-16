@@ -36,7 +36,7 @@ export default function MySightsScreen() {
         commented: sight =>  userComments?.includes(sight.id)
     };
 
-    const filteredSights = sights.filter(filters[type])
+    const filteredSights = sights.filter(filters[type]);
 
     useEffect(()=> {
         async function loadRatedSights() {
@@ -67,7 +67,7 @@ export default function MySightsScreen() {
         }
         loadUserFavorites();
 
-        async function loadUserComments() {
+        function loadUserComments() {
             try {
                 const userCreatedComments = comments.filter(comment => comment?.ownerId === user.id);
                 setUserComments(userCreatedComments.map(comment => comment?.sightId))
@@ -115,7 +115,7 @@ export default function MySightsScreen() {
                                         <Card index={index} {...item}/>
                                         { type === 'commented' && (
                                                 <FlatList
-                                                    data={comments}
+                                                    data={sightComments}
                                                     renderItem={({item, index}) =>
                                                         <CommentCard 
                                                             index={index} 

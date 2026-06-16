@@ -21,7 +21,6 @@ export function CommentProvider({ children }){
         } catch (error) {
             console.error('Error get all comments', error)            
         }
-           
     }
 
     async function createComment(commentData) {
@@ -56,9 +55,9 @@ export function CommentProvider({ children }){
         }
     }
 
-    function subscribeToComments(sightId) {
+    function subscribeToComments(sightId, callback) {
         try {
-            return commentService.subscribeToComments(sightId, setComments);
+            return commentService.subscribeToComments(sightId, callback);
         } catch (error) {
             console.error('Error subscribing to comment', error)            
         }

@@ -68,7 +68,8 @@ export default function DetailsSightScreen({route}) {
     const { ratingsMap, loadRatings } = useRating();
 
     const [ userRating, setUserRating ] = useState(null);
-    const [ comment, setComment ] = useState('')
+    const [ comment, setComment ] = useState('');
+    const [ sightComments, setSightComments] = useState([]);
     // const [ comments, setComments ] = useState([]);
     const [ editedCommentId, setEditedCommentId ] = useState(null);
     const [ editedComment, setEditedComment ] = useState('')
@@ -82,7 +83,6 @@ export default function DetailsSightScreen({route}) {
     let isOwner = sight?.ownerId === user?.id
 
     useEffect(() => {
-        
         if(!user?.id) return;
     // зареждат се по-бавно и може да са undefined, след return може при повторен рендер да са вече заредени
 
@@ -131,7 +131,7 @@ export default function DetailsSightScreen({route}) {
 
         // зачистваща функция, която стопира слушането на промени при влизане в тази секция, по този начин, няма да се стартира отново
         // и отново всеки път щом се отвори даден екран и да се натрупват процеси на eventListeners
-        const unsubscribe = subscribeToComments(sightId);
+        const unsubscribe = subscribeToComments(sightId,setSightComments);
         // setComments е се приема като callback от commentService и се зарежда с коментарите от там
         return () => { unsubscribe?.() }
         
@@ -286,7 +286,7 @@ export default function DetailsSightScreen({route}) {
             <SafeAreaView style={{flex:1}}>
             <GestureDetector gesture={swipeBack}>
                 <FlatList
-                    data={comments}
+                    data={sightComments}
                     renderItem={({item, index}) =>
                                  <CommentCard 
                                     index={index} 
