@@ -221,8 +221,30 @@ export default function DetailsSightScreen({route}) {
         }
     }
 
-    const handleOnDeleteComment = async(item) => {
-        await removeComment(item?.id)
+    async function handleOnDeleteComment (item) {
+        console.log('pressed dela')
+        // TODO confirm
+        try {
+            Alert.alert(
+                "Delete Comment",
+                'Confirm delete that comment',
+                [
+                    { 
+                        text: 'Delete',
+                        style:'destructive',
+                        onPress: async()=> {
+                            await removeComment(item?.id)
+                        }
+                    },
+                    {
+                        text: 'Dismiss',
+                        style: 'cancel'
+                    }
+                ]
+            )
+        } catch (error) {
+            console.error('Error delete comment', error)
+        }
     }
 
     const swipeBack = Gesture.Pan()
