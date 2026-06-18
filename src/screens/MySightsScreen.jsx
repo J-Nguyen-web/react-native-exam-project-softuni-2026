@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import { globalColor, globalStyles } from "../globalStyles.js";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Alert, FlatList, Pressable, Text, TouchableOpacity, View } from "react-native";
 import Card from "../components/Card.jsx";
 import { useAuth } from "../context/useAuth.js";
 import { useSight } from "../context/useSight.js";
@@ -21,10 +21,13 @@ export default function MySightsScreen() {
     const route = useRoute();
     const { type, title } = route.params;
     const { user } = useAuth();
+
     const { comments } = useComment();
+
     const { sights, reloadSights } = useSight();
     const { getAllRatings, getUserRating } = useRating();
 
+    const [ sightComments, setSightComments] = useState([]);
     const [ favoriteSightsId, setFavoriteSightsId ] = useState([]);
     const [ userRatedSightsId, setUserRatedSightsId ] = useState([]);
     const [ userComments, setUserComments ] = useState([]);
@@ -82,7 +85,7 @@ export default function MySightsScreen() {
         useCallback(()=> {
             reloadSights()
         },[])
-    )
+    );
 
     const swipeBack = Gesture.Pan()
             .activeOffsetX(50)
@@ -117,24 +120,27 @@ export default function MySightsScreen() {
                                                 <FlatList
                                                     data={sightComments}
                                                     renderItem={({item, index}) =>
-                                                        <CommentCard 
+                                                        <Pressable onPress={() => navigation.navigate('Details', {id: item.sightId})}>
+                                                            <CommentCard 
                                                             index={index} 
                                                             item={item}
                                                             // isEditing={editedCommentId === item.id}
                                                             // editedComment={editedComment}
                                                             // setEditedComment={setEditedComment}
-                                                            // onEdit={() => handleOnEditComment(item)}
+                                                            onEdit={() =>  navigation.navigate('Details', {id: item.sightId})}
                                                             // onSave={() => handleSaveEdit(item.id)}
                                                             // onCancel={() => {
                                                             //     setEditedComment('');
                                                             //     setEditedCommentId(null);
                                                             // }}
-                                                            // onDelete={() => handleOnDeleteComment(item.id)}
-                                                            />
+                                                            onDelete={() => navigation.navigate('Details', {id: item.sightId})}
+                                                            /> 
+                                                        </Pressable>
                                                     }
                                                     contentContainerStyle={{ paddingBottom: 140 }}
                                                     keyboardShouldPersistTaps="handled"
                                                 />
+                                           
                                             )
                                         }
                                     </>                                    

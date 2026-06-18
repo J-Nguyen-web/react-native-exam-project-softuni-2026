@@ -12,7 +12,7 @@ export function CommentProvider({ children }){
     
     useEffect(() => {
         loadComments();
-    },[]);
+    },[comments]);
 
     async function loadComments() {
         try {

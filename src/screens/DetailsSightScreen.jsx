@@ -222,8 +222,6 @@ export default function DetailsSightScreen({route}) {
     }
 
     async function handleOnDeleteComment (item) {
-        console.log('pressed dela')
-        // TODO confirm
         try {
             Alert.alert(
                 "Delete Comment",
