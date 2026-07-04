@@ -116,7 +116,7 @@ export default function DetailsSightScreen({route}) {
         }
         loadLikes();
         
-        // async function checkIfLiked(params) {
+        // async function checkIfLiked(params) { // unneccesery
         //     const likeRef = doc(db, 'users', user.id, 'favorites', sightId)
             
         //     const snapshot = await getDoc(likeRef);
@@ -297,6 +297,7 @@ export default function DetailsSightScreen({route}) {
         return <View style={globalStyles.divider} />
     }
 
+    //todo keyboard to not hide the input
     return (
         <LinearGradient 
             colors={[globalColor.gradientPrimo, 
