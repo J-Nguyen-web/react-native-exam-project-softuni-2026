@@ -7,13 +7,13 @@ import { globalColor } from "../globalStyles.js";
 import { Entypo } from "@expo/vector-icons";
 import { useAuth } from "../context/useAuth.js";
 import LogoutButton from "../components/LogoutButton.jsx";
+import { useUser } from "../context/userProvider.jsx";
 
 export default function ProfileScreen() {
-    const [photo, setPhoto] = useState(null);
-    const [uploaded, setUploaded] = useState(false)
     const navigation = useNavigation();
 
-    const {user} = useAuth()
+    const { user, displayName } = useAuth()
+    const { userProfile, updateUser} = useUser();
 
     const pickImageHandler = async () => {
         const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -31,21 +31,38 @@ export default function ProfileScreen() {
             quality: 0.6,
         });
 
-        if(!result.canceled) {
-            setPhoto(result.assets[0].uri);
-            setUploaded(false);
+        if(result.canceled) return;
+
+        const formData = new FormData();
+        
+        formData.append("file", {
+            uri: result.assets[0].uri,
+            type: "image/jpeg",
+            name: "profile.jpg",
+        });
+
+        formData.append("upload_preset", "react_native_upload");
+
+        try {
+            const response = await fetch(
+                "https://api.cloudinary.com/v1_1/dtxhqksls/image/upload",
+                {
+                    method: "POST",
+                    body: formData,
+                }
+            );
+
+            const data = await response.json();
+            const imageUrl = data.secure_url;
+            
+            await updateUser(user.id,{photo: imageUrl})
+            setUploaded(true)
+        } catch (error) {
+            console.error('Failed to upload profile photo', error)
         }
     };
-
-    const uploadHandler = () => {
-        setUploaded(true);
-        Alert.alert("Photo uploaded succesfully!")
-    }
     
 // TODO RESET PASSWORD INVITE BY GOOGLE PROFILE
-
-// My Comments
-
     return (
         <ScreenWrapper>
             <View style={styles.container}>
@@ -55,28 +72,17 @@ export default function ProfileScreen() {
                     </Text>
                 </View>
                     <View style={styles.avatarContainer}>
-                        {!photo ? (
+                        {!userProfile?.photo ? (
                             <TouchableOpacity style={styles.avatarFrame} onPress={pickImageHandler}>
                                 <Text style={styles.avatarPlaceholder}><Entypo name="user" size={70} color={globalColor.primary} /></Text>
                                 <Text style={styles.uploadText}>Upload Picture</Text>
                             </TouchableOpacity>
                         ) : (
-                            <Image source={{ uri: photo }} style={styles.avatarFrame}/>
+                            <Image source={{ uri: userProfile?.photo }} style={styles.avatarFrame}/>
                         )}
                     </View>
-
-                    {photo && !uploaded && (
-                        <View style={styles.buttonRow}>
-                            <TouchableOpacity style={styles.retakeButton} onPress={pickImageHandler}>
-                                <Text style={styles.buttonText}>Retake</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.uploadButton} onPress={uploadHandler}>
-                                <Text style={styles.buttonText}>Upload</Text>
-                            </TouchableOpacity>
-                        </View>
-                    )}
                 
-                {photo && uploaded && (
+                {userProfile?.photo && uploaded && (
                             <TouchableOpacity style={styles.changeButton} onPress={pickImageHandler}>
                                 <Text style={styles.buttonText}>Change Photo</Text>
                             </TouchableOpacity>

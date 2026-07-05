@@ -47,7 +47,6 @@ export function AuthProvider({ children}) {
             setCheckingAuth(false)
         })
         
-
         return () => unsubscribe(); // самата функция е subscribe, за това се извиква като clean up при else-a
 
         // const loadUser = async () => {

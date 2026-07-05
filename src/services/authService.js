@@ -61,25 +61,14 @@ export async function register(email, password, username) {
 }
 
 export async function getProfile(token) { 
-
     const res = await fetch(`${BASE_URL}/profile`,{
-        headers: {
-            Authorization: `Bearer ${token}`
-        }
-    });
-
-    if (!res.ok) {
-        throw new Error("Not valid token")
-    }
-
+        headers: {Authorization: `Bearer ${token}`}});
+    if (!res.ok) {throw new Error("Not valid token")}
     return res.json();
 }
 
 export async function checkUserExist(userId){
     const res = await fetch(`${BASE_URL}/users/${userId}`);
-
-    if(!res.ok) {
-        throw new Error("User not found");
-    }
+    if(!res.ok) {throw new Error("User not found");}
     return res.json();
 }
