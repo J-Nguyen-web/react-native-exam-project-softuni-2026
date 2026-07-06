@@ -6,8 +6,8 @@ import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-na
 import { globalColor } from "../globalStyles.js";
 import { Entypo } from "@expo/vector-icons";
 import { useAuth } from "../context/useAuth.js";
+import { useUser } from "../context/useUser.js";
 import LogoutButton from "../components/LogoutButton.jsx";
-import { useUser } from "../context/userProvider.jsx";
 
 export default function ProfileScreen() {
     const navigation = useNavigation();

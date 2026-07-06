@@ -49,7 +49,7 @@ export function UserProvider({children}) {
         }
     };
 
-    const updateUser = (userData) => {
+    const updateUser = async (userData) => {
         try {
             if (!user?.id) return
 
@@ -79,9 +79,9 @@ export function UserProvider({children}) {
     }
 
     return (
-        <userContext.Provider value={contextValue}>
+        <UserContext.Provider value={contextValue}>
             {children}
-        </userContext.Provider>
+        </UserContext.Provider>
     )
 }
 

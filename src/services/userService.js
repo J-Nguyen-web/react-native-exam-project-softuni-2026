@@ -1,11 +1,11 @@
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
 
-export const getUserById = (userId) => {
+export const getUserById = async (userId) => {
     
     try {
         const userRef = doc(db, 'users', userId);
-        const snapshot = await getDoc(userRef);
+        const snapshot = getDoc(userRef);
 
         if(!snapshot.exists()) {
             throw new Error('User not found')
@@ -21,7 +21,7 @@ export const getUserById = (userId) => {
 
 }
 
-export const updateUser = (userId, data) => {
+export const updateUser = async (userId, data) => {
     try {
         const userRef = doc(db, 'user', userId);
         await updateDoc(userRef, data)        
