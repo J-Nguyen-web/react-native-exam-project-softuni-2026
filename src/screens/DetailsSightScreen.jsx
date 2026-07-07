@@ -14,6 +14,7 @@ import { sightService } from "../services/index.js";
 import { AntDesign, Feather, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { KeyboardAwareFlatList } from "react-native-keyboard-aware-scroll-view";
 import { FlatList } from "react-native";
 import { collection, deleteDoc, doc, getDocs,getDoc, setDoc } from "firebase/firestore";
 import { db } from "../firebaseConfig.js";
@@ -306,7 +307,7 @@ export default function DetailsSightScreen({route}) {
         >
             <SafeAreaView style={{flex:1}}>
             <GestureDetector gesture={swipeBack}>
-                <FlatList
+                <KeyboardAwareFlatList // thats new o_O flatList with keyboard awareness
                     data={sightComments}
                     renderItem={({item, index}) =>
                                  <CommentCard 
@@ -324,6 +325,13 @@ export default function DetailsSightScreen({route}) {
                                     onDelete={() => handleOnDeleteComment(item)}
                                      />
                                 }
+                    enableOnAndroid = {true}
+                    keyboardShouldPersistTaps="handled"
+                    enableAutomaticScroll={true}
+                    extraHeight={110}
+                    extraScrollHeight={110}
+                    contentContainerStyle={globalStyles.container}
+                    keyboardOpeningTime={0} 
                     contentContainerStyle={{ paddingBottom: 140 }}
                     keyboardShouldPersistTaps="handled"
 
