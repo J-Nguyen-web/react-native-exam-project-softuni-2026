@@ -1,5 +1,6 @@
 import { auth } from "../firebaseConfig.js"
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUser } from "./userService.js";
 
 const BASE_URL = process.env.EXPO_PUBLIC_API_URL;
 
@@ -37,7 +38,7 @@ export async function register(email, password, username) {
     try {
         const res = await createUserWithEmailAndPassword(auth, email, password) // firebase
         await updateProfile(res.user, {displayName: username}) //photoUri за аватари
-
+        await createUser(res.user)
         return res.user;
     } catch (error) {
         console.log('FIREBASE ERROR ', error.code, error.message)

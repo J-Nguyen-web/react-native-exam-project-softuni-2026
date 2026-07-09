@@ -140,13 +140,13 @@ export const globalStyles = StyleSheet.create({
  },
 
   // Title
-  title: {
-    fontSize: 28,
-    fontWeight: "700",
-    color: C.foreground,
-    lineHeight: 36,
-    letterSpacing: -0.3,
-  },
+//   title: {
+//     fontSize: 28,
+//     fontWeight: "700",
+//     color: C.foreground,
+//     lineHeight: 36,
+//     letterSpacing: -0.3,
+//   },
   authorRow: {
     flexDirection: "row",
     alignItems: "center",

@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import * as userService from '../services/userService.js'
 import { useAuth } from "./useAuth.js";
 
-const UserContext = createContext();
+export const UserContext = createContext();
 
 export function UserProvider({children}) {
 
@@ -18,7 +18,7 @@ export function UserProvider({children}) {
         const loadUser = async () => {
             try {
                 setIsLoading(true)
-                const profile = await userService.getUser(user.id);
+                const profile = await userService.getUserById(user.id);
 
                 setUserProfile(profile)
                 setError(false)
@@ -55,7 +55,7 @@ export function UserProvider({children}) {
 
             setIsLoading(true)
 
-            await userService.updateUser(userId,data);
+            await userService.updateUser(user.id, userData);
             
             setUserProfile(previous => ({
                 ...previous,
