@@ -37,11 +37,12 @@ export default function ProfileScreen() {
         
         formData.append("file", {
             uri: result.assets[0].uri,
-            type: "image/jpeg",
-            name: "profile.jpg",
+            type: result.assets[0].mimeType || "image/jpeg",
+            name: result.assets[0].fileName || "profile.jpg",
         });
 
-        formData.append("upload_preset", "react_native_upload");
+        formData.append("upload_preset", "react_native");
+        
 
         try {
             const response = await fetch(
@@ -55,8 +56,11 @@ export default function ProfileScreen() {
             const data = await response.json();
             const imageUrl = data.secure_url;
             
-            await updateUser(user.id,{photo: imageUrl})
-            setUploaded(true)
+
+if(!response.ok) {
+    return
+}
+            await updateUser( {photo: imageUrl} )
         } catch (error) {
             console.error('Failed to upload profile photo', error)
         }
@@ -82,7 +86,7 @@ export default function ProfileScreen() {
                         )}
                     </View>
                 
-                {userProfile?.photo && uploaded && (
+                {userProfile?.photo && (
                             <TouchableOpacity style={styles.changeButton} onPress={pickImageHandler}>
                                 <Text style={styles.buttonText}>Change Photo</Text>
                             </TouchableOpacity>
