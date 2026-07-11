@@ -5,6 +5,7 @@ import { TextInput, } from "react-native"
 import { useEffect, useRef } from "react"
 import { formatDate } from "../util/formatDate.js"
 import { formatTimeAgo } from "../util/formatTimeAgo.js"
+import { Image } from "react-native"
 
 export default function  CommentCard({
   item,
@@ -20,6 +21,7 @@ export default function  CommentCard({
     const inputRef = useRef(null); // useRef запазва референция към тази const като в началото е null
 
     useEffect(()=> {
+        console.log('avatar-',item.avatar)
         if(isEditing) {
             inputRef.current?.focus(); 
             // ако е isEditing и е current-(задава се в TextInput ref={inputRef}), pointer-а се слага вътре
@@ -31,7 +33,7 @@ export default function  CommentCard({
             <View style={styles.commentHeader}>
                 <View style={styles.userInfo}>
                     <View style={styles.commentAvatar}>
-
+                        <Image source={{ uri: item?.avatar }} style={styles.commentAvatar}/>
                     </View>
                     <Text style={styles.commentUsername}>
                         {item.username}

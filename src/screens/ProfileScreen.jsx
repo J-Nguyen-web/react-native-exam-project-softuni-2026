@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import * as ImagePicker from "expo-image-picker";
 import ScreenWrapper from "../components/ScreenWrapper.jsx";
 import { Alert, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -14,6 +14,10 @@ export default function ProfileScreen() {
 
     const { user, displayName } = useAuth()
     const { userProfile, updateUser} = useUser();
+    
+    useEffect(()=>{
+        console.log(user)
+    },[])
 
     const pickImageHandler = async () => {
         const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -72,7 +76,7 @@ if(!response.ok) {
             <View style={styles.container}>
                 <View style={styles.usernameContainer}>
                     <Text style={styles.usernameText}>
-                        {user.displayName}
+                        {user.username}
                     </Text>
                 </View>
                     <View style={styles.avatarContainer}>

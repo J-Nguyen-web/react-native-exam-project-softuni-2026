@@ -25,6 +25,7 @@ import CountryFlag from "react-native-country-flag";
 import commentService from "../services/commentService.js";
 import CommentCard from "../components/CommentCard.jsx";
 import * as ratingService from "../services/ratingService.js"
+import { useUser } from "../context/useUser.js";
 // import filter from "../util/profanityFilter.js";
 
 export default function DetailsSightScreen({route}) {
@@ -62,6 +63,8 @@ export default function DetailsSightScreen({route}) {
         likeSight,
         unlikeSight,
     } = useLike();
+    
+    const { userProfile } = useUser();
     
     const [sight, setSight] = useState(null);    
     const sightId  = route?.params?.id;
@@ -116,6 +119,8 @@ export default function DetailsSightScreen({route}) {
             setLikesMap(map)
         }
         loadLikes();
+
+        console.log(comments)
         
         // async function checkIfLiked(params) { // unneccesery
         //     const likeRef = doc(db, 'users', user.id, 'favorites', sightId)
@@ -187,7 +192,7 @@ export default function DetailsSightScreen({route}) {
                 sightId: sightId,
                 ownerId: user?.id, // firebase id
                 username: user.username,
-                // avatar: user.photoUrl || null // todo users photo 
+                avatar: userProfile.photo || null // todo users photo 
             };
 
             await createComment(newComment)
