@@ -21,7 +21,6 @@ export default function  CommentCard({
     const inputRef = useRef(null); // useRef запазва референция към тази const като в началото е null
 
     useEffect(()=> {
-        console.log('avatar-',item.avatar)
         if(isEditing) {
             inputRef.current?.focus(); 
             // ако е isEditing и е current-(задава се в TextInput ref={inputRef}), pointer-а се слага вътре

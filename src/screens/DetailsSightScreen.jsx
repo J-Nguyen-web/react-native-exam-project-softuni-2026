@@ -192,7 +192,7 @@ export default function DetailsSightScreen({route}) {
                 sightId: sightId,
                 ownerId: user?.id, // firebase id
                 username: user.username,
-                avatar: userProfile.photo || null // todo users photo 
+                avatar: userProfile.photo || null
             };
 
             await createComment(newComment)
@@ -302,8 +302,6 @@ export default function DetailsSightScreen({route}) {
     function Divider() {
         return <View style={globalStyles.divider} />
     }
-
-    //todo keyboard to not hide the input
     return (
         <LinearGradient 
             colors={[globalColor.gradientPrimo, 
@@ -335,10 +333,8 @@ export default function DetailsSightScreen({route}) {
                     enableAutomaticScroll={true}
                     extraHeight={110}
                     extraScrollHeight={110}
-                    contentContainerStyle={globalStyles.container}
-                    keyboardOpeningTime={0} 
-                    contentContainerStyle={{ paddingBottom: 140 }}
-                    keyboardShouldPersistTaps="handled"
+                    contentContainerStyle={[globalStyles.container, {paddingBottom: 140}]}
+                    keyboardOpeningTime={0}
 
                     ListHeaderComponent={(
                         <>

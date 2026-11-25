@@ -7,10 +7,9 @@ import { globalColor } from "../globalStyles.js";
 import ProfileNavigator from "./ProfileNavigatror.jsx";
 import { TouchableOpacity } from "react-native";
 
-    const Tabs = createBottomTabNavigator();
+const Tabs = createBottomTabNavigator();
 
 export default function TabNavigator() {
-
 
 return (
     <Tabs.Navigator 

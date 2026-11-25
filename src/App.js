@@ -25,13 +25,10 @@ export default function App() {
                                     <NavigationContainer>
                                 {/* за да работят всички навигатори всички се обвиват в него*/}
                                     
-                                        <StatusBar style="auto" />
-                                            <SafeAreaProvider>
-                                                {/* <SafeAreaView> bugged for now - its depricated - use SafeAreaView from react-native-safe-area-context*/}
-                                                                                
+                                            <SafeAreaProvider>                              
                                                     <RootNavigator />
-                                                                                    
-                                                {/* </SafeAreaView> */}
+                                                    <StatusBar style="auto" />
+                                                    {/* не обвива, а е sibling */}
                                             </SafeAreaProvider>
                                     </NavigationContainer>
                                 </RatingProvider>

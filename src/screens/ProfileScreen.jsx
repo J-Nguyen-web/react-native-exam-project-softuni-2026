@@ -14,10 +14,6 @@ export default function ProfileScreen() {
 
     const { user, displayName } = useAuth()
     const { userProfile, updateUser} = useUser();
-    
-    useEffect(()=>{
-        console.log(user)
-    },[])
 
     const pickImageHandler = async () => {
         const {status} = await ImagePicker.requestMediaLibraryPermissionsAsync();
